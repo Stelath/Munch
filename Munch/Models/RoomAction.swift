@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+enum RoomAction: String, CaseIterable, Identifiable {
+    case joinRoom = "Join Room"
+    case createRoom = "Create Room"
+    var id: Self { self }
+}

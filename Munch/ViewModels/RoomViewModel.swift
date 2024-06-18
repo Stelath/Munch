@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+class RoomViewModel: ObservableObject {
+    @Published var selectedRoomAction: String = RoomAction.joinRoom.rawValue
+    
+    // MARK: Join Room
+    @Published var roomCode: String = ""
+    func joinRoom() {
+        
+    }
+    
+    // MARK: Create Room
+    
+}
