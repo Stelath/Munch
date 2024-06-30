@@ -10,6 +10,9 @@ import MapKit
 
 struct ResturantView: View {
     @StateObject private var viewModel = RestaurantViewModel()
+    @State private var navigateToResults = false
+    @State private var showButton = false
+    
     
     var body: some View {
         //        NavigationView {
@@ -23,17 +26,40 @@ struct ResturantView: View {
         //            }
         //            .navigationTitle("Nearby Restaurants")
         //        }
-        VStack {
-            Text("Restaurants Near You")
-                .font(.system(.title2, design: .rounded))
-                .bold()
-                .padding()
-            ZStack{
-                ForEach(viewModel.restaurants) { resturant in
-                    let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
-                    
-                    CardView(card: card)
-                        .environmentObject(viewModel)
+        NavigationView {
+            VStack {
+                Text("Restaurants Near You")
+                    .font(.system(.title2, design: .rounded))
+                    .bold()
+                    .padding()
+                ZStack{
+                    ForEach(viewModel.restaurants) { resturant in
+                        let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
+                        
+                        CardView(card: card)
+                            .environmentObject(viewModel)
+                    }
+                }
+                if (viewModel.restaurants.count == (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
+                    Button(action: {
+                        navigateToResults = true
+                    }, label: {
+                        Text("See Results")
+                            .foregroundColor(.white)
+                            .font(.system(.title2, design: .rounded))
+                            .bold()
+                            .padding(EdgeInsets(top: 12, leading: 25, bottom: 12, trailing: 25))
+                        
+                    })
+                    .background(.black)
+                    .cornerRadius(40)
+                    .padding()
+                    .opacity(1)
+                }
+                
+                
+                NavigationLink(destination: ResultView(), isActive: $navigateToResults)  {
+                    EmptyView()
                 }
             }
         }
@@ -57,7 +83,7 @@ struct ResturantView: View {
         }
     }
 }
-
+    
 #Preview {
-    ResturantView()
+    ResturantView().environmentObject(RestaurantViewModel())
 }
