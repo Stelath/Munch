@@ -11,6 +11,14 @@ struct RoomView: View {
     @StateObject private var viewModel = RoomViewModel()
     
     var body: some View {
+        HStack {
+            Image("MunchNoBack")
+                .resizable()
+                .frame(width: 50, height: 51)
+            Text("Munch")
+                .font(.system(size: 40, design: .rounded))
+                .bold()
+        }
         Spacer()
         
         if(viewModel.selectedRoomAction == RoomAction.joinRoom.rawValue)

@@ -28,6 +28,7 @@ struct ResturantView: View {
         //        }
         NavigationView {
             VStack {
+            VStack {
                 Text("Restaurants Near You")
                     .font(.system(.title2, design: .rounded))
                     .bold()
@@ -40,47 +41,41 @@ struct ResturantView: View {
                             .environmentObject(viewModel)
                     }
                 }
-                if (viewModel.restaurants.count == (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
-                    Button(action: {
-                        navigateToResults = true
-                    }, label: {
-                        Text("See Results")
+                if (viewModel.restaurants.count <= (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
+                    NavigationLink(destination: ResultView().environmentObject(viewModel)) {
+                        
+                        Text("Top Restaurants")
                             .foregroundColor(.white)
                             .font(.system(.title2, design: .rounded))
                             .bold()
-                            .padding(EdgeInsets(top: 12, leading: 25, bottom: 12, trailing: 25))
-                        
-                    })
+                            .padding(EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32))
+                    }
                     .background(.black)
                     .cornerRadius(40)
                     .padding()
-                    .opacity(1)
                 }
                 
-                
-                NavigationLink(destination: ResultView(), isActive: $navigateToResults)  {
-                    EmptyView()
+            }
+            .padding(8)
+            .zIndex(1.0)
+            
+            HStack {
+                Button(action: {}) {
+                    Image(systemName: "x.circle")
+                }
+                Button(action: {}) {
+                    Image(systemName: "checkmark.circle")
                 }
             }
-        }
-        .padding(8)
-        .zIndex(1.0)
-        
-        HStack {
-            Button(action: {}) {
-                Image(systemName: "x.circle")
-            }
-            Button(action: {}) {
-                Image(systemName: "checkmark.circle")
+            .tint(.black)
+            .font(.largeTitle)
+            .padding()
+            HStack {
+                Text("\(viewModel.noRestaurants.count)")
+                Text("\(viewModel.yesRestaurants.count)")
             }
         }
-        .tint(.black)
-        .font(.largeTitle)
-        .padding()
-        HStack {
-            Text("\(viewModel.noRestaurants.count)")
-            Text("\(viewModel.yesRestaurants.count)")
-        }
+        }.environmentObject(viewModel)
     }
 }
     
