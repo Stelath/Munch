@@ -23,11 +23,18 @@ struct ResturantView: View {
         //            }
         //            .navigationTitle("Nearby Restaurants")
         //        }
-        ZStack{
-            ForEach(viewModel.restaurants) { resturant in
-                let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
-                
-                CardView(card: card)
+        VStack {
+            Text("Restaurants Near You")
+                .font(.system(.title2, design: .rounded))
+                .bold()
+                .padding()
+            ZStack{
+                ForEach(viewModel.restaurants) { resturant in
+                    let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
+                    
+                    CardView(card: card)
+                        .environmentObject(viewModel)
+                }
             }
         }
         .padding(8)
@@ -35,15 +42,19 @@ struct ResturantView: View {
         
         HStack {
             Button(action: {}) {
-                Image(systemName: "checkmark.circle")
+                Image(systemName: "x.circle")
             }
             Button(action: {}) {
-                Image(systemName: "x.circle")
+                Image(systemName: "checkmark.circle")
             }
         }
         .tint(.black)
         .font(.largeTitle)
         .padding()
+        HStack {
+            Text("\(viewModel.noRestaurants.count)")
+            Text("\(viewModel.yesRestaurants.count)")
+        }
     }
 }
 

@@ -22,12 +22,15 @@ import MapKit
 struct CardView: View {
     @State var card: Card
     @State private var lookAroundScene: MKLookAroundScene?
+    @EnvironmentObject var viewModel: RestaurantViewModel
     
     // MARK: - Drawing Constant
     let cardGradient = Gradient(colors: [Color.black.opacity(0.0), Color.black.opacity(0.5)])
     
     var body: some View {
         ZStack(alignment: .topLeading) {
+//This is for the look of the cards, the "Street View" look on each
+//card
             if let scene = lookAroundScene {
                 LookAroundPreview(initialScene: scene)
             } else {
@@ -40,6 +43,7 @@ struct CardView: View {
             
             // Linear Gradient
             LinearGradient(gradient: cardGradient, startPoint: .top, endPoint: .bottom)
+//Puts the name of the restaurant at the bottom of the card
             VStack {
                 Spacer()
                 VStack(alignment: .leading){
@@ -51,7 +55,7 @@ struct CardView: View {
             }
             .padding()
             .foregroundColor(.white)
-            
+//Not super sure about this one
             HStack {
                 Image("yes")
                     .resizable()
@@ -74,15 +78,20 @@ struct CardView: View {
         .offset(x: card.x, y: card.y)
         .rotationEffect(.init(degrees: card.degree))
         .gesture (
+//allows us to drag around card
             DragGesture()
+//when you grab it use default drag animation
                 .onChanged { value in
                     withAnimation(.default) {
                         card.x = value.translation.width
                         // MARK: - BUG 5
                         card.y = value.translation.height
+//adjust degree/tilt of the card based on the x value of the card
                         card.degree = 7 * (value.translation.width > 0 ? 1 : -1)
                     }
                 }
+//when the card is released if it is still within certain bounds
+//spring back to where it originally was
                 .onEnded { (value) in
                     withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
                         switch value.translation.width {
@@ -90,10 +99,12 @@ struct CardView: View {
                             card.x = 0; card.degree = 0; card.y = 0
                         case let x where x > 100:
                             card.x = 500; card.degree = 12
+                            viewModel.yesRestaurants.append(card.name)
                         case (-100)...(-1):
                             card.x = 0; card.degree = 0; card.y = 0
                         case let x where x < -100:
                             card.x  = -500; card.degree = -12
+                            viewModel.noRestaurants.append(card.name)
                         default:
                             card.x = 0; card.y = 0
                         }
@@ -119,7 +130,7 @@ struct CardView_Previews: PreviewProvider {
     static var previews: some View {
         let locationCoordinate = CLLocationCoordinate2D(latitude: 37.332816, longitude: -122.005797)
         
-//        var card = Card(name: "Testing", about: "Guess Who!", coordinate: locationCoordinate)
+//       var card = Card(name: "Testing", about: "Guess Who!", coordinate: locationCoordinate)
         
 //        CardView(card: card)
     }
