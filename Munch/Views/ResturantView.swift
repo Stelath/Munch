@@ -36,8 +36,15 @@ struct ResturantView: View {
                     ForEach(viewModel.restaurants) { resturant in
                         let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
                         
-                        CardView(card: card)
-                            .environmentObject(viewModel)
+                        let _ = print(card.name, card.coordinate.latitude, card.coordinate.longitude)
+                        
+                        CardView(card: card) { swipedYes in
+                            if (swipedYes) {
+                                viewModel.yesRestaurants.append(resturant.name)
+                            } else {
+                                viewModel.noRestaurants.append(resturant.name)
+                            }
+                        }
                     }
                 }
                 if (viewModel.restaurants.count == (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
@@ -83,7 +90,7 @@ struct ResturantView: View {
         }
     }
 }
-    
+
 #Preview {
     ResturantView().environmentObject(RestaurantViewModel())
 }
