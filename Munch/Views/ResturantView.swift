@@ -11,7 +11,6 @@ import MapKit
 struct ResturantView: View {
     @StateObject private var viewModel = RestaurantViewModel()
     @State private var navigateToResults = false
-    @State private var showButton = false
     
     
     var body: some View {
@@ -33,20 +32,17 @@ struct ResturantView: View {
                     .bold()
                     .padding()
                 ZStack{
-                    ForEach(viewModel.restaurants) { resturant in
-                        let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
-                        
-                        let _ = print(card.name, card.coordinate.latitude, card.coordinate.longitude)
-                        
-                        CardView(card: card) { swipedYes in
+                    ForEach($viewModel.cards) { $card in
+                        CardView(card: $card) { swipedYes in
                             if (swipedYes) {
-                                viewModel.yesRestaurants.append(resturant.name)
+                                viewModel.swipeRight(moveCard: false)
                             } else {
-                                viewModel.noRestaurants.append(resturant.name)
+                                viewModel.swipeLeft(moveCard: false)
                             }
                         }
                     }
                 }
+                
                 if (viewModel.restaurants.count == (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
                     Button(action: {
                         navigateToResults = true
@@ -65,21 +61,29 @@ struct ResturantView: View {
                 }
                 
                 
-                NavigationLink(destination: ResultView(), isActive: $navigateToResults)  {
-                    EmptyView()
-                }
+//                NavigationLink(destination: ResultView(), isActive: $navigateToResults)  {
+//                    EmptyView()
+//                }
             }
         }
         .padding(8)
         .zIndex(1.0)
         
         HStack {
-            Button(action: {}) {
+            Button(action: {
+                withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
+                    viewModel.swipeLeft(moveCard: true)
+                }
+            }) {
                 Image(systemName: "x.circle")
-            }
-            Button(action: {}) {
+            }.disabled(viewModel.currentCard < 0)
+            Button(action: {
+                withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
+                    viewModel.swipeRight(moveCard: true)
+                }
+            }) {
                 Image(systemName: "checkmark.circle")
-            }
+            }.disabled(viewModel.currentCard < 0)
         }
         .tint(.black)
         .font(.largeTitle)

@@ -19,8 +19,12 @@
 import SwiftUI
 import MapKit
 
+public enum SwipeState {
+    case none, left, right
+}
+
 struct CardView: View {
-    @State var card: Card
+    @Binding var card: Card
     @State private var lookAroundScene: MKLookAroundScene?
     
     var action: ((Bool) -> Void)? = nil
@@ -81,38 +85,39 @@ struct CardView: View {
         .gesture (
             //allows us to drag around card
             DragGesture()
-            //when you grab it use default drag animation
                 .onChanged { value in
                     withAnimation(.default) {
                         card.x = value.translation.width
-                        // MARK: - BUG 5
                         card.y = value.translation.height
-                        //adjust degree/tilt of the card based on the x value of the card
                         card.degree = 7 * (value.translation.width > 0 ? 1 : -1)
                     }
                 }
-            //when the card is released if it is still within certain bounds
-            //spring back to where it originally was
-                .onEnded { (value) in
-                    withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
-                        switch value.translation.width {
-                        case 0...100:
-                            card.x = 0; card.degree = 0; card.y = 0
-                        case let x where x > 100:
-                            card.x = 500; card.degree = 12
-                            action?(true)
-                        case (-100)...(-1):
-                            card.x = 0; card.degree = 0; card.y = 0
-                        case let x where x < -100:
-                            card.x  = -500; card.degree = -12
-                            action?(false)
-                        default:
-                            card.x = 0; card.y = 0
-                        }
-                    }
+                .onEnded { value in
+                    handleSwipeEnd(value: value)
                 }
         )
     }
+    
+    func handleSwipeEnd(value: DragGesture.Value) {
+            //when the card is released if it is still within certain bounds
+            //spring back to where it originally was
+            withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
+                switch value.translation.width {
+                case 0...100:
+                    card.x = 0; card.degree = 0; card.y = 0
+                case let x where x > 100:
+                    card.x = 500; card.degree = 12
+                    action?(true)
+                case (-100)...(-1):
+                    card.x = 0; card.degree = 0; card.y = 0
+                case let x where x < -100:
+                    card.x = -500; card.degree = -12
+                    action?(false)
+                default:
+                    card.x = 0; card.y = 0
+                }
+            }
+        }
 }
 
 extension CardView {
@@ -133,17 +138,15 @@ struct CardView_Previews: PreviewProvider {
     }
     
     struct CardPreviewWrapper: View {
-        @State private var card: Card?
+        @State private var card: Card = Card(name: "", about: "", coordinate: CLLocationCoordinate2D(latitude: 0, longitude: 0), mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 0, longitude: 0))))
         @State private var selectedMapItem: MKMapItem? = nil
+        @State private var mapItemPresented: Bool = true
         private let locationCoordinate = CLLocationCoordinate2D(latitude: 37.3231985, longitude: -122.0098249)
         
         var body: some View {
             ZStack {
-                mapItemDetailSheet(item: $selectedMapItem, displaysMap: false)
-//                if let card = card {
-//                    let _ = print("Card Exists")
-//                    CardView(card: card)
-//                }
+//                mapItemDetailSheet(isPresented: $mapItemPresented, item: selectedMapItem, displaysMap: true)
+                CardView(card: $card)
             }
             .onAppear {
                 findClosestMapItem(to: locationCoordinate) { closestMapItem in

@@ -11,9 +11,11 @@ import MapKit
 
 class RestaurantViewModel: NSObject, ObservableObject {
     @Published var restaurants: [Restaurant] = []
+    @Published var cards: [Card] = []
+    @Published var currentCard: Int = 0
     
-    @Published var yesRestaurants: [String] = []
-    @Published var noRestaurants: [String] = []
+    @Published var yesRestaurants: [Card] = []
+    @Published var noRestaurants: [Card] = []
     
     private var locationManager = CLLocationManager()
     
@@ -46,8 +48,48 @@ class RestaurantViewModel: NSObject, ObservableObject {
                                mapItem: item
                     )
                 }
+                
+                self.updateCards()
             }
         }
+    }
+    
+    func updateCards() {
+        self.restaurants.forEach { resturant in
+            let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
+            
+            self.cards.append(card)
+        }
+        
+        self.currentCard = self.cards.count - 1
+    }
+    
+    func swipeLeft(moveCard: Bool) {
+        if (self.cards.count <= 0 && currentCard < 0) {
+            return
+        }
+        
+        if (moveCard) {
+            self.cards[self.currentCard].x = -500;
+            self.cards[self.currentCard].degree = -12
+        }
+        
+        self.noRestaurants.append(self.cards[self.currentCard])
+        self.currentCard -= 1
+    }
+    
+    func swipeRight(moveCard: Bool) {
+        if (self.cards.count <= 0 && currentCard < 0) {
+            return
+        }
+        
+        if (moveCard) {
+            self.cards[self.currentCard].x = 500;
+            self.cards[self.currentCard].degree = 12
+        }
+        
+        self.yesRestaurants.append(self.cards[self.currentCard])
+        self.currentCard -= 1
     }
 }
 
@@ -64,7 +106,8 @@ extension RestaurantViewModel: CLLocationManagerDelegate {
     // Once we grab the restaurants stop using the users current location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            fetchRestaurants(near: location)
+            let tempLocation = CLLocation(latitude:34.681951192984215, longitude:-82.83710411475863)
+            fetchRestaurants(near: tempLocation)
             locationManager.stopUpdatingLocation()
         }
     }
