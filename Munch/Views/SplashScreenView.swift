@@ -21,7 +21,7 @@ struct SplashScreenView: View {
 
     var body: some View {
         if animationCompleted {
-            withAnimation(.easeInOut(duration: 1)) {
+            withAnimation(.easeInOut(duration: 0.5)) {
                 RoomView()
             }
             
@@ -70,7 +70,7 @@ struct SplashScreenView: View {
                 } else {
                     timer?.invalidate()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        withAnimation(.easeInOut(duration: 1.0)) {
+                        withAnimation(.easeInOut(duration: 0.72)) {
                             animationCompleted = true // Trigger navigation after animation completes
                         }
                     }

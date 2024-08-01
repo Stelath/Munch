@@ -23,6 +23,9 @@
 		02F5EE852C21593600DC1C8F /* ResturantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE842C21592800DC1C8F /* ResturantViewModel.swift */; };
 		02F5EE872C215CF500DC1C8F /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE862C215CF200DC1C8F /* CardView.swift */; };
 		02F5EE892C215D7200DC1C8F /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE882C215D7100DC1C8F /* Card.swift */; };
+		F30978B72C2F4097003C82D7 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30978B62C2F4097003C82D7 /* LoginView.swift */; };
+		F30978B92C2FB83B003C82D7 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30978B82C2FB83A003C82D7 /* ResultView.swift */; };
+		F30978BB2C3352BF003C82D7 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30978BA2C3352BF003C82D7 /* SplashScreenView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +65,9 @@
 		02F5EE842C21592800DC1C8F /* ResturantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResturantViewModel.swift; sourceTree = "<group>"; };
 		02F5EE862C215CF200DC1C8F /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		02F5EE882C215D7100DC1C8F /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		F30978B62C2F4097003C82D7 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		F30978B82C2FB83A003C82D7 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		F30978BA2C3352BF003C82D7 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +178,9 @@
 			children = (
 				02D4E6872C1FAC4F00D12FE2 /* RoomView.swift */,
 				02D4E6992C2002F600D12FE2 /* ResturantView.swift */,
+				F30978B62C2F4097003C82D7 /* LoginView.swift */,
+				F30978B82C2FB83A003C82D7 /* ResultView.swift */,
+				F30978BA2C3352BF003C82D7 /* SplashScreenView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -338,6 +347,9 @@
 				02D4E6882C1FAC4F00D12FE2 /* RoomView.swift in Sources */,
 				02F5EE872C215CF500DC1C8F /* CardView.swift in Sources */,
 				02D4E65A2C1F798900D12FE2 /* ContentView.swift in Sources */,
+				F30978B72C2F4097003C82D7 /* LoginView.swift in Sources */,
+				F30978BB2C3352BF003C82D7 /* SplashScreenView.swift in Sources */,
+				F30978B92C2FB83B003C82D7 /* ResultView.swift in Sources */,
 				02D4E6982C1FC69A00D12FE2 /* PickerPlus.swift in Sources */,
 				02D4E68A2C1FB16900D12FE2 /* RoomAction.swift in Sources */,
 				02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */,
