@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02CA030F2C53818A0053EAC4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CA030D2C53818A0053EAC4 /* LoginView.swift */; };
+		02CA03102C53818A0053EAC4 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CA030E2C53818A0053EAC4 /* ResultView.swift */; };
 		02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D4E6572C1F798900D12FE2 /* MunchApp.swift */; };
 		02D4E65A2C1F798900D12FE2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D4E6592C1F798900D12FE2 /* ContentView.swift */; };
 		02D4E65C2C1F798B00D12FE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E65B2C1F798B00D12FE2 /* Assets.xcassets */; };
@@ -46,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02CA030D2C53818A0053EAC4 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		02CA030E2C53818A0053EAC4 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		02D4E6542C1F798900D12FE2 /* Munch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Munch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D4E6572C1F798900D12FE2 /* MunchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunchApp.swift; sourceTree = "<group>"; };
 		02D4E6592C1F798900D12FE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -181,6 +185,7 @@
 				F30978B62C2F4097003C82D7 /* LoginView.swift */,
 				F30978B82C2FB83A003C82D7 /* ResultView.swift */,
 				F30978BA2C3352BF003C82D7 /* SplashScreenView.swift */,
+
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -351,6 +356,8 @@
 				F30978BB2C3352BF003C82D7 /* SplashScreenView.swift in Sources */,
 				F30978B92C2FB83B003C82D7 /* ResultView.swift in Sources */,
 				02D4E6982C1FC69A00D12FE2 /* PickerPlus.swift in Sources */,
+				02CA030F2C53818A0053EAC4 /* LoginView.swift in Sources */,
+				02CA03102C53818A0053EAC4 /* ResultView.swift in Sources */,
 				02D4E68A2C1FB16900D12FE2 /* RoomAction.swift in Sources */,
 				02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */,
 				02F5EE852C21593600DC1C8F /* ResturantViewModel.swift in Sources */,
@@ -527,7 +534,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -558,7 +565,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

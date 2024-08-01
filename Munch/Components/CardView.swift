@@ -19,18 +19,23 @@
 import SwiftUI
 import MapKit
 
+public enum SwipeState {
+    case none, left, right
+}
+
 struct CardView: View {
-    @State var card: Card
+    @Binding var card: Card
     @State private var lookAroundScene: MKLookAroundScene?
-    @EnvironmentObject var viewModel: RestaurantViewModel
+    
+    var action: ((Bool) -> Void)? = nil
     
     // MARK: - Drawing Constant
     let cardGradient = Gradient(colors: [Color.black.opacity(0.0), Color.black.opacity(0.5)])
     
     var body: some View {
         ZStack(alignment: .topLeading) {
-//This is for the look of the cards, the "Street View" look on each
-//card
+            //This is for the look of the cards, the "Street View" look on each
+            //card
             if let scene = lookAroundScene {
                 LookAroundPreview(initialScene: scene)
             } else {
@@ -43,7 +48,7 @@ struct CardView: View {
             
             // Linear Gradient
             LinearGradient(gradient: cardGradient, startPoint: .top, endPoint: .bottom)
-//Puts the name of the restaurant at the bottom of the card
+            //Puts the name of the restaurant at the bottom of the card
             VStack {
                 Spacer()
                 VStack(alignment: .leading){
@@ -55,7 +60,7 @@ struct CardView: View {
             }
             .padding()
             .foregroundColor(.white)
-//Not super sure about this one
+            //Not super sure about this one
             HStack {
                 Image("yes")
                     .resizable()
@@ -78,40 +83,41 @@ struct CardView: View {
         .offset(x: card.x, y: card.y)
         .rotationEffect(.init(degrees: card.degree))
         .gesture (
-//allows us to drag around card
+            //allows us to drag around card
             DragGesture()
-//when you grab it use default drag animation
                 .onChanged { value in
                     withAnimation(.default) {
                         card.x = value.translation.width
-                        // MARK: - BUG 5
                         card.y = value.translation.height
-//adjust degree/tilt of the card based on the x value of the card
                         card.degree = 7 * (value.translation.width > 0 ? 1 : -1)
                     }
                 }
-//when the card is released if it is still within certain bounds
-//spring back to where it originally was
-                .onEnded { (value) in
-                    withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
-                        switch value.translation.width {
-                        case 0...100:
-                            card.x = 0; card.degree = 0; card.y = 0
-                        case let x where x > 100:
-                            card.x = 500; card.degree = 12
-                            viewModel.yesRestaurants.append(card.name)
-                        case (-100)...(-1):
-                            card.x = 0; card.degree = 0; card.y = 0
-                        case let x where x < -100:
-                            card.x  = -500; card.degree = -12
-                            viewModel.noRestaurants.append(card.name)
-                        default:
-                            card.x = 0; card.y = 0
-                        }
-                    }
+                .onEnded { value in
+                    handleSwipeEnd(value: value)
                 }
         )
     }
+    
+    func handleSwipeEnd(value: DragGesture.Value) {
+            //when the card is released if it is still within certain bounds
+            //spring back to where it originally was
+            withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
+                switch value.translation.width {
+                case 0...100:
+                    card.x = 0; card.degree = 0; card.y = 0
+                case let x where x > 100:
+                    card.x = 500; card.degree = 12
+                    action?(true)
+                case (-100)...(-1):
+                    card.x = 0; card.degree = 0; card.y = 0
+                case let x where x < -100:
+                    card.x = -500; card.degree = -12
+                    action?(false)
+                default:
+                    card.x = 0; card.y = 0
+                }
+            }
+        }
 }
 
 extension CardView {
@@ -128,10 +134,68 @@ extension CardView {
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        let locationCoordinate = CLLocationCoordinate2D(latitude: 37.332816, longitude: -122.005797)
+        CardPreviewWrapper()
+    }
+    
+    struct CardPreviewWrapper: View {
+        @State private var card: Card = Card(name: "", about: "", coordinate: CLLocationCoordinate2D(latitude: 0, longitude: 0), mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 0, longitude: 0))))
+        @State private var selectedMapItem: MKMapItem? = nil
+        @State private var mapItemPresented: Bool = true
+        private let locationCoordinate = CLLocationCoordinate2D(latitude: 37.3231985, longitude: -122.0098249)
         
-//       var card = Card(name: "Testing", about: "Guess Who!", coordinate: locationCoordinate)
+        var body: some View {
+            ZStack {
+//                mapItemDetailSheet(isPresented: $mapItemPresented, item: selectedMapItem, displaysMap: true)
+                CardView(card: $card)
+            }
+            .onAppear {
+                findClosestMapItem(to: locationCoordinate) { closestMapItem in
+                    if let closestMapItem = closestMapItem {
+                        print("Closest map item: \(closestMapItem.name ?? "Unknown")")
+                        print("Location: \(closestMapItem.placemark.coordinate.latitude), \(closestMapItem.placemark.coordinate.longitude)")
+                        
+                        DispatchQueue.main.async {
+                            card = Card(name: "Testing", about: "Guess Who!", coordinate: locationCoordinate, mapItem: closestMapItem)
+//                            selectedMapItem = closestMapItem
+                        }
+                    } else {
+                        print("No map item found.")
+                    }
+                }
+            }
+        }
+    }
+}
+
+func findClosestMapItem(to locationCoordinate: CLLocationCoordinate2D, completion: @escaping (MKMapItem?) -> Void) {
+    // Define a region with a radius around the specified location coordinate
+    let region = MKCoordinateRegion(center: locationCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+    
+    // Create a request to search for points of interest around the specified location
+    let request = MKLocalSearch.Request()
+    request.region = region
+    request.naturalLanguageQuery = "Resturant" // You can change this to search for specific types of places
+    
+    // Create a local search object
+    let search = MKLocalSearch(request: request)
+    
+    // Start the search
+    search.start { response, error in
+        // Check if there is an error or no response
+        guard let response = response, error == nil else {
+            print("Search error: \(error?.localizedDescription ?? "Unknown error")")
+            completion(nil)
+            return
+        }
         
-//        CardView(card: card)
+        // Find the closest map item to the specified location coordinate
+        let closestMapItem = response.mapItems.min { mapItem1, mapItem2 in
+            let distance1 = CLLocation(latitude: mapItem1.placemark.coordinate.latitude, longitude: mapItem1.placemark.coordinate.longitude).distance(from: CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude))
+            let distance2 = CLLocation(latitude: mapItem2.placemark.coordinate.latitude, longitude: mapItem2.placemark.coordinate.longitude).distance(from: CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude))
+            return distance1 < distance2
+        }
+        
+        // Return the closest map item
+        completion(closestMapItem)
     }
 }

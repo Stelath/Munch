@@ -11,7 +11,6 @@ import MapKit
 struct ResturantView: View {
     @StateObject private var viewModel = RestaurantViewModel()
     @State private var navigateToResults = false
-    @State private var showButton = false
     
     
     var body: some View {
@@ -34,17 +33,22 @@ struct ResturantView: View {
                     .bold()
                     .padding()
                 ZStack{
-                    ForEach(viewModel.restaurants) { resturant in
-                        let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
-                        
-                        CardView(card: card)
-                            .environmentObject(viewModel)
+                    ForEach($viewModel.cards) { $card in
+                        CardView(card: $card) { swipedYes in
+                            if (swipedYes) {
+                                viewModel.swipeRight(moveCard: false)
+                            } else {
+                                viewModel.swipeLeft(moveCard: false)
+                            }
+                        }
                     }
                 }
-                if (viewModel.restaurants.count <= (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
-                    NavigationLink(destination: ResultView().environmentObject(viewModel)) {
-                        
-                        Text("Top Restaurants")
+                
+                if (viewModel.restaurants.count == (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
+                    Button(action: {
+                        navigateToResults = true
+                    }, label: {
+                        Text("See Results")
                             .foregroundColor(.white)
                             .font(.system(.title2, design: .rounded))
                             .bold()
@@ -53,32 +57,37 @@ struct ResturantView: View {
                     .background(.black)
                     .cornerRadius(40)
                     .padding()
-                }
+                           
+                )}
                 
+//                NavigationLink(destination: ResultView(), isActive: $navigateToResults)  {
+//                    EmptyView()
+//                }
             }
-            .padding(8)
-            .zIndex(1.0)
-            
-            HStack {
-                Button(action: {}) {
-                    Image(systemName: "x.circle")
+        }
+        .padding(8)
+        .zIndex(1.0)
+        
+        HStack {
+            Button(action: {
+                withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
+                    viewModel.swipeLeft(moveCard: true)
                 }
-                Button(action: {}) {
-                    Image(systemName: "checkmark.circle")
+            }) {
+                Image(systemName: "x.circle")
+            }.disabled(viewModel.currentCard < 0)
+            Button(action: {
+                withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
+                    viewModel.swipeRight(moveCard: true)
                 }
-            }
-            .tint(.black)
-            .font(.largeTitle)
-            .padding()
-            HStack {
-                Text("\(viewModel.noRestaurants.count)")
-                Text("\(viewModel.yesRestaurants.count)")
-            }
+            }) {
+                Image(systemName: "checkmark.circle")
+            }.disabled(viewModel.currentCard < 0)
         }
         }.environmentObject(viewModel)
     }
 }
-    
+
 #Preview {
     ResturantView().environmentObject(RestaurantViewModel())
 }
