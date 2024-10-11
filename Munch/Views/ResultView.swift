@@ -27,10 +27,10 @@ struct ResultView: View {
 
 
 //struct ResultView_Previews: PreviewProvider {
-   // @State static var viewModel = RestaurantViewModel()
-
-    //static var previews: some View {
-        //ResultView(viewModel: $viewModel)
-    //}
+//    @State static var viewModel = RestaurantViewModel()
+//
+//    static var previews: some View {
+//        ResultView(viewModel: $viewModel)
+//    }
 //}
 

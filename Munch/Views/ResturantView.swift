@@ -70,27 +70,39 @@ struct ResturantView: View {
         .zIndex(1.0)
         
         HStack {
+            Spacer()
             Button(action: {
                 withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
                     viewModel.swipeLeft(moveCard: true)
-                }
-            }) {
-                Image(systemName: "x.circle")
-            }.disabled(viewModel.currentCardI < 0)
+                    }
+                }) {
+                    Image(systemName: "x.circle")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                }.disabled(viewModel.currentCardI < 0)
+            Spacer()
+            Spacer()
             Button(action: {
                 withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
                     viewModel.swipeRight(moveCard: true)
-                }
-            }) {
-                Image(systemName: "checkmark.circle")
-            }.disabled(viewModel.currentCardI < 0)
+                    }
+                }) {
+                    Image(systemName: "checkmark.circle")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                }.disabled(viewModel.currentCardI < 0)
+            Spacer()
         }
         .tint(.black)
         .font(.largeTitle)
-        .padding()
+//        .padding()
         HStack {
+            Spacer()
             Text("\(viewModel.noRestaurants.count)")
+            Spacer()
+            Spacer()
             Text("\(viewModel.yesRestaurants.count)")
+            Spacer()
         }
     }
 }
