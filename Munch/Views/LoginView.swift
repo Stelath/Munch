@@ -11,7 +11,7 @@ struct LoginView: View {
     var body: some View {
         VStack{
             HStack {
-                Image("MunchNoBack")
+                Image("MunchLogo")
                     .resizable()
                     .frame(width: 50, height: 51)
                 Text("Munch")
