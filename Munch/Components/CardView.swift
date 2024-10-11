@@ -10,11 +10,10 @@
 
 //
 //  CardView.swift
-//  TinderClone
+//  Munch
 //
-//  Created by Franck-Stephane Ndame Mpouli on 19/02/2021.
+//  Edited by Mac Howe on 10/11/2024
 //
-
 
 import SwiftUI
 import MapKit
@@ -29,7 +28,7 @@ struct CardView: View {
     
     var action: ((Bool) -> Void)? = nil
     
-    // MARK: - Drawing Constant
+
     let cardGradient = Gradient(colors: [Color.black.opacity(0.0), Color.black.opacity(0.5)])
     
     var body: some View {
@@ -38,16 +37,19 @@ struct CardView: View {
             //card
             if let scene = lookAroundScene {
                 LookAroundPreview(initialScene: scene)
+                LinearGradient(gradient: cardGradient, startPoint: .top, endPoint: .bottom)
             } else {
+                Color.gray // no gradient when no preview
                 ContentUnavailableView("No Preview Available", systemImage: "eye.slash")
+                 
             }
             //            Image(card.imageName)
             //                .resizable()
             //                .clipped()
             
             
-            // Linear Gradient
-            LinearGradient(gradient: cardGradient, startPoint: .top, endPoint: .bottom)
+            // Linear Gradient -- moved for now so there is not gradient when there is not preview
+//            LinearGradient(gradient: cardGradient, startPoint: .top, endPoint: .bottom)
             //Puts the name of the restaurant at the bottom of the card
             VStack {
                 Spacer()
@@ -60,26 +62,45 @@ struct CardView: View {
             }
             .padding()
             .foregroundColor(.white)
-            //Not super sure about this one
+            
             HStack {
-                Image("yes")
+                
+                // YES Symbol
+                Image(systemName: "hand.thumbsup")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width:150)
-                    .opacity(Double(card.x/10 - 1))
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.green)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.green, lineWidth: 2)
+                    )
+                    .rotationEffect(.degrees(-12))
+                    .opacity(Double(card.x / 10 - 1))
+                
                 Spacer()
-                Image("nope")
+                
+                // NOPE Symbol
+                Image(systemName: "hand.thumbsdown")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width:150)
-                    .opacity(Double(card.x/10 * -1 - 1))
-            }
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.red)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.red, lineWidth: 2)
+                    )
+                    .rotationEffect(.degrees(12))
+                    .opacity(Double(card.x / 10 * -1 - 1))
+            }.padding(25)/*.padding(.top, 20)*/
             
         }.onAppear {
             fetchLookAroundPreview()
         }
         
-        .cornerRadius(8)
+        .cornerRadius(20)
         .offset(x: card.x, y: card.y)
         .rotationEffect(.init(degrees: card.degree))
         .gesture (
