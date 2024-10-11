@@ -12,7 +12,7 @@ import MapKit
 class RestaurantViewModel: NSObject, ObservableObject {
     @Published var restaurants: [Restaurant] = []
     @Published var cards: [Card] = []
-    @Published var currentCard: Int = 0
+    @Published var currentCardI: Int = 0
     
     @Published var yesRestaurants: [Card] = []
     @Published var noRestaurants: [Card] = []
@@ -53,44 +53,46 @@ class RestaurantViewModel: NSObject, ObservableObject {
             }
         }
     }
-    
     func updateCards() {
-        self.restaurants.forEach { resturant in
-            let card = Card(name: resturant.name, about: "", coordinate: resturant.coordinate, mapItem: resturant.mapItem)
-            
-            self.cards.append(card)
+        self.cards = restaurants.map { restaurant in
+            Card(name: restaurant.name, about: "", coordinate: restaurant.coordinate, mapItem: restaurant.mapItem)
         }
         
-        self.currentCard = self.cards.count - 1
+        self.currentCardI = self.cards.count - 1
+    }
+    
+    // Unified method to handle swipes
+    private func handleSwipe(moveCard: Bool, direction: SwipeDirection) {
+        guard currentCardI >= 0 else { return }
+        
+        if moveCard {
+            self.cards[currentCardI].x = direction == .left ? -500 : 500
+            self.cards[currentCardI].degree = direction == .left ? -12 : 12
+        }
+        
+        if direction == .left {
+            self.noRestaurants.append(self.cards[currentCardI])
+        } else {
+            self.yesRestaurants.append(self.cards[currentCardI])
+        }
+        
+        self.cards.remove(at: currentCardI)
+        self.currentCardI = max(self.cards.count - 1, 0)
     }
     
     func swipeLeft(moveCard: Bool) {
-        if (self.cards.count <= 0 && currentCard < 0) {
-            return
-        }
-        
-        if (moveCard) {
-            self.cards[self.currentCard].x = -500;
-            self.cards[self.currentCard].degree = -12
-        }
-        
-        self.noRestaurants.append(self.cards[self.currentCard])
-        self.currentCard -= 1
+        handleSwipe(moveCard: moveCard, direction: .left)
     }
     
     func swipeRight(moveCard: Bool) {
-        if (self.cards.count <= 0 && currentCard < 0) {
-            return
-        }
-        
-        if (moveCard) {
-            self.cards[self.currentCard].x = 500;
-            self.cards[self.currentCard].degree = 12
-        }
-        
-        self.yesRestaurants.append(self.cards[self.currentCard])
-        self.currentCard -= 1
+        handleSwipe(moveCard: moveCard, direction: .right)
     }
+    
+}
+
+enum SwipeDirection {
+    case left
+    case right
 }
 
 extension RestaurantViewModel: CLLocationManagerDelegate {

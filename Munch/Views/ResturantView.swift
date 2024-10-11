@@ -76,14 +76,14 @@ struct ResturantView: View {
                 }
             }) {
                 Image(systemName: "x.circle")
-            }.disabled(viewModel.currentCard < 0)
+            }.disabled(viewModel.currentCardI < 0)
             Button(action: {
                 withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
                     viewModel.swipeRight(moveCard: true)
                 }
             }) {
                 Image(systemName: "checkmark.circle")
-            }.disabled(viewModel.currentCard < 0)
+            }.disabled(viewModel.currentCardI < 0)
         }
         .tint(.black)
         .font(.largeTitle)
