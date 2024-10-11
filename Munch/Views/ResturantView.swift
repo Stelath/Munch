@@ -27,7 +27,6 @@ struct ResturantView: View {
         //        }
         NavigationView {
             VStack {
-            VStack {
                 Text("Restaurants Near You")
                     .font(.system(.title2, design: .rounded))
                     .bold()
@@ -52,13 +51,15 @@ struct ResturantView: View {
                             .foregroundColor(.white)
                             .font(.system(.title2, design: .rounded))
                             .bold()
-                            .padding(EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32))
-                    }
+                            .padding(EdgeInsets(top: 12, leading: 25, bottom: 12, trailing: 25))
+                        
+                    })
                     .background(.black)
                     .cornerRadius(40)
                     .padding()
-                           
-                )}
+                    .opacity(1)
+                }
+                
                 
 //                NavigationLink(destination: ResultView(), isActive: $navigateToResults)  {
 //                    EmptyView()
@@ -84,7 +85,13 @@ struct ResturantView: View {
                 Image(systemName: "checkmark.circle")
             }.disabled(viewModel.currentCard < 0)
         }
-        }.environmentObject(viewModel)
+        .tint(.black)
+        .font(.largeTitle)
+        .padding()
+        HStack {
+            Text("\(viewModel.noRestaurants.count)")
+            Text("\(viewModel.yesRestaurants.count)")
+        }
     }
 }
 
