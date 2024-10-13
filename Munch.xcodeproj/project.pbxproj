@@ -130,7 +130,6 @@
 				02D4E6832C1FA15400D12FE2 /* Models */,
 				02D4E6842C1FA17600D12FE2 /* Views */,
 				02D4E6822C1FA14D00D12FE2 /* ViewModels */,
-				4A8D26B82CBB9C2E00B9B0EC /* Networking */,
 				02D4E68D2C1FBB5B00D12FE2 /* Components */,
 				02D4E6852C1FA1C800D12FE2 /* App */,
 				02D4E6862C1FA20800D12FE2 /* Assets */,
@@ -230,17 +229,10 @@
 			path = Circles;
 			sourceTree = "<group>";
 		};
-		4A8D26B82CBB9C2E00B9B0EC /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */,
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
 		4A8D26BC2CBBBE7D00B9B0EC /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */,
 				4A8D26C22CBBBF1100B9B0EC /* RestaurantService.swift */,
 				4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */,
 			);
