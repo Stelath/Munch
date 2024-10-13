@@ -36,28 +36,28 @@ struct RestaurantView: View {
                         .font(.body)
                 }
                 .padding()
-                .background(Color.black.opacity(0.5))
-                .cornerRadius(10)
                 .foregroundColor(.white)
             }
 
             HStack {
-                if viewModel.position.width > 0 {
-                    Image(systemName: "hand.thumbsup.fill")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .foregroundColor(.green)
-                        .opacity(viewModel.likeOpacity)
-                        .rotationEffect(.degrees(-20))
-                        .offset(x: -50, y: 0)
-                } else if viewModel.position.width < 0 {
-                    Image(systemName: "hand.thumbsdown.fill")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .foregroundColor(.red)
-                        .opacity(viewModel.dislikeOpacity)
-                        .rotationEffect(.degrees(20))
-                        .offset(x: 50, y: 0)
+                GeometryReader { geometry in
+                    if viewModel.position.width > 0 {
+                        Image(systemName: "hand.thumbsup.fill")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .foregroundColor(.green)
+                            .opacity(viewModel.likeOpacity)
+                            .rotationEffect(.degrees(-20))
+                            .offset(x: geometry.size.width - 125, y: 50)
+                    } else if viewModel.position.width < 0 {
+                        Image(systemName: "hand.thumbsdown.fill")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .foregroundColor(.red)
+                            .opacity(viewModel.dislikeOpacity)
+                            .rotationEffect(.degrees(20))
+                            .offset(x: 25, y: 50)
+                    }
                 }
             }
         }
