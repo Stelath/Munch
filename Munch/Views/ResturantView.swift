@@ -11,79 +11,86 @@ import MapKit
 struct RestaurantView: View {
     @StateObject private var viewModel = RestaurantViewModel()
     @State private var navigateToResults = false
-    
-    
+
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("Restaurants Near You")
-                    .font(.system(.title2, design: .rounded))
-                    .bold()
+            if viewModel.isLoading {
+                ProgressView("Loading Restaurants...")
+                    .onAppear {
+                        viewModel.locationService.startUpdatingLocation()
+                    }
+            } else if let locationError = viewModel.locationService.locationError {
+                Text(locationError.localizedDescription)
                     .padding()
-                ZStack{
-                    ForEach($viewModel.cards) { $card in
-                        CardView(card: $card) { swipedRight in
-                            viewModel.handleSwipe(direction: swipedRight ? .right : .left)
+            } else {
+                VStack {
+                    Text("Restaurants Near You")
+                        .font(.system(.title2, design: .rounded))
+                        .bold()
+                        .padding()
+
+                    ZStack {
+                        ForEach(viewModel.cardViewModels) { cardViewModel in
+                            CardView(viewModel: cardViewModel) { direction in
+                                viewModel.handleSwipe(direction: direction)
+                            }
                         }
                     }
-                }
-                
-                if viewModel.isAllRestaurantsSwiped {
-                    Button(action: {
-                        navigateToResults = true
-                    }) {
-                        Text("See Results")
-                            .foregroundColor(.white)
-                            .font(.system(.title2, design: .rounded))
-                            .bold()
-                            .padding(.horizontal, 25)
-                            .padding(.vertical, 12)
+
+                    if viewModel.isAllRestaurantsSwiped {
+                        Button(action: {
+                            navigateToResults = true
+                        }) {
+                            Text("See Results")
+                                .foregroundColor(.white)
+                                .font(.system(.title2, design: .rounded))
+                                .bold()
+                                .padding(.horizontal, 25)
+                                .padding(.vertical, 12)
+                        }
+                        .background(Color.black)
+                        .cornerRadius(40)
+                        .padding()
                     }
-                    .background(.black)
-                    .cornerRadius(40)
-                    .padding()
-                }
-                
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)){
-                            viewModel.handleSwipe(direction: .left, moveCard: true)
-                            }
+
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            viewModel.performSwipe(direction: .left)
                         }) {
                             Image(systemName: "x.circle")
                                 .resizable()
                                 .frame(width: 60, height: 60)
-                        }.disabled(viewModel.currentCardIndex < 0)
-                    Spacer()
-                    Spacer()
-                    Button(action: {
-                        withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
-                            viewModel.handleSwipe(direction: .right, moveCard: true)
-                            }
+                        }
+                        .disabled(viewModel.currentCardViewModel == nil)
+                        Spacer()
+                        Spacer()
+                        Button(action: {
+                            viewModel.performSwipe(direction: .right)
                         }) {
                             Image(systemName: "checkmark.circle")
                                 .resizable()
                                 .frame(width: 60, height: 60)
-                        }.disabled(viewModel.currentCardIndex < 0)
-                    Spacer()
-                }
-                .tint(.black)
-                .font(.largeTitle)
+                        }
+                        .disabled(viewModel.currentCardViewModel == nil)
+                        Spacer()
+                    }
+                    .tint(.black)
+                    .font(.largeTitle)
 
-                HStack {
-                    Spacer()
-                    Text("\(viewModel.noRestaurants.count)")
-                    Spacer()
-                    Spacer()
-                    Text("\(viewModel.yesRestaurants.count)")
-                    Spacer()
+                    HStack {
+                        Spacer()
+                        Text("\(viewModel.noRestaurants.count)")
+                        Spacer()
+                        Spacer()
+                        Text("\(viewModel.yesRestaurants.count)")
+                        Spacer()
+                    }
                 }
-            }
-        .padding(8)
-        .zIndex(1.0)
-        .navigationDestination(isPresented: $navigateToResults) {
-                        ResultView()
+                .padding(8)
+                .navigationDestination(isPresented: $navigateToResults) {
+                    ResultView()
+                }
             }
         }
     }

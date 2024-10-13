@@ -28,6 +28,9 @@
 		4A6ECFC12CB8DF41007C0095 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6ECFBE2CB8DF41007C0095 /* Circle.swift */; };
 		4A6ECFC22CB8DF41007C0095 /* Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6ECFBF2CB8DF41007C0095 /* Code.swift */; };
 		4A8D26B92CBB9C2E00B9B0EC /* CirclesAPIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */; };
+		4A8D26BB2CBBB2A800B9B0EC /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26BA2CBBB29D00B9B0EC /* CardViewModel.swift */; };
+		4A8D26BE2CBBBE9800B9B0EC /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */; };
+		4A8D26C32CBBBF1500B9B0EC /* RestaurantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26C22CBBBF1100B9B0EC /* RestaurantService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +75,9 @@
 		4A6ECFBE2CB8DF41007C0095 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		4A6ECFBF2CB8DF41007C0095 /* Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Code.swift; sourceTree = "<group>"; };
 		4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesAPIHandler.swift; sourceTree = "<group>"; };
+		4A8D26BA2CBBB29D00B9B0EC /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
+		4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		4A8D26C22CBBBF1100B9B0EC /* RestaurantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,11 +128,12 @@
 		02D4E6562C1F798900D12FE2 /* Munch */ = {
 			isa = PBXGroup;
 			children = (
+				4A8D26BC2CBBBE7D00B9B0EC /* Services */,
+				02D4E6832C1FA15400D12FE2 /* Models */,
+				02D4E6842C1FA17600D12FE2 /* Views */,
+				02D4E6822C1FA14D00D12FE2 /* ViewModels */,
 				4A8D26B82CBB9C2E00B9B0EC /* Networking */,
 				02D4E68D2C1FBB5B00D12FE2 /* Components */,
-				02D4E6832C1FA15400D12FE2 /* Models */,
-				02D4E6822C1FA14D00D12FE2 /* ViewModels */,
-				02D4E6842C1FA17600D12FE2 /* Views */,
 				02D4E6852C1FA1C800D12FE2 /* App */,
 				02D4E6862C1FA20800D12FE2 /* Assets */,
 				02D4E65D2C1F798B00D12FE2 /* Preview Content */,
@@ -162,6 +169,7 @@
 		02D4E6822C1FA14D00D12FE2 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				4A8D26BA2CBBB29D00B9B0EC /* CardViewModel.swift */,
 				02F5EE842C21592800DC1C8F /* ResturantViewModel.swift */,
 				02D4E68B2C1FB18100D12FE2 /* RoomViewModel.swift */,
 			);
@@ -231,6 +239,15 @@
 				4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		4A8D26BC2CBBBE7D00B9B0EC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4A8D26C22CBBBF1100B9B0EC /* RestaurantService.swift */,
+				4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,16 +384,19 @@
 				02D4E69A2C2002F600D12FE2 /* ResturantView.swift in Sources */,
 				02F5EE832C21592000DC1C8F /* Resturant.swift in Sources */,
 				4A6ECFC12CB8DF41007C0095 /* Circle.swift in Sources */,
+				4A8D26BB2CBBB2A800B9B0EC /* CardViewModel.swift in Sources */,
 				4A6ECFC22CB8DF41007C0095 /* Code.swift in Sources */,
 				02D4E6882C1FAC4F00D12FE2 /* RoomView.swift in Sources */,
 				02F5EE872C215CF500DC1C8F /* CardView.swift in Sources */,
 				02D4E65A2C1F798900D12FE2 /* ContentView.swift in Sources */,
 				02D4E6982C1FC69A00D12FE2 /* PickerPlus.swift in Sources */,
 				02CA030F2C53818A0053EAC4 /* LoginView.swift in Sources */,
+				4A8D26BE2CBBBE9800B9B0EC /* LocationService.swift in Sources */,
 				02CA03102C53818A0053EAC4 /* ResultView.swift in Sources */,
 				02D4E68A2C1FB16900D12FE2 /* RoomAction.swift in Sources */,
 				02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */,
 				02F5EE852C21593600DC1C8F /* ResturantViewModel.swift in Sources */,
+				4A8D26C32CBBBF1500B9B0EC /* RestaurantService.swift in Sources */,
 				02F5EE892C215D7200DC1C8F /* Card.swift in Sources */,
 				4A8D26B92CBB9C2E00B9B0EC /* CirclesAPIHandler.swift in Sources */,
 			);

@@ -6,7 +6,7 @@
 //
 
 
-import UIKit
+import Foundation
 import CoreLocation
 import MapKit
 
@@ -18,7 +18,5 @@ struct Card: Identifiable {
     let coordinate: CLLocationCoordinate2D
     let mapItem: MKMapItem
     
-    var x: CGFloat = 0.0
-    var y: CGFloat = 0.0
-    var degree: Double = 0.0
+
 }
