@@ -20,36 +20,36 @@ class RestaurantViewModel: ObservableObject {
     @Published private(set) var yesRestaurants: [Card] = []
     @Published private(set) var noRestaurants: [Card] = []
     @Published var isLoading: Bool = false
-    
+
     let locationService = LocationService()
-    private var restaurantService = RestaurantService()
+    private let restaurantService = RestaurantService()
     private var cancellables = Set<AnyCancellable>()
     private var currentCardIndex: Int = 0
-    
+
     init() {
         observeLocationUpdates()
         locationService.requestLocationPermission()
     }
-    
+
     var isAllRestaurantsSwiped: Bool {
         return restaurants.count == (yesRestaurants.count + noRestaurants.count)
     }
-    
+
     var currentCardViewModel: CardViewModel? {
         guard currentCardIndex >= 0 && currentCardIndex < cardViewModels.count else { return nil }
         return cardViewModels[currentCardIndex]
     }
-    
+
     private func observeLocationUpdates() {
         locationService.$currentLocation
+            .receive(on: DispatchQueue.main)
             .compactMap { $0 }
-            .first()
             .sink { [weak self] location in
                 self?.fetchRestaurants(near: location)
             }
             .store(in: &cancellables)
     }
-    
+
     func fetchRestaurants(near location: CLLocation) {
         isLoading = true
         Task { [weak self] in
@@ -82,7 +82,7 @@ class RestaurantViewModel: ObservableObject {
         }
         self.currentCardIndex = self.cardViewModels.count - 1
     }
-    
+
     func handleSwipe(direction: SwipeDirection) {
         guard currentCardIndex >= 0 else { return }
 
@@ -99,8 +99,8 @@ class RestaurantViewModel: ObservableObject {
 
     func performSwipe(direction: SwipeDirection) {
         guard let cardViewModel = currentCardViewModel else { return }
-        cardViewModel.performSwipe(direction: direction) {
-            self.handleSwipe(direction: direction)
+        cardViewModel.performSwipe(direction: direction) { [weak self] in
+            self?.handleSwipe(direction: direction)
         }
     }
 }

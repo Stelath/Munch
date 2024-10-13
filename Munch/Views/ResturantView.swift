@@ -20,8 +20,20 @@ struct RestaurantView: View {
                         viewModel.locationService.startUpdatingLocation()
                     }
             } else if let locationError = viewModel.locationService.locationError {
-                Text(locationError.localizedDescription)
+                // Handle location errors
+                VStack {
+                    Text("Location Error")
+                        .font(.title)
+                        .padding()
+                    Text(locationError.localizedDescription)
+                        .padding()
+                    Button("Open Settings") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
                     .padding()
+                }
             } else {
                 VStack {
                     Text("Restaurants Near You")

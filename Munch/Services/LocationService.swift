@@ -19,6 +19,7 @@ class LocationService: NSObject, ObservableObject {
     override init() {
         super.init()
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
 
     func requestLocationPermission() {
@@ -33,10 +34,15 @@ class LocationService: NSObject, ObservableObject {
 extension LocationService: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         authorizationStatus = manager.authorizationStatus
-        if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
+        switch authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
             startUpdatingLocation()
-        } else if authorizationStatus == .denied || authorizationStatus == .restricted {
+        case .denied, .restricted:
             locationError = NSError(domain: "LocationPermission", code: 1, userInfo: [NSLocalizedDescriptionKey: "Location permission denied"])
+        case .notDetermined:
+            requestLocationPermission()
+        @unknown default:
+            locationError = NSError(domain: "LocationPermission", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unknown authorization status"])
         }
     }
     
@@ -46,6 +52,6 @@ extension LocationService: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to get user location: \(error.localizedDescription)")
+        locationError = error
     }
 }
