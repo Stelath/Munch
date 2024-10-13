@@ -45,7 +45,7 @@ struct RoomView: View {
         )
         .font(.system(size: 16, weight: .regular))
         .selectedFont(.system(size: 18, weight: .bold))
-        .frame(height: 80)  // Adjust height as needed
+        .frame(height: 80)
         .padding()
     }
 }

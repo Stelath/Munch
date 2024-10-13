@@ -23,6 +23,7 @@ public enum SwipeState {
 }
 
 struct CardView: View {
+    
     @Binding var card: Card
     @State private var lookAroundScene: MKLookAroundScene?
     
@@ -34,7 +35,6 @@ struct CardView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             //This is for the look of the cards, the "Street View" look on each
-            //card
             if let scene = lookAroundScene {
                 LookAroundPreview(initialScene: scene)
                 LinearGradient(gradient: cardGradient, startPoint: .top, endPoint: .bottom)

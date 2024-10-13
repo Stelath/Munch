@@ -6,18 +6,11 @@
 //
 
 
-//
-//  Person.swift
-//  TinderClone
-//
-//  Created by Franck-Stephane Ndame Mpouli on 06/08/2020.
-//
-
 import UIKit
 import CoreLocation
 import MapKit
 
-//MARK: - DATA
+
 struct Card: Identifiable {
     let id = UUID()
     let name: String

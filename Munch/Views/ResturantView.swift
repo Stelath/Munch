@@ -8,24 +8,13 @@
 import SwiftUI
 import MapKit
 
-struct ResturantView: View {
+struct RestaurantView: View {
     @StateObject private var viewModel = RestaurantViewModel()
     @State private var navigateToResults = false
     
     
     var body: some View {
-        //        NavigationView {
-        //            List(viewModel.restaurants) { restaurant in
-        //                VStack(alignment: .leading) {
-        //                    Text(restaurant.name)
-        //                        .font(.headline)
-        //                    Text(restaurant.address)
-        //                        .font(.subheadline)
-        //                }
-        //            }
-        //            .navigationTitle("Nearby Restaurants")
-        //        }
-        NavigationView {
+        NavigationStack {
             VStack {
                 Text("Restaurants Near You")
                     .font(.system(.title2, design: .rounded))
@@ -33,80 +22,73 @@ struct ResturantView: View {
                     .padding()
                 ZStack{
                     ForEach($viewModel.cards) { $card in
-                        CardView(card: $card) { swipedYes in
-                            if (swipedYes) {
-                                viewModel.swipeRight(moveCard: false)
-                            } else {
-                                viewModel.swipeLeft(moveCard: false)
-                            }
+                        CardView(card: $card) { swipedRight in
+                            viewModel.handleSwipe(direction: swipedRight ? .right : .left)
                         }
                     }
                 }
                 
-                if (viewModel.restaurants.count == (viewModel.yesRestaurants.count + viewModel.noRestaurants.count)) {
+                if viewModel.isAllRestaurantsSwiped {
                     Button(action: {
                         navigateToResults = true
-                    }, label: {
+                    }) {
                         Text("See Results")
                             .foregroundColor(.white)
                             .font(.system(.title2, design: .rounded))
                             .bold()
-                            .padding(EdgeInsets(top: 12, leading: 25, bottom: 12, trailing: 25))
-                        
-                    })
+                            .padding(.horizontal, 25)
+                            .padding(.vertical, 12)
+                    }
                     .background(.black)
                     .cornerRadius(40)
                     .padding()
-                    .opacity(1)
                 }
                 
-                
-//                NavigationLink(destination: ResultView(), isActive: $navigateToResults)  {
-//                    EmptyView()
-//                }
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)){
+                            viewModel.handleSwipe(direction: .left, moveCard: true)
+                            }
+                        }) {
+                            Image(systemName: "x.circle")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                        }.disabled(viewModel.currentCardIndex < 0)
+                    Spacer()
+                    Spacer()
+                    Button(action: {
+                        withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
+                            viewModel.handleSwipe(direction: .right, moveCard: true)
+                            }
+                        }) {
+                            Image(systemName: "checkmark.circle")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                        }.disabled(viewModel.currentCardIndex < 0)
+                    Spacer()
+                }
+                .tint(.black)
+                .font(.largeTitle)
+
+                HStack {
+                    Spacer()
+                    Text("\(viewModel.noRestaurants.count)")
+                    Spacer()
+                    Spacer()
+                    Text("\(viewModel.yesRestaurants.count)")
+                    Spacer()
+                }
             }
-        }
         .padding(8)
         .zIndex(1.0)
-        
-        HStack {
-            Spacer()
-            Button(action: {
-                withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
-                    viewModel.swipeLeft(moveCard: true)
-                    }
-                }) {
-                    Image(systemName: "x.circle")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                }.disabled(viewModel.currentCardI < 0)
-            Spacer()
-            Spacer()
-            Button(action: {
-                withAnimation(.interpolatingSpring(mass: 1.0, stiffness: 50, damping: 8, initialVelocity: 0)) {
-                    viewModel.swipeRight(moveCard: true)
-                    }
-                }) {
-                    Image(systemName: "checkmark.circle")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                }.disabled(viewModel.currentCardI < 0)
-            Spacer()
-        }
-        .tint(.black)
-        .font(.largeTitle)
-//        .padding()
-        HStack {
-            Spacer()
-            Text("\(viewModel.noRestaurants.count)")
-            Spacer()
-            Spacer()
-            Text("\(viewModel.yesRestaurants.count)")
-            Spacer()
+        .navigationDestination(isPresented: $navigateToResults) {
+                        ResultView()
+            }
         }
     }
 }
 
 #Preview {
-    ResturantView().environmentObject(RestaurantViewModel())
+    RestaurantView()
 }
