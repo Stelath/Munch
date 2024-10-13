@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ResultView: View {
     @EnvironmentObject var viewModel: RestaurantViewModel
-
+//    let yesRestaurants: [Card]
     
     var body: some View {
 // gotta get that sweet backend code here, with a little frequency
