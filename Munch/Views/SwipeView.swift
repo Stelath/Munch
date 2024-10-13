@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import MapKit
 
-struct RestaurantView: View {
-    @StateObject private var viewModel = RestaurantViewModel()
+struct SwipeView: View {
+    @StateObject private var viewModel = SwipeViewModel()
     @State private var navigateToResults = false
 
     var body: some View {
@@ -20,7 +19,6 @@ struct RestaurantView: View {
                         viewModel.locationService.startUpdatingLocation()
                     }
             } else if let locationError = viewModel.locationService.locationError {
-                // Handle location errors
                 VStack {
                     Text("Location Error")
                         .font(.title)
@@ -42,12 +40,13 @@ struct RestaurantView: View {
                         .padding()
 
                     ZStack {
-                        ForEach(viewModel.cardViewModels) { cardViewModel in
-                            CardView(viewModel: cardViewModel) { direction in
+                        ForEach(viewModel.restaurantViewModels) { restaurantViewModel in
+                            RestaurantView(viewModel: restaurantViewModel) { direction in
                                 viewModel.handleSwipe(direction: direction)
                             }
                         }
                     }
+                    .padding()
 
                     if viewModel.isAllRestaurantsSwiped {
                         Button(action: {
@@ -74,7 +73,7 @@ struct RestaurantView: View {
                                 .resizable()
                                 .frame(width: 60, height: 60)
                         }
-                        .disabled(viewModel.currentCardViewModel == nil)
+                        .disabled(viewModel.currentRestaurantViewModel == nil)
                         Spacer()
                         Spacer()
                         Button(action: {
@@ -84,7 +83,7 @@ struct RestaurantView: View {
                                 .resizable()
                                 .frame(width: 60, height: 60)
                         }
-                        .disabled(viewModel.currentCardViewModel == nil)
+                        .disabled(viewModel.currentRestaurantViewModel == nil)
                         Spacer()
                     }
                     .tint(.black)
@@ -102,6 +101,7 @@ struct RestaurantView: View {
                 .padding(8)
                 .navigationDestination(isPresented: $navigateToResults) {
                     ResultView()
+                        .environmentObject(viewModel)
                 }
             }
         }
@@ -109,5 +109,5 @@ struct RestaurantView: View {
 }
 
 #Preview {
-    RestaurantView()
+    SwipeView()
 }

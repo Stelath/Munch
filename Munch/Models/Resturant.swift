@@ -13,6 +13,7 @@ struct Restaurant: Identifiable {
     let id: UUID
     let name: String
     let address: String
+    let images: [String]
     let coordinate: CLLocationCoordinate2D
     let mapItem: MKMapItem
 }

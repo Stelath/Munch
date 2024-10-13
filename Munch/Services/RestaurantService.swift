@@ -27,6 +27,7 @@ class RestaurantService {
                 id: UUID(),
                 name: item.name ?? "Unknown",
                 address: item.placemark.title ?? "No Address",
+                images: [""],
                 coordinate: item.placemark.coordinate,
                 mapItem: item
             )

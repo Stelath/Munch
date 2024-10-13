@@ -8,25 +8,25 @@
 import SwiftUI
 import MapKit
 
-class CardViewModel: ObservableObject, Identifiable {
-    @Published var card: Card
+class RestaurantViewModel: ObservableObject, Identifiable {
+    @Published var restaurant: Restaurant
     @Published var lookAroundScene: MKLookAroundScene?
     @Published var position: CGSize = .zero
     @Published var rotation: Double = 0.0
-    
+
     let id = UUID()
 
-    init(card: Card) {
-        self.card = card
+    init(restaurant: Restaurant) {
+        self.restaurant = restaurant
         fetchLookAroundPreview()
     }
 
     var likeOpacity: Double {
-        Double(position.width / 10 - 1)
+        Double(max(min(position.width / 10 - 1, 1), 0))
     }
 
     var dislikeOpacity: Double {
-        Double(position.width / 10 * -1 - 1)
+        Double(max(min(-position.width / 10 - 1, 1), 0))
     }
 
     func fetchLookAroundPreview() {
@@ -34,7 +34,7 @@ class CardViewModel: ObservableObject, Identifiable {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let request = MKLookAroundSceneRequest(mapItem: card.mapItem)
+                let request = MKLookAroundSceneRequest(mapItem: restaurant.mapItem)
                 let scene = try await request.scene
                 await MainActor.run {
                     self.lookAroundScene = scene
@@ -52,26 +52,18 @@ class CardViewModel: ObservableObject, Identifiable {
         }
     }
 
-
     func onDragEnded(value: DragGesture.Value) -> SwipeDirection? {
-        var swipeDirection: SwipeDirection? = nil
-
-        if value.translation.width > 100 {
-            // Swiped right
-            performSwipe(direction: .right, isUserInitiated: true)
-            swipeDirection = .right
-        } else if value.translation.width < -100 {
-            // Swiped left
-            performSwipe(direction: .left, isUserInitiated: true)
-            swipeDirection = .left
+        if abs(value.translation.width) > 100 {
+            let direction: SwipeDirection = value.translation.width > 0 ? .right : .left
+            performSwipe(direction: direction, isUserInitiated: true)
+            return direction
         } else {
-            // Return to original position
             withAnimation(.spring()) {
                 position = .zero
                 rotation = 0
             }
+            return nil
         }
-        return swipeDirection
     }
 
     func performSwipe(direction: SwipeDirection, isUserInitiated: Bool = false, completion: (() -> Void)? = nil) {
@@ -88,5 +80,3 @@ class CardViewModel: ObservableObject, Identifiable {
         }
     }
 }
-
-

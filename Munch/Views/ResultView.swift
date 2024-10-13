@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ResultView: View {
-    @EnvironmentObject var viewModel: RestaurantViewModel
+    @EnvironmentObject var viewModel: SwipeViewModel
 //    let yesRestaurants: [Card]
     
     var body: some View {
