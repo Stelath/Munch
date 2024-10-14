@@ -15,6 +15,7 @@ class LocationService: NSObject, ObservableObject {
     @Published var locationError: Error?
     
     private let locationManager = CLLocationManager()
+    private var lastClientLocation: CLLocation?
 
     override init() {
         super.init()
@@ -47,7 +48,13 @@ extension LocationService: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocation = locations.first
+        guard let location = locations.first else { return }
+        if let lastLocation = lastClientLocation, location.distance(from: lastLocation) < 50 {
+            print("Location update ignored: not significant enough.")
+            return
+        }
+        lastClientLocation = location
+        currentLocation = location
         locationManager.stopUpdatingLocation()
     }
 

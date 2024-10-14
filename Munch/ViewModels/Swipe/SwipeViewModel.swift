@@ -1,5 +1,5 @@
 //
-//  ResturantViewModel.swift
+//  SwipeViewModel.swift
 //  Munch
 //
 //  Created by Alexander Korte on 6/17/24.
@@ -17,7 +17,7 @@ public enum SwipeDirection {
 class SwipeViewModel: ObservableObject {
     @Published private(set) var restaurants: [Restaurant] = []
     @Published private(set) var restaurantViewModels: [RestaurantViewModel] = []
-    @Published private(set) var yesRestaurants: [Restaurant] = []
+    @Published private(set) var yesRestaurants: [Restaurant] = [] // TODO: just hold id later
     @Published private(set) var noRestaurants: [Restaurant] = []
     @Published var isLoading: Bool = false
 
@@ -27,8 +27,9 @@ class SwipeViewModel: ObservableObject {
     private var currentIndex: Int = 0
 
     init() {
-        observeLocationUpdates()
         locationService.requestLocationPermission()
+        observeLocationUpdates()
+        print("init") // DEBUG
     }
 
     var isAllRestaurantsSwiped: Bool {
@@ -44,8 +45,15 @@ class SwipeViewModel: ObservableObject {
         locationService.$currentLocation
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
+            .first()
+//            .removeDuplicates(by: { (loc1, loc2) in
+//                    // Prevents multiple fetches for the same location
+//                    loc1.coordinate.latitude == loc2.coordinate.latitude &&
+//                    loc1.coordinate.longitude == loc2.coordinate.longitude
+//                })
+//                .debounce(for: .seconds(2), scheduler: DispatchQueue.main)  // Throttle quick successive updates
             .sink { [weak self] location in
-                self?.fetchRestaurants(near: location)
+                    self?.fetchRestaurants(near: location)
             }
             .store(in: &cancellables)
     }
@@ -71,6 +79,7 @@ class SwipeViewModel: ObservableObject {
     }
 
     private func updateRestaurantViewModels() {
+        print("Updating restaurant view models") //DEBUG
         self.restaurantViewModels = restaurants.map { RestaurantViewModel(restaurant: $0) }
         self.currentIndex = self.restaurantViewModels.count - 1
     }

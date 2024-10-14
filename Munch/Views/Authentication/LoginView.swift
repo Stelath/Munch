@@ -18,7 +18,7 @@ struct LoginView: View {
                     .font(.system(size: 40, design: .rounded))
                     .bold()
             }
-            
+
             Spacer()
          
             Text("Not sure where to eat, swipe to find a place to Munch")

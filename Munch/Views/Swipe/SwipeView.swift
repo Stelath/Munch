@@ -15,9 +15,9 @@ struct SwipeView: View {
         NavigationStack {
             if viewModel.isLoading {
                 ProgressView("Loading Restaurants...")
-                    .onAppear {
-                        viewModel.locationService.startUpdatingLocation()
-                    }
+//                    .onAppear {
+//                        viewModel.locationService.startUpdatingLocation()
+//                        print("Started updating location") // DEBUG
             } else if let locationError = viewModel.locationService.locationError {
                 VStack {
                     Text("Location Error")

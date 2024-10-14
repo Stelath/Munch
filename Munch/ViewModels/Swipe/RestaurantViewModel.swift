@@ -1,5 +1,5 @@
 //
-//  CardViewModel.swift
+//  RestaurantViewModel.swift
 //  Munch
 //
 //  Created by Mac Howe on 10/13/24.
@@ -14,7 +14,7 @@ class RestaurantViewModel: ObservableObject, Identifiable {
     @Published var position: CGSize = .zero
     @Published var rotation: Double = 0.0
 
-    let id = UUID()
+
 
     init(restaurant: Restaurant) {
         self.restaurant = restaurant
@@ -38,9 +38,10 @@ class RestaurantViewModel: ObservableObject, Identifiable {
                 let scene = try await request.scene
                 await MainActor.run {
                     self.lookAroundScene = scene
+                    print("Successfully fetched Look Around scene for \(self.restaurant.name)") // DEBUG
                 }
             } catch {
-                print("Failed to fetch Look Around scene: \(error.localizedDescription)")
+                print("Failed to fetch Look Around scene for \(restaurant.name): \(error.localizedDescription)") // DEBUG
             }
         }
     }

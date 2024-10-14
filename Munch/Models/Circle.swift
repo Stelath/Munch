@@ -21,3 +21,9 @@ struct CirclePartialUpdate: Codable {
     let restaurants: [String]?
     let started: Bool?
 }
+
+struct Code: Identifiable, Codable {
+    let id: String
+    let code: String
+    let circleId: String
+}

@@ -1,3 +1,12 @@
+//
+//  CreateCircleView.swift
+//  Munch
+//
+//  Created by Mac Howe on 10/14/24.
+//
+
+// place holder for this for now
+
 import SwiftUI
 
 struct PickerPlus: View {
@@ -81,3 +90,5 @@ struct ResizableSegmentedPicker_Previews: PreviewProvider {
         PickerPlusPreview()
     }
 }
+
+

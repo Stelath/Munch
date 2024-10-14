@@ -25,7 +25,7 @@ struct RestaurantView: View {
                 Color.gray
                 ContentUnavailableView("No Preview Available", systemImage: "eye.slash")
             }
-
+            
             VStack {
                 Spacer()
                 VStack(alignment: .leading) {
@@ -38,28 +38,39 @@ struct RestaurantView: View {
                 .padding()
                 .foregroundColor(.white)
             }
-
+            
             HStack {
-                GeometryReader { geometry in
-                    if viewModel.position.width > 0 {
-                        Image(systemName: "hand.thumbsup.fill")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(.green)
-                            .opacity(viewModel.likeOpacity)
-                            .rotationEffect(.degrees(-20))
-                            .offset(x: geometry.size.width - 125, y: 50)
-                    } else if viewModel.position.width < 0 {
-                        Image(systemName: "hand.thumbsdown.fill")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(.red)
-                            .opacity(viewModel.dislikeOpacity)
-                            .rotationEffect(.degrees(20))
-                            .offset(x: 25, y: 50)
-                    }
-                }
+                // Swipe Right
+                Image(systemName: "hand.thumbsup")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.green)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.green, lineWidth: 2)
+                    )
+                    .rotationEffect(.degrees(-12))
+                    .opacity(viewModel.likeOpacity)
+                
+                Spacer()
+                
+                // Swipe Left
+                Image(systemName: "hand.thumbsdown")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.red)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.red, lineWidth: 2)
+                    )
+                    .rotationEffect(.degrees(12))
+                    .opacity(viewModel.dislikeOpacity)
             }
+            .padding(25)
         }
         .cornerRadius(20)
         .offset(x: viewModel.position.width, y: viewModel.position.height)

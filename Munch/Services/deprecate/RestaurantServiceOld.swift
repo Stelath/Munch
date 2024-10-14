@@ -10,6 +10,7 @@ import MapKit
 
 class RestaurantService {
     func fetchRestaurants(near location: CLLocationCoordinate2D) async throws -> [Restaurant] {
+        print("Fetching restaurants near \(location)") // DEBUG
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = "restaurant"
         request.region = MKCoordinateRegion(center: location, latitudinalMeters: 5000, longitudinalMeters: 5000)
