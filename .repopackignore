@@ -1,0 +1,91 @@
+# Add patterns to ignore here, one per line
+# Example:
+# *.log
+# tmp/
+
+
+# Build artifacts and intermediate files
+build/
+DerivedData/
+*.o
+*.log
+*.aux
+*.out
+*.toc
+*.dSYM/
+
+# Xcode specific files
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/*.pbxuser
+*.xcodeproj/*.mode1v3
+*.xcodeproj/*.mode2v3
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# CocoaPods (if using CocoaPods)
+Pods/
+Podfile.lock
+
+# Carthage (if using Carthage)
+Carthage/Build/
+Carthage/Checkouts/
+
+# Fastlane files
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# MacOS
+.DS_Store
+*.swp
+*.swo
+
+# Archives and Generated Files
+*.xcarchive
+*.ipa
+*.dSYM.zip
+
+# Temporary files and metadata
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
+
+# Test output files
+test-output/
+test-reports/
+*.log
+
+# Playgrounds and Xcode timeline data
+timeline.xctimeline
+playground.xcworkspace
+playground/Contents.swift
+
+# Ignore unnecessary file types or system artifacts
+*.plist
+*.lock
+*.json.lock
+
+
+Resources/
+Munch.xcodeproj/
+MunchTests/
+MunchUITests/
+.gitignore
+.repopackignore

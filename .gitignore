@@ -1,0 +1,56 @@
+# Xcode
+.DS_Store
+build/
+DerivedData/
+*.xcworkspace
+xcuserdata/
+
+*.xcuserstate
+*.xcodeproj/project.xcworkspace/
+!*.xcodeproj/*.pbxproj
+!*.xcodeproj/*.xc*
+!*.xcworkspace/*.xc*
+
+# Swift Package Manager
+.build/
+Package.resolved
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Archives
+*.xcarchive
+
+# SwiftPM binaries
+.swiftpm/xcode
+.swiftpm/repositories
+
+# Mac
+*.swp
+*.swo
+*.DS_Store
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# IDE
+.idea/
+
+# Test output
+test-output/
+test-reports/
+*.log
+
+repopack.config.json
+repopack-output.txt
