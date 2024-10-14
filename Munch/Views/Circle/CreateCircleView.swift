@@ -22,7 +22,7 @@ struct CreateCircleView: View {
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocapitalization(.words)
-
+                //TODO: How many restaurants to pick from and pick a new location - mac
             Button(action: {
                 viewModel.createCircle()
             }) {

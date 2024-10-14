@@ -40,6 +40,7 @@
 		4AA542A22CBCE82500784CBC /* SSEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542A12CBCE81B00784CBC /* SSEService.swift */; };
 		4AA542A42CBCED5300784CBC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542A32CBCED4F00784CBC /* User.swift */; };
 		4AA542A62CBDD5E500784CBC /* CircleTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542A52CBDD5DF00784CBC /* CircleTabView.swift */; };
+		4AA542A82CBDDCD000784CBC /* ResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542A72CBDDCCE00784CBC /* ResultsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		4AA542A12CBCE81B00784CBC /* SSEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEService.swift; sourceTree = "<group>"; };
 		4AA542A32CBCED4F00784CBC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4AA542A52CBDD5DF00784CBC /* CircleTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTabView.swift; sourceTree = "<group>"; };
+		4AA542A72CBDDCCE00784CBC /* ResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,16 +346,9 @@
 		4AA542992CBCDE5D00784CBC /* Results */ = {
 			isa = PBXGroup;
 			children = (
-				4AA5429A2CBCDE7700784CBC /* ResultsViewModel.swift */,
+				4AA542A72CBDDCCE00784CBC /* ResultsViewModel.swift */,
 			);
 			path = Results;
-			sourceTree = "<group>";
-		};
-		4AA5429A2CBCDE7700784CBC /* ResultsViewModel.swift */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ResultsViewModel.swift;
 			sourceTree = "<group>";
 		};
 		4AA5429B2CBCE25900784CBC /* SSE */ = {
@@ -521,6 +516,7 @@
 				4AA542982CBCDE4F00784CBC /* LoginViewModel.swift in Sources */,
 				4A8D26BE2CBBBE9800B9B0EC /* LocationService.swift in Sources */,
 				02CA03102C53818A0053EAC4 /* ResultView.swift in Sources */,
+				4AA542A82CBDDCD000784CBC /* ResultsViewModel.swift in Sources */,
 				4AA542A02CBCE72400784CBC /* Endpoint.swift in Sources */,
 				02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */,
 				02F5EE852C21593600DC1C8F /* SwipeViewModel.swift in Sources */,
