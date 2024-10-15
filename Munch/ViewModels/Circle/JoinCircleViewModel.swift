@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+@MainActor
 class JoinCircleViewModel: ObservableObject {
     @Published var circleCode: String = ""
     @Published var name: String = ""
@@ -16,45 +17,40 @@ class JoinCircleViewModel: ObservableObject {
     @Published var isWaitingToStart: Bool = false
     @Published var errorMessage: String?
 
-    private var cancellables = Set<AnyCancellable>()
     private let circleService = CircleService()
-    private let userService = UserService()
     private let sseService = SSEService()
-    private var circleId: String?
+    private var circleId: UUID?
+
 
     func joinCircle() {
-        guard !circleCode.isEmpty else {
-            errorMessage = "Circle code cannot be empty."
-            return
-        }
+        Task {
+            guard !circleCode.isEmpty else {
+                errorMessage = "Circle code cannot be empty."
+                return
+            }
 
-        isLoading = true
-        errorMessage = nil
+            isLoading = true
+            errorMessage = nil
 
-        circleService.joinCircle(code: circleCode, userName: name)
-            .sink(receiveCompletion: { completion in
-                self.isLoading = false
-                if case let .failure(error) = completion {
-                    self.errorMessage = error.localizedDescription
-                }
-            }, receiveValue: { circle in
+            do {
+                let circle = try await circleService.joinCircle(code: circleCode, userName: name)
                 self.circleId = circle.id
                 self.joinedUsers = circle.users
                 self.isWaitingToStart = true
-                self.startListeningForUpdates()
-            })
-            .store(in: &cancellables)
+                startListeningForUpdates()
+            } catch {
+                self.errorMessage = error.localizedDescription
+            }
+            isLoading = false
+        }
     }
 
     private func startListeningForUpdates() {
-        guard let circleId = circleId else { return }
-        sseService.circleUpdates
-            .receive(on: DispatchQueue.main)
-            .sink { update in
-                // Update `joinedUsers` based on the update
-                self.joinedUsers.append(update.user)
-            }
-            .store(in: &cancellables)
-        sseService.startListening(circleId: circleId)
+        guard let circleId = circleId,
+              let url = URL(string: "https://api.yourapp.com/circles/\(circleId)/events") else { return }
+        sseService.startListening(url: url) { [weak self] eventString in //Variable 'self' was written to, but never read
+            // Parse eventString to get updated users
+            // Update self?.joinedUsers accordingly
+        }
     }
 }

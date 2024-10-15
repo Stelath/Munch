@@ -11,7 +11,7 @@ enum VoteType: String, Codable {
 }
 
 struct Vote: Codable {
-    let id : String
+    let id : UUID
     let restaurantId : String
     let userId : String
     let voteType : VoteType

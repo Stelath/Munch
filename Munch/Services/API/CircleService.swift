@@ -23,9 +23,9 @@ class CircleService {
         let endpoint = Endpoint.getCircle(circleId: circleId)
         return try await APIClient.shared.request(endpoint, responseType: Circle.self)
     }
-    func startCircle(circleId: String) async throws -> Circle{
+
+    func startCircle(circleId: String) async throws -> Circle {
         let endpoint = Endpoint.startCircle(circleId: circleId)
         return try await APIClient.shared.request(endpoint, responseType: Circle.self)
     }
-
 }

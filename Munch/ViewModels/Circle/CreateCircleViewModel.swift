@@ -20,40 +20,39 @@ class CreateCircleViewModel: ObservableObject {
     private let sseService = SSEService()
     private var circleId: String?
 
-    func createCircle(userId: String) async {
-        do {
-            let circle = try await circleService.createCircle(userId: userId, name: name, location: location)
-            self.generatedCode = circle.code
-            self.circleId = circle.id
-            self.joinedUsers = circle.users
-            self.startListeningForUpdates()
-        } catch {
-            self.errorMessage = error.localizedDescription
+    func createCircle(userId: String) {
+        Task {
+            do {
+                let circle = try await circleService.createCircle(userId: userId, name: name, location: location)
+                self.generatedCode = circle.code
+                self.circleId = circle.id
+                self.joinedUsers = circle.users
+                startListeningForUpdates()
+            } catch {
+                self.errorMessage = error.localizedDescription
+            }
         }
     }
 
     func startCircle() {
-        guard let circleId = circleId else { return }
-        circleService.startCircle(circleId: circleId)
-            .sink(receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    self.errorMessage = error.localizedDescription
-                }
-            }, receiveValue: {
-                // Handle success (e.g., navigate to the next screen)
-            })
-            .store(in: &cancellables)
+        Task {
+            do {
+                guard let circleId = circleId else { return }
+                let circle = try await circleService.startCircle(circleId: circleId)
+                self.canStartCircle = circle.started
+                // Navigate to the next screen if needed
+            } catch {
+                self.errorMessage = error.localizedDescription
+            }
+        }
     }
 
     private func startListeningForUpdates() {
-        guard let circleId = circleId else { return }
-        sseService.circleUpdates
-            .receive(on: DispatchQueue.main)
-            .sink { update in
-                // Update `joinedUsers` based on the update
-                self.joinedUsers.append(update.user)
-            }
-            .store(in: &cancellables)
-        sseService.startListening(circleId: circleId)
+        guard let circleId = circleId,
+              let url = URL(string: "https://api.yourapp.com/circles/\(circleId)/events") else { return }
+        sseService.startListening(url: url) { [weak self] eventString in //Warnning: Variable 'self' was written to, but never read
+            // Parse eventString to get updated users
+            // Update self?.joinedUsers accordingly
+        }
     }
 }

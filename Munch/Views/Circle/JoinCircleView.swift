@@ -63,7 +63,7 @@ struct JoinCircleView: View {
                                 .font(.headline)
 
                             ForEach(viewModel.joinedUsers, id: \.self) { user in
-                                Text(user)
+                                Text(user.name)
                                     .padding(.vertical, 2)
                             }
                         }

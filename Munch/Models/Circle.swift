@@ -4,9 +4,10 @@
 //
 //  Created by Alexander Korte on 7/26/24.
 //
+import Foundation
 
 struct Circle: Identifiable, Codable {
-    let id: String
+    let id: UUID
     let code: String
     let name: String
     let location: String
@@ -17,7 +18,7 @@ struct Circle: Identifiable, Codable {
 
 
 struct Code: Identifiable, Codable {
-    let id: String
+    let id: UUID
     let code: String
     let circleId: String
 }

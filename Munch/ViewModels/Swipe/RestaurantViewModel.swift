@@ -10,7 +10,7 @@ import MapKit
 
 class RestaurantViewModel: ObservableObject, Identifiable {
     @Published var restaurant: Restaurant
-    @Published var lookAroundScene: MKLookAroundScene?
+//    @Published var lookAroundScene: MKLookAroundScene?
     @Published var position: CGSize = .zero
     @Published var rotation: Double = 0.0
 
@@ -18,7 +18,6 @@ class RestaurantViewModel: ObservableObject, Identifiable {
 
     init(restaurant: Restaurant) {
         self.restaurant = restaurant
-        fetchLookAroundPreview()
     }
 
     var likeOpacity: Double {
@@ -29,22 +28,22 @@ class RestaurantViewModel: ObservableObject, Identifiable {
         Double(max(min(-position.width / 10 - 1, 1), 0))
     }
 
-    func fetchLookAroundPreview() {
-        lookAroundScene = nil
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let request = MKLookAroundSceneRequest(mapItem: restaurant.mapItem)
-                let scene = try await request.scene
-                await MainActor.run {
-                    self.lookAroundScene = scene
-                    print("LookAroundScene set for \(self.restaurant.name): \(String(describing: self.lookAroundScene))") // DEBUG
-                }
-            } catch {
-                print("Failed to fetch Look Around scene for \(restaurant.name): \(error.localizedDescription)") // DEBUG
-            }
-        }
-    }
+//    func fetchLookAroundPreview() {
+//        lookAroundScene = nil
+//        Task { [weak self] in
+//            guard let self else { return }
+//            do {
+//                let request = MKLookAroundSceneRequest(address: restaurant.address)
+//                let scene = try await request.scene
+//                await MainActor.run {
+//                    self.lookAroundScene = scene
+//                    print("LookAroundScene set for \(self.restaurant.name): \(String(describing: self.lookAroundScene))") // DEBUG
+//                }
+//            } catch {
+//                print("Failed to fetch Look Around scene for \(restaurant.name): \(error.localizedDescription)") // DEBUG
+//            }
+//        }
+//    }
 
     func onDragChanged(value: DragGesture.Value) {
         withAnimation(.default) {

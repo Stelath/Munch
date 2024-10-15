@@ -24,7 +24,7 @@ struct CreateCircleView: View {
                 .autocapitalization(.words)
                 //TODO: How many restaurants to pick from and pick a new location - mac
             Button(action: {
-                viewModel.createCircle()
+                viewModel.createCircle(userId: "place holder")
             }) {
                 Text("Create Circle")
                     .bold()

@@ -14,88 +14,45 @@ public enum SwipeDirection {
     case right
 }
 
+@MainActor
 class SwipeViewModel: ObservableObject {
     @Published private(set) var restaurants: [Restaurant] = []
     @Published private(set) var restaurantViewModels: [RestaurantViewModel] = []
-    @Published private(set) var yesRestaurants: [Restaurant] = [] // TODO: just hold id later, may not need to hold bc will fetch from backend and send results as we go
-    @Published private(set) var noRestaurants: [Restaurant] = []
     @Published var isLoading: Bool = false
-    
-    let locationService = LocationService()
+
     private let restaurantService = RestaurantService()
-    private var cancellables = Set<AnyCancellable>()
-    private var circleId: String?
+    private var circleId: String
     private var currentIndex: Int = 0
-    
-    init() {
-        locationService.requestLocationPermission()
-        observeLocationUpdates()
-        print("init") // DEBUG
+
+    init(circleId: String) {
+        self.circleId = circleId
+        Task {
+            await fetchRestaurants()
+        }
     }
-    
+
     var isAllRestaurantsSwiped: Bool {
-        return restaurants.count == (yesRestaurants.count + noRestaurants.count)
+        return currentIndex < 0
     }
-    
+
     var currentRestaurantViewModel: RestaurantViewModel? {
         guard currentIndex >= 0 && currentIndex < restaurantViewModels.count else { return nil }
         return restaurantViewModels[currentIndex]
     }
-    
-    private func observeLocationUpdates() {
-        locationService.$currentLocation
-            .receive(on: DispatchQueue.main)
-            .compactMap { $0 }
-            .first()
-        //            .removeDuplicates(by: { (loc1, loc2) in
-        //                    // Prevents multiple fetches for the same location
-        //                    loc1.coordinate.latitude == loc2.coordinate.latitude &&
-        //                    loc1.coordinate.longitude == loc2.coordinate.longitude
-        //                })
-        //                .debounce(for: .seconds(2), scheduler: DispatchQueue.main)  // Throttle quick successive updates
-            .sink { [weak self] location in
-                self?.fetchRestaurants(near: location)
-            }
-            .store(in: &cancellables)
-    }
-    func fetchRestaurants() {
-        guard let circleId = circleId else { return }
+
+    func fetchRestaurants() async {
         isLoading = true
-        
-        restaurantService.fetchRestaurants(circleId: circleId)
-            .sink(receiveCompletion: { completion in
-                self.isLoading = false
-                if case let .failure(error) = completion {
-                    // Handle error
-                }
-            }, receiveValue: { restaurants in
-                self.restaurants = restaurants
-                self.updateRestaurantViewModels()
-            })
-            .store(in: &cancellables)
+        do {
+            let fetchedRestaurants = try await restaurantService.fetchRestaurants(circleId: circleId)
+            self.restaurants = fetchedRestaurants
+            self.updateRestaurantViewModels()
+        } catch {
+            print("Failed to fetch restaurants: \(error.localizedDescription)")
         }
-//    func fetchRestaurants(near location: CLLocation) {
-//        isLoading = true
-//        Task { [weak self] in
-//            guard let self else { return }
-//            do {
-//                let fetchedRestaurants = try await self.restaurantService.fetchRestaurants(near: location.coordinate)
-//                await MainActor.run {
-//                    self.restaurants = fetchedRestaurants
-//                    self.updateRestaurantViewModels()
-//                    self.isLoading = false
-//                }
-//            } catch {
-//                await MainActor.run {
-//                    print("Failed to fetch restaurants: \(error.localizedDescription)")
-//                    self.isLoading = false
-//                }
-//            }
-//        }
-//    }
+        isLoading = false
+    }
 
     private func updateRestaurantViewModels() {
-        print("Updating restaurant view models") //DEBUG
         self.restaurantViewModels = restaurants.map { RestaurantViewModel(restaurant: $0) }
         self.currentIndex = self.restaurantViewModels.count - 1
     }
@@ -104,11 +61,17 @@ class SwipeViewModel: ObservableObject {
         guard currentIndex >= 0 else { return }
 
         let restaurantViewModel = restaurantViewModels[currentIndex]
-
-        if direction == .left {
-            noRestaurants.append(restaurantViewModel.restaurant)
-        } else {
-            yesRestaurants.append(restaurantViewModel.restaurant)
+        Task {
+            do {
+                let voteType: VoteType = (direction == .right) ? .like : .dislike
+                try await restaurantService.submitVote(
+                    circleId: circleId,
+                    restaurantId: restaurantViewModel.restaurant.id,
+                    voteType: voteType
+                )
+            } catch {
+                print("Failed to submit vote: \(error.localizedDescription)")
+            }
         }
 
         currentIndex -= 1

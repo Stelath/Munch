@@ -19,7 +19,7 @@ struct Endpoint {
     let headers: [String: String]?
     let body: [String: Any]?
 
-    static func createCircle(userId: String, name: String, location: String) -> Endpoint {
+    static func createCircle(userId: UUID, name: String, location: String) -> Endpoint {
         return Endpoint(
             path: "/circles",
             method: .POST,
@@ -37,7 +37,7 @@ struct Endpoint {
         )
     }
 
-    static func getCircle(circleId: String) -> Endpoint {
+    static func getCircle(circleId: UUID) -> Endpoint {
         return Endpoint(
             path: "/circles/\(circleId)",
             method: .GET,
@@ -46,7 +46,7 @@ struct Endpoint {
         )
     }
     
-    static func startCircle(circleId: String) -> Endpoint {
+    static func startCircle(circleId: UUID) -> Endpoint {
         return Endpoint(
             path: "/circles/\(circleId)/start",
             method: .POST,
@@ -55,7 +55,7 @@ struct Endpoint {
         )
     }
 
-    static func fetchRestaurants(circleId: String) -> Endpoint {
+    static func fetchRestaurants(circleId: UUID) -> Endpoint {
         return Endpoint(
             path: "/circles/\(circleId)/restaurants",
             method: .GET,
@@ -64,12 +64,21 @@ struct Endpoint {
         )
     }
 
-    static func submitVote(circleId: String, restaurantId: String, vote: String) -> Endpoint {
-        return Endpoint(
+    static func submitVote(circleId: UUID, restaurantId: UUID, voteType: VoteType) -> Endpoint {
+        Endpoint(
             path: "/circles/\(circleId)/restaurants/\(restaurantId)/vote",
             method: .POST,
             headers: ["Content-Type": "application/json"],
-            body: ["vote": vote]
+            body: ["vote": voteType.rawValue]
+        )
+    }
+
+    static func getVotingResults(circleId: UUID) -> Endpoint {
+        Endpoint(
+            path: "/circles/\(circleId)/results",
+            method: .GET,
+            headers: nil,
+            body: nil
         )
     }
 }

@@ -8,10 +8,6 @@
 import Foundation
 import Combine
 
-import Foundation
-import Combine
-
-
 class SSEService: NSObject, URLSessionDataDelegate {
     private var task: URLSessionDataTask?
     private var eventHandler: ((String) -> Void)?

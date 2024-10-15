@@ -9,7 +9,7 @@ import Foundation
 
 
 struct RestaurantVoteResult: Identifiable, Codable {
-    let id: String
+    let id: UUID
     let restaurant: Restaurant
     let likes: Int
     let dislikes: Int

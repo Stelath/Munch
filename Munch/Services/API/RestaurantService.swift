@@ -8,22 +8,24 @@
 import Foundation
 import Combine
 
+import Foundation
+
 class RestaurantService {
     func fetchRestaurants(circleId: String) async throws -> [Restaurant] {
         let endpoint = Endpoint.fetchRestaurants(circleId: circleId)
         return try await APIClient.shared.request(endpoint, responseType: [Restaurant].self)
     }
-    
 
-    func submitVote(circleId: String, restaurantId: String, vote: Vote) -> AnyPublisher<Void, Error> {
-        let endpoint = Endpoint.submitVote(circleId: circleId, restaurantId: restaurantId, vote: vote)
-        return APIClient.shared.request(endpoint)
-            .map { _ in () }
-            .eraseToAnyPublisher()
+    func submitVote(circleId: String, restaurantId: String, voteType: VoteType) async throws {
+        let endpoint = Endpoint.submitVote(circleId: circleId, restaurantId: restaurantId, voteType: voteType)
+        _ = try await APIClient.shared.request(endpoint, responseType: EmptyResponse.self)
     }
 
-    func getVotingResults(circleId: String) -> AnyPublisher<[RestaurantVoteResult], Error> {
+    func getVotingResults(circleId: String) async throws -> [RestaurantVoteResult] {
         let endpoint = Endpoint.getVotingResults(circleId: circleId)
-        return APIClient.shared.request(endpoint)
+        return try await APIClient.shared.request(endpoint, responseType: [RestaurantVoteResult].self)
     }
 }
+
+// Helper for endpoints that return no data
+struct EmptyResponse: Decodable {}
