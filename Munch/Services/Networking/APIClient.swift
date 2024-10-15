@@ -6,22 +6,32 @@
 //
 
 import Foundation
-import Combine
 
 class APIClient {
     static let shared = APIClient()
-    
-    func request<T: Decodable>(_ endpoint: Endpoint) -> AnyPublisher<T, Error> {
-        let request = URLRequest(url: endpoint.url)
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .tryMap { output in
-                guard let response = output.response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
-                    throw URLError(.badServerResponse)
-                }
-                return output.data
-            }
-            .decode(type: T.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+    private let session: URLSession
+    private let baseURL = URL(string: "https://my.API.com")!
+
+    private init(session: URLSession = .shared) {
+        self.session = session
+    }
+
+    func request<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
+        var request = URLRequest(url: baseURL.appendingPathComponent(endpoint.path))
+        request.httpMethod = endpoint.method.rawValue
+        request.allHTTPHeaderFields = endpoint.headers
+
+        if let body = endpoint.body {
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        }
+
+        let (data, response) = try await session.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+
+        return try JSONDecoder().decode(T.self, from: data)
     }
 }

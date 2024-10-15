@@ -7,10 +7,11 @@
 
 struct Circle: Identifiable, Codable {
     let id: String
+    let code: String
     let name: String
     let location: String
-    let users: [String]
-    let restaurants: [String]
+    let users: [User]
+    let restaurants: [Restaurant]?
     let started: Bool
 }
 

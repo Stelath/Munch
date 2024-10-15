@@ -22,7 +22,6 @@
 		02F5EE852C21593600DC1C8F /* SwipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE842C21592800DC1C8F /* SwipeViewModel.swift */; };
 		02F5EE872C215CF500DC1C8F /* RestaurantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE862C215CF200DC1C8F /* RestaurantView.swift */; };
 		4A6ECFC12CB8DF41007C0095 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6ECFBE2CB8DF41007C0095 /* Circle.swift */; };
-		4A8D26B92CBB9C2E00B9B0EC /* CirclesAPIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */; };
 		4A8D26BB2CBBB2A800B9B0EC /* RestaurantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26BA2CBBB29D00B9B0EC /* RestaurantViewModel.swift */; };
 		4A8D26BE2CBBBE9800B9B0EC /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */; };
 		4A8D26C32CBBBF1500B9B0EC /* RestaurantServiceOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26C22CBBBF1100B9B0EC /* RestaurantServiceOld.swift */; };
@@ -83,7 +82,6 @@
 		02F5EE842C21592800DC1C8F /* SwipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeViewModel.swift; sourceTree = "<group>"; };
 		02F5EE862C215CF200DC1C8F /* RestaurantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantView.swift; sourceTree = "<group>"; };
 		4A6ECFBE2CB8DF41007C0095 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
-		4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesAPIHandler.swift; sourceTree = "<group>"; };
 		4A8D26BA2CBBB29D00B9B0EC /* RestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModel.swift; sourceTree = "<group>"; };
 		4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		4A8D26C22CBBBF1100B9B0EC /* RestaurantServiceOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantServiceOld.swift; sourceTree = "<group>"; };
@@ -286,7 +284,6 @@
 		4AA5428A2CBCDAE200784CBC /* deprecate */ = {
 			isa = PBXGroup;
 			children = (
-				4A8D26B72CBB9C2E00B9B0EC /* CirclesAPIHandler.swift */,
 				4A8D26C22CBBBF1100B9B0EC /* RestaurantServiceOld.swift */,
 				4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */,
 			);
@@ -541,7 +538,6 @@
 				4A985DD82CBE0B04004E09E9 /* Vote.swift in Sources */,
 				4A8D26C32CBBBF1500B9B0EC /* RestaurantServiceOld.swift in Sources */,
 				4AA542882CBCDAAC00784CBC /* UserService.swift in Sources */,
-				4A8D26B92CBB9C2E00B9B0EC /* CirclesAPIHandler.swift in Sources */,
 				4AA542862CBCDA9600784CBC /* RestaurantService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

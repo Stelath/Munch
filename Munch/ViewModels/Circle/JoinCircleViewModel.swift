@@ -11,12 +11,16 @@ import Combine
 class JoinCircleViewModel: ObservableObject {
     @Published var circleCode: String = ""
     @Published var name: String = ""
-    @Published var joinedUsers: [String] = []
+    @Published var joinedUsers: [User] = []
     @Published var isLoading: Bool = false
     @Published var isWaitingToStart: Bool = false
     @Published var errorMessage: String?
 
     private var cancellables = Set<AnyCancellable>()
+    private let circleService = CircleService()
+    private let userService = UserService()
+    private let sseService = SSEService()
+    private var circleId: String?
 
     func joinCircle() {
         guard !circleCode.isEmpty else {
@@ -27,14 +31,30 @@ class JoinCircleViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        // Placeholder for logic to call CircleService to join the circle
-        // Simulate a successful join
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.isLoading = false
-            self.isWaitingToStart = true
+        circleService.joinCircle(code: circleCode, userName: name)
+            .sink(receiveCompletion: { completion in
+                self.isLoading = false
+                if case let .failure(error) = completion {
+                    self.errorMessage = error.localizedDescription
+                }
+            }, receiveValue: { circle in
+                self.circleId = circle.id
+                self.joinedUsers = circle.users
+                self.isWaitingToStart = true
+                self.startListeningForUpdates()
+            })
+            .store(in: &cancellables)
+    }
 
-            // Simulate some joined users for preview
-            self.joinedUsers = ["User1", "User2", "User3"]
-        }
+    private func startListeningForUpdates() {
+        guard let circleId = circleId else { return }
+        sseService.circleUpdates
+            .receive(on: DispatchQueue.main)
+            .sink { update in
+                // Update `joinedUsers` based on the update
+                self.joinedUsers.append(update.user)
+            }
+            .store(in: &cancellables)
+        sseService.startListening(circleId: circleId)
     }
 }

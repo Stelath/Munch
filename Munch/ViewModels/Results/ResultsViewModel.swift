@@ -14,6 +14,11 @@ class ResultsViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
 
+    private let circleService = CircleService()
+    private let sseService = SSEService()
+    private var cancellables = Set<AnyCancellable>()
+    private var circleId: String? // Assume this is set from context
+
     private var cancellables = Set<AnyCancellable>()
 
     init() {
@@ -21,59 +26,29 @@ class ResultsViewModel: ObservableObject {
     }
 
     func fetchResults() {
-        isLoading = true
-        errorMessage = nil
+            guard let circleId = circleId else { return }
+            isLoading = true
 
-        // Simulate fetching data
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
-            let sampleResults = [
-                RestaurantVoteResult(
-                    restaurant: Restaurant(
-                        id: UUID(),
-                        name: "Sushi Place",
-                        address: "123 Main St",
-                        images: ["https://source.unsplash.com/featured/?sushi"],
-                        coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-                        mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)))
-                    ),
-                    likes: 10,
-                    dislikes: 2
-                ),
-                RestaurantVoteResult(
-                    restaurant: Restaurant(
-                        id: UUID(),
-                        name: "Pizza Corner",
-                        address: "456 Elm St",
-                        images: ["https://source.unsplash.com/featured/?pizza"],
-                        coordinate: CLLocationCoordinate2D(latitude: 37.8044, longitude: -122.2712),
-                        mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.8044, longitude: -122.2712)))
-                    ),
-                    likes: 8,
-                    dislikes: 1
-                ),
-                RestaurantVoteResult(
-                    restaurant: Restaurant(
-                        id: UUID(),
-                        name: "Burger Joint",
-                        address: "789 Oak St",
-                        images: ["https://source.unsplash.com/featured/?burger"],
-                        coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-                        mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)))
-                    ),
-                    likes: 5,
-                    dislikes: 0
-                )
-            ]
+            circleService.getVotingResults(circleId: circleId)
+                .sink(receiveCompletion: { completion in
+                    self.isLoading = false
+                    if case let .failure(error) = completion {
+                        // Handle error
+                    }
+                }, receiveValue: { results in
+                    self.restaurantResults = results.sorted { $0.score > $1.score }
+                })
+                .store(in: &cancellables)
+        }
 
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.restaurantResults = sampleResults.sorted { $0.score > $1.score }
-            }
+        func startListeningForUpdates() {
+            guard let circleId = circleId else { return }
+            sseService.voteUpdates
+                .receive(on: DispatchQueue.main)
+                .sink { update in
+                    // Update `restaurantResults` based on the update
+                }
+                .store(in: &cancellables)
+            sseService.startListening(circleId: circleId)
         }
     }
-
-    // Placeholder for SSE updates
-    func startListeningForUpdates() {
-        // Future SSE implementation to update `restaurantResults`
-    }
-}

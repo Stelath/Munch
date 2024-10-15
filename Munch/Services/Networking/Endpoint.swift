@@ -7,29 +7,69 @@
 
 import Foundation
 
-enum Endpoint {
-    case createCircle(name: String)
-    case joinCircle(code: String)
-    case startCircle(circleId: String)
-    case fetchRestaurants(circleId: String)
-//    case submitVote(circleId: String, restaurantId: String, vote: Vote)
-    case getVotingResults(circleId: String)
+enum HTTPMethod: String {
+    case GET
+    case POST
+    case PATCH
+}
+
+struct Endpoint {
+    let path: String
+    let method: HTTPMethod
+    let headers: [String: String]?
+    let body: [String: Any]?
+
+    static func createCircle(userId: String, name: String, location: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: ["userId": userId, "name": name, "location": location]
+        )
+    }
+
+    static func joinCircle(code: String, userName: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/join",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: ["code": code, "userName": userName]
+        )
+    }
+
+    static func getCircle(circleId: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)",
+            method: .GET,
+            headers: nil,
+            body: nil
+        )
+    }
     
-    var url: URL {
-        let baseUrl = "https://api.yourapp.com"
-        switch self {
-        case .createCircle(let name):
-            return URL(string: "\(baseUrl)/circles?name=\(name)")!
-        case .joinCircle(let code):
-            return URL(string: "\(baseUrl)/circles/join?code=\(code)")!
-        case .startCircle(let circleId):
-            return URL(string: "\(baseUrl)/circles/\(circleId)/start")!
-        case .fetchRestaurants(let circleId):
-            return URL(string: "\(baseUrl)/circles/\(circleId)/restaurants")!
-//        case .submitVote(let circleId, let restaurantId, let vote):
-//            return URL(string: "\(baseUrl)/circles/\(circleId)/restaurants/\(restaurantId)/vote?vote=\(vote.rawValue)")!
-        case .getVotingResults(let circleId):
-            return URL(string: "\(baseUrl)/circles/\(circleId)/results")!
-        }
+    static func startCircle(circleId: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/start",
+            method: .POST,
+            headers: nil,
+            body: nil
+        )
+    }
+
+    static func fetchRestaurants(circleId: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/restaurants",
+            method: .GET,
+            headers: nil,
+            body: nil
+        )
+    }
+
+    static func submitVote(circleId: String, restaurantId: String, vote: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/restaurants/\(restaurantId)/vote",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: ["vote": vote]
+        )
     }
 }

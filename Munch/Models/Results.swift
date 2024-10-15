@@ -7,14 +7,16 @@
 
 import Foundation
 
-// add codable back once restaurants is fixed
-struct RestaurantVoteResult: Identifiable {
-    let id: UUID = UUID()
+
+struct RestaurantVoteResult: Identifiable, Codable {
+    let id: String
     let restaurant: Restaurant
     let likes: Int
     let dislikes: Int
-    
+
     var score: Int {
-        return likes - dislikes
-    }
+            let totalVotes = Float(likes + dislikes)
+            guard totalVotes > 0 else { return 0 } 
+            return Int((Float(likes) / totalVotes) * 100)
+        }
 }

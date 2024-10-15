@@ -5,24 +5,27 @@
 //  Created by Mac Howe on 10/14/24.
 //
 
+
 import Foundation
-import Combine
 
 class CircleService {
-    func createCircle(name: String) -> AnyPublisher<Circle, Error> {
-        let endpoint = Endpoint.createCircle(name: name)
-        return APIClient.shared.request(endpoint)
-    }
-    
-    func joinCircle(code: String) -> AnyPublisher<Circle, Error> {
-        let endpoint = Endpoint.joinCircle(code: code)
-        return APIClient.shared.request(endpoint)
+    func createCircle(userId: String, name: String, location: String) async throws -> Circle {
+        let endpoint = Endpoint.createCircle(userId: userId, name: name, location: location)
+        return try await APIClient.shared.request(endpoint, responseType: Circle.self)
     }
 
-//    func startCircle(circleId: String) -> AnyPublisher<Void, Error> {
-//        let endpoint = Endpoint.startCircle(circleId: circleId)
-//        return APIClient.shared.request(endpoint)
-//            .map { _ in () }  // Mapping the response to Void
-//            .eraseToAnyPublisher()
-//    }
+    func joinCircle(code: String, userName: String) async throws -> Circle {
+        let endpoint = Endpoint.joinCircle(code: code, userName: userName)
+        return try await APIClient.shared.request(endpoint, responseType: Circle.self)
+    }
+
+    func getCircle(circleId: String) async throws -> Circle {
+        let endpoint = Endpoint.getCircle(circleId: circleId)
+        return try await APIClient.shared.request(endpoint, responseType: Circle.self)
+    }
+    func startCircle(circleId: String) async throws -> Circle{
+        let endpoint = Endpoint.startCircle(circleId: circleId)
+        return try await APIClient.shared.request(endpoint, responseType: Circle.self)
+    }
+
 }
