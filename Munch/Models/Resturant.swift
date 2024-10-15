@@ -24,26 +24,7 @@ struct Restaurant: Identifiable {
 //    let name: String
 //    let address: String
 //    let imageURLs: [String]
+//    let logoURL: String?
+//    
 //}
 
-enum VoteType: String, Codable {
-    case like
-    case dislike
-}
-
-struct Vote: Codable {
-    let id : String
-    let restaurantId : String
-    let userId : String
-    let voteType : VoteType
-}
-
-struct RestaurantVoteResult: Codable {
-    let restaurantId: UUID
-    let likes: Int
-    let dislikes: Int
-
-    var score: Int {
-        return likes - dislikes
-    }
-}

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		02CA030F2C53818A0053EAC4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CA030D2C53818A0053EAC4 /* LoginView.swift */; };
-		02CA03102C53818A0053EAC4 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CA030E2C53818A0053EAC4 /* ResultView.swift */; };
+		02CA03102C53818A0053EAC4 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CA030E2C53818A0053EAC4 /* ResultsView.swift */; };
 		02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D4E6572C1F798900D12FE2 /* MunchApp.swift */; };
 		02D4E65A2C1F798900D12FE2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02D4E6592C1F798900D12FE2 /* ContentView.swift */; };
 		02D4E65C2C1F798B00D12FE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E65B2C1F798B00D12FE2 /* Assets.xcassets */; };
@@ -26,6 +26,10 @@
 		4A8D26BB2CBBB2A800B9B0EC /* RestaurantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26BA2CBBB29D00B9B0EC /* RestaurantViewModel.swift */; };
 		4A8D26BE2CBBBE9800B9B0EC /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */; };
 		4A8D26C32CBBBF1500B9B0EC /* RestaurantServiceOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26C22CBBBF1100B9B0EC /* RestaurantServiceOld.swift */; };
+		4A985DD62CBE0AE3004E09E9 /* Results.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A985DD52CBE0AD3004E09E9 /* Results.swift */; };
+		4A985DD82CBE0B04004E09E9 /* Vote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A985DD72CBE0AFE004E09E9 /* Vote.swift */; };
+		4A985DDA2CBE1185004E09E9 /* ResultRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A985DD92CBE116E004E09E9 /* ResultRow.swift */; };
+		4A985DDE2CBE139F004E09E9 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A985DDD2CBE139C004E09E9 /* DetailView.swift */; };
 		4AA542782CBCD95200784CBC /* CreateCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542772CBCD94800784CBC /* CreateCircleView.swift */; };
 		4AA5427A2CBCD95D00784CBC /* JoinCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542792CBCD95A00784CBC /* JoinCircleView.swift */; };
 		4AA5427E2CBCD9E500784CBC /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5427C2CBCD9C500784CBC /* LoadingIndicatorView.swift */; };
@@ -62,7 +66,7 @@
 
 /* Begin PBXFileReference section */
 		02CA030D2C53818A0053EAC4 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		02CA030E2C53818A0053EAC4 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		02CA030E2C53818A0053EAC4 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		02D4E6542C1F798900D12FE2 /* Munch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Munch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02D4E6572C1F798900D12FE2 /* MunchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MunchApp.swift; sourceTree = "<group>"; };
 		02D4E6592C1F798900D12FE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +87,10 @@
 		4A8D26BA2CBBB29D00B9B0EC /* RestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModel.swift; sourceTree = "<group>"; };
 		4A8D26BD2CBBBE9700B9B0EC /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		4A8D26C22CBBBF1100B9B0EC /* RestaurantServiceOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantServiceOld.swift; sourceTree = "<group>"; };
+		4A985DD52CBE0AD3004E09E9 /* Results.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Results.swift; sourceTree = "<group>"; };
+		4A985DD72CBE0AFE004E09E9 /* Vote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vote.swift; sourceTree = "<group>"; };
+		4A985DD92CBE116E004E09E9 /* ResultRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultRow.swift; sourceTree = "<group>"; };
+		4A985DDD2CBE139C004E09E9 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		4AA542772CBCD94800784CBC /* CreateCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCircleView.swift; sourceTree = "<group>"; };
 		4AA542792CBCD95A00784CBC /* JoinCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinCircleView.swift; sourceTree = "<group>"; };
 		4AA5427C2CBCD9C500784CBC /* LoadingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorView.swift; sourceTree = "<group>"; };
@@ -197,6 +205,8 @@
 		02D4E6832C1FA15400D12FE2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4A985DD72CBE0AFE004E09E9 /* Vote.swift */,
+				4A985DD52CBE0AD3004E09E9 /* Results.swift */,
 				4AA542A32CBCED4F00784CBC /* User.swift */,
 				02F5EE822C21591D00DC1C8F /* Resturant.swift */,
 				4A6ECFBE2CB8DF41007C0095 /* Circle.swift */,
@@ -312,7 +322,9 @@
 		4AA542902CBCDD4100784CBC /* Results */ = {
 			isa = PBXGroup;
 			children = (
-				02CA030E2C53818A0053EAC4 /* ResultView.swift */,
+				4A985DDD2CBE139C004E09E9 /* DetailView.swift */,
+				4A985DD92CBE116E004E09E9 /* ResultRow.swift */,
+				02CA030E2C53818A0053EAC4 /* ResultsView.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -499,11 +511,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AA542782CBCD95200784CBC /* CreateCircleView.swift in Sources */,
+				4A985DDA2CBE1185004E09E9 /* ResultRow.swift in Sources */,
 				4AA5427A2CBCD95D00784CBC /* JoinCircleView.swift in Sources */,
 				4AA542952CBCDE2D00784CBC /* JoinCircleViewModel.swift in Sources */,
 				4AA5429D2CBCE6E900784CBC /* APIClient.swift in Sources */,
 				02D4E68C2C1FB18100D12FE2 /* CreateCircleViewModel.swift in Sources */,
 				4AA542A42CBCED5300784CBC /* User.swift in Sources */,
+				4A985DD62CBE0AE3004E09E9 /* Results.swift in Sources */,
 				02D4E69A2C2002F600D12FE2 /* SwipeView.swift in Sources */,
 				02F5EE832C21592000DC1C8F /* Resturant.swift in Sources */,
 				4A6ECFC12CB8DF41007C0095 /* Circle.swift in Sources */,
@@ -515,7 +529,8 @@
 				02CA030F2C53818A0053EAC4 /* LoginView.swift in Sources */,
 				4AA542982CBCDE4F00784CBC /* LoginViewModel.swift in Sources */,
 				4A8D26BE2CBBBE9800B9B0EC /* LocationService.swift in Sources */,
-				02CA03102C53818A0053EAC4 /* ResultView.swift in Sources */,
+				02CA03102C53818A0053EAC4 /* ResultsView.swift in Sources */,
+				4A985DDE2CBE139F004E09E9 /* DetailView.swift in Sources */,
 				4AA542A82CBDDCD000784CBC /* ResultsViewModel.swift in Sources */,
 				4AA542A02CBCE72400784CBC /* Endpoint.swift in Sources */,
 				02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */,
@@ -523,6 +538,7 @@
 				4AA542A22CBCE82500784CBC /* SSEService.swift in Sources */,
 				4AA5427E2CBCD9E500784CBC /* LoadingIndicatorView.swift in Sources */,
 				4AA5427F2CBCD9E500784CBC /* ErrorView.swift in Sources */,
+				4A985DD82CBE0B04004E09E9 /* Vote.swift in Sources */,
 				4A8D26C32CBBBF1500B9B0EC /* RestaurantServiceOld.swift in Sources */,
 				4AA542882CBCDAAC00784CBC /* UserService.swift in Sources */,
 				4A8D26B92CBB9C2E00B9B0EC /* CirclesAPIHandler.swift in Sources */,
@@ -702,8 +718,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -734,8 +750,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -100,7 +100,7 @@ struct SwipeView: View {
                 }
                 .padding(8)
                 .navigationDestination(isPresented: $navigateToResults) {
-                    ResultView()
+                    ResultsView()
                         .environmentObject(viewModel)
                 }
             }
