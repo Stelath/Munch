@@ -5,6 +5,8 @@
 //  Created by Mac Howe on 10/14/24.
 //
 
+import Foundation
+
 enum VoteType: String, Codable {
     case like
     case dislike

@@ -27,7 +27,7 @@ struct RestaurantResultRow: View {
             // Restaurant Details with Image
             HStack(spacing: 15) {
                 // Image Placeholder
-                if let firstImage = result.restaurant.images.first, let imageURL = URL(string: firstImage) {
+                if let firstImage = result.restaurant.imageURLs.first, let imageURL = URL(string: firstImage) {
                     AsyncImage(url: imageURL) { phase in
                         switch phase {
                         case .empty:
@@ -116,11 +116,11 @@ struct RestaurantResultRow_Previews: PreviewProvider {
             id: UUID(),
             name: "Sushi Place",
             address: "123 Main St",
-            images: ["https://example.com/image.jpg"], // Replace with valid image URLs
-            coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-            mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)))
-        )
+            imageURLs: ["https://example.com/image.jpg"],
+            logoURL: nil
+        ) 
         let sampleResult = RestaurantVoteResult(
+            id: UUID(),
             restaurant: sampleRestaurant,
             likes: 10,
             dislikes: 2

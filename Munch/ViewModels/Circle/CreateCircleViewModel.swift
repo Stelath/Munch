@@ -18,9 +18,9 @@ class CreateCircleViewModel: ObservableObject {
 
     private let circleService = CircleService()
     private let sseService = SSEService()
-    private var circleId: String?
-
-    func createCircle(userId: String) {
+    private var circleId: UUID?
+    
+    func createCircle(userId: UUID) {
         Task {
             do {
                 let circle = try await circleService.createCircle(userId: userId, name: name, location: location)
@@ -40,19 +40,44 @@ class CreateCircleViewModel: ObservableObject {
                 guard let circleId = circleId else { return }
                 let circle = try await circleService.startCircle(circleId: circleId)
                 self.canStartCircle = circle.started
-                // Navigate to the next screen if needed
+                // TODO navigate to the next screen
             } catch {
                 self.errorMessage = error.localizedDescription
             }
         }
     }
-
+    
     private func startListeningForUpdates() {
         guard let circleId = circleId,
-              let url = URL(string: "https://api.yourapp.com/circles/\(circleId)/events") else { return }
-        sseService.startListening(url: url) { [weak self] eventString in //Warnning: Variable 'self' was written to, but never read
-            // Parse eventString to get updated users
-            // Update self?.joinedUsers accordingly
+              let url = URL(string: "https://api.yourapp.com/circles/\(circleId.uuidString)/events") else { return }
+        sseService.startListening(url: url) { [weak self] eventName, eventData in
+            guard let self = self else { return }
+            switch eventName {
+            case "user_joined":
+                if let data = eventData?.data(using: .utf8) {
+                    do {
+                        let newUser = try JSONDecoder().decode(User.self, from: data)
+                        DispatchQueue.main.async {
+                            if !self.joinedUsers.contains(where: { $0.id == newUser.id }) {
+                                self.joinedUsers.append(newUser)
+                            }
+                        }
+                    } catch {
+                        print("Failed to decode user_joined event: \(error.localizedDescription)")
+                    }
+                }
+            case "circle_started":
+                DispatchQueue.main.async {
+                    self.canStartCircle = true
+                    // Navigate to the next screen if needed
+                }
+            default:
+                break
+            }
         }
+    }
+
+    func stopListeningForUpdates() {
+        sseService.stopListening()
     }
 }

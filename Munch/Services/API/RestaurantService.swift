@@ -6,22 +6,20 @@
 //
 //
 import Foundation
-import Combine
 
-import Foundation
 
 class RestaurantService {
-    func fetchRestaurants(circleId: String) async throws -> [Restaurant] {
+    func fetchRestaurants(circleId: UUID) async throws -> [Restaurant] {
         let endpoint = Endpoint.fetchRestaurants(circleId: circleId)
         return try await APIClient.shared.request(endpoint, responseType: [Restaurant].self)
     }
 
-    func submitVote(circleId: String, restaurantId: String, voteType: VoteType) async throws {
+    func submitVote(circleId: UUID, restaurantId: UUID, voteType: VoteType) async throws {
         let endpoint = Endpoint.submitVote(circleId: circleId, restaurantId: restaurantId, voteType: voteType)
         _ = try await APIClient.shared.request(endpoint, responseType: EmptyResponse.self)
     }
 
-    func getVotingResults(circleId: String) async throws -> [RestaurantVoteResult] {
+    func getVotingResults(circleId: UUID) async throws -> [RestaurantVoteResult] {
         let endpoint = Endpoint.getVotingResults(circleId: circleId)
         return try await APIClient.shared.request(endpoint, responseType: [RestaurantVoteResult].self)
     }

@@ -10,9 +10,8 @@ import MapKit
 
 struct RestaurantDetailView: View {
     let restaurant: Restaurant
-    @State private var region = MKCoordinateRegion()
-    @State private var coordinate: CLLocationCoordinate2D?
-    @State private var isMapLoaded = false
+    @StateObject private var viewModel = RestaurantDetailViewModel()
+
 
     var body: some View {
         ScrollView {
@@ -70,25 +69,18 @@ struct RestaurantDetailView: View {
                 }
                 .padding(.horizontal)
 
-                if let coordinate = coordinate {
-                    Map(coordinateRegion: $region, annotationItems: [AnnotationItem(coordinate: coordinate)]) { item in
-                        Marker(restaurant.name, coordinate: item.coordinate)
-                            .tint(.red)
+                if viewModel.isMapLoaded, let coordinate = viewModel.coordinate {
+                    Map(coordinateRegion: $viewModel.region, interactionModes: .all, showsUserLocation: false, annotationItems: [coordinate]) { coordinate in
+                        MapPin(coordinate: coordinate, tint: .red)
                     }
                     .frame(height: 200)
                     .cornerRadius(15)
                     .padding(.horizontal)
-                    .onAppear {
-                        region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-                    }
-                } else if !isMapLoaded {
+                } else if !viewModel.isMapLoaded {
                     ProgressView("Loading Map...")
                         .frame(height: 200)
                         .cornerRadius(15)
                         .padding(.horizontal)
-                        .onAppear {
-                            geocodeAddress()
-                        }
                 } else {
                     Text("Unable to load map for this address.")
                         .foregroundColor(.gray)
@@ -103,21 +95,12 @@ struct RestaurantDetailView: View {
         }
         .navigationTitle(restaurant.name)
         .navigationBarTitleDisplayMode(.inline)
-    }
-
-    private func geocodeAddress() {
-        isMapLoaded = true
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(restaurant.address) { placemarks, error in
-            if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
-            } else if let coordinate = placemarks?.first?.location?.coordinate {
-                self.coordinate = coordinate
-                self.region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-            }
+        .onAppear {
+            viewModel.fetchCoordinate(for: restaurant.address)
         }
     }
 }
+
 
 // Helper struct for annotation
 struct AnnotationItem: Identifiable {
@@ -131,7 +114,7 @@ struct RestaurantDetailView_Previews: PreviewProvider {
             id: UUID(),
             name: "Sushi Place",
             address: "123 Main St",
-            imageURLs: ["https://example.com/image.jpg"], // Replace with valid image URLs
+            imageURLs: ["https://example.com/image.jpg"],
             logoURL: nil
         )
         RestaurantDetailView(restaurant: sampleRestaurant)

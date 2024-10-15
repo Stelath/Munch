@@ -6,18 +6,23 @@
 //
 
 import Foundation
-import Combine
 
-class SSEService: NSObject, URLSessionDataDelegate {
+class SSEService: NSObject {
     private var task: URLSessionDataTask?
-    private var eventHandler: ((String) -> Void)?
+    private var eventHandler: ((String, String?) -> Void)?
+    private var urlSession: URLSession?
+    private var url: URL?
 
-    func startListening(url: URL, eventHandler: @escaping (String) -> Void) {
+    func startListening(url: URL, eventHandler: @escaping (String, String?) -> Void) {
+        self.url = url
         self.eventHandler = eventHandler
-        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = TimeInterval(INT_MAX)
+        sessionConfig.timeoutIntervalForResource = TimeInterval(INT_MAX)
+        urlSession = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: nil)
         var request = URLRequest(url: url)
         request.setValue("text/event-stream", forHTTPHeaderField: "Accept")
-        task = session.dataTask(with: request)
+        task = urlSession?.dataTask(with: request)
         task?.resume()
     }
 
@@ -25,16 +30,49 @@ class SSEService: NSObject, URLSessionDataDelegate {
         task?.cancel()
         task = nil
         eventHandler = nil
-    }
-
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        if let eventString = String(data: data, encoding: .utf8) {
-            eventHandler?(eventString)
-        }
+        urlSession = nil
     }
 }
 
-struct CircleUpdate: Decodable {
-    let type: String
-    let user: User
+extension SSEService: URLSessionDataDelegate {
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        // Parse the SSE data
+        guard let eventString = String(data: data, encoding: .utf8) else { return }
+
+        let lines = eventString.components(separatedBy: .newlines)
+        var eventName: String?
+        var eventData: String?
+
+        for line in lines {
+            if line.hasPrefix("event:") {
+                eventName = line.replacingOccurrences(of: "event: ", with: "")
+            } else if line.hasPrefix("data:") {
+                let dataLine = line.replacingOccurrences(of: "data: ", with: "")
+                if let existingData = eventData {
+                    eventData = existingData + "\n" + dataLine
+                } else {
+                    eventData = dataLine
+                }
+            }
+        }
+
+        if let eventName = eventName {
+            eventHandler?(eventName, eventData)
+        } else if let eventData = eventData {
+            eventHandler?("message", eventData)
+        }
+    }
+
+    func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
+        // Handle session invalidation
+        if let error = error {
+            print("SSE session invalidated with error: \(error.localizedDescription)")
+        } else {
+            print("SSE session invalidated")
+        }
+        // Attempt to reconnect
+        if let url = url, let eventHandler = eventHandler {
+            startListening(url: url, eventHandler: eventHandler)
+        }
+    }
 }

@@ -11,6 +11,8 @@ import SwiftUI
 
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
+    // Assume you have a way to obtain the current user's UUID
+    let userId: UUID = UUID() // Replace with actual user ID retrieval - May hash it from the username they pick for now
     
     var body: some View {
         VStack {
@@ -23,18 +25,23 @@ struct CreateCircleView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocapitalization(.words)
                 //TODO: How many restaurants to pick from and pick a new location - mac
-            Button(action: {
-                viewModel.createCircle(userId: "place holder")
-            }) {
-                Text("Create Circle")
-                    .bold()
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding()
+            TextField("Location", text: $viewModel.location)
+                       .padding()
+                       .textFieldStyle(RoundedBorderTextFieldStyle())
+                       .autocapitalization(.words)
+
+                   Button(action: {
+                       viewModel.createCircle(userId: userId)
+                   }) {
+                       Text("Create Circle")
+                           .bold()
+                           .padding()
+                           .frame(maxWidth: .infinity)
+                           .background(Color.blue)
+                           .foregroundColor(.white)
+                           .cornerRadius(8)
+                   }
+                   .padding()
 
             if let code = viewModel.generatedCode {
                 VStack {
@@ -55,13 +62,14 @@ struct CreateCircleView: View {
                         .font(.headline)
                         .padding(.top)
 
-                    ForEach(viewModel.joinedUsers, id: \.self) { user in
-                        Text(user)
+                    ForEach(viewModel.joinedUsers) { user in
+                        Text(user.name)
                             .padding(.vertical, 2)
                     }
                 }
                 .padding(.horizontal)
             }
+
 
             Spacer()
 

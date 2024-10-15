@@ -8,6 +8,7 @@
 import SwiftUI
 import MapKit
 
+
 struct RestaurantView: View {
     @ObservedObject var viewModel: RestaurantViewModel
     var onSwipe: ((SwipeDirection) -> Void)?
@@ -25,7 +26,6 @@ struct RestaurantView: View {
                 Color.gray
                 ContentUnavailableView("No Preview Available", systemImage: "eye.slash")
             }
-            
             VStack {
                 Spacer()
                 VStack(alignment: .leading) {
@@ -86,6 +86,9 @@ struct RestaurantView: View {
                     }
                 }
         )
+        .onAppear {
+            viewModel.fetchLookAroundPreview()
+        }
     }
 }
 
@@ -95,9 +98,9 @@ struct RestaurantView_Previews: PreviewProvider {
             id: UUID(),
             name: "Sample Restaurant",
             address: "123 Main St",
-            images: [],
-            coordinate: CLLocationCoordinate2D(latitude: 0, longitude: 0),
-            mapItem: MKMapItem()
+            imageURLs: [],
+            logoURL: nil
+
         )
         let viewModel = RestaurantViewModel(restaurant: sampleRestaurant)
         RestaurantView(viewModel: viewModel)

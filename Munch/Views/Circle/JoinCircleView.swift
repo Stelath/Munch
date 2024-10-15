@@ -9,6 +9,8 @@ import SwiftUI
 
 struct JoinCircleView: View {
     @StateObject private var viewModel = JoinCircleViewModel()
+    @State private var navigateToSwipe = false
+    @State private var currentCircleId: UUID?
 
     var body: some View {
         VStack {
@@ -62,7 +64,7 @@ struct JoinCircleView: View {
                             Text("Joined Users")
                                 .font(.headline)
 
-                            ForEach(viewModel.joinedUsers, id: \.self) { user in
+                            ForEach(viewModel.joinedUsers) { user in
                                 Text(user.name)
                                     .padding(.vertical, 2)
                             }

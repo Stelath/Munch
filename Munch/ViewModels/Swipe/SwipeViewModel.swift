@@ -18,14 +18,21 @@ public enum SwipeDirection {
 class SwipeViewModel: ObservableObject {
     @Published private(set) var restaurants: [Restaurant] = []
     @Published private(set) var restaurantViewModels: [RestaurantViewModel] = []
+    @Published var userYesVotes : Int = 0
+    @Published var userNoVotes: Int = 0
     @Published var isLoading: Bool = false
+    @Published var locationError: Error?
 
     private let restaurantService = RestaurantService()
-    private var circleId: String
+    private let locationService = LocationService()
+    private var circleId: UUID
     private var currentIndex: Int = 0
 
-    init(circleId: String) {
+    init(circleId: UUID) {
         self.circleId = circleId
+        locationService.requestLocationPermission()
+        locationService.startUpdatingLocation()
+        locationService.$locationError.assign(to: &$locationError)
         Task {
             await fetchRestaurants()
         }
@@ -74,6 +81,11 @@ class SwipeViewModel: ObservableObject {
             }
         }
 
+        if direction == .left {
+            self.userNoVotes += 1
+        } else {
+            self.userYesVotes += 1
+        }
         currentIndex -= 1
     }
 

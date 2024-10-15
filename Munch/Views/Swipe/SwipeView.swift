@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct SwipeView: View {
-    @StateObject private var viewModel = SwipeViewModel()
+    @StateObject private var viewModel: SwipeViewModel
     @State private var navigateToResults = false
+    private let circleId: UUID
+    
+    init(circleId: UUID) {
+        self.circleId = circleId
+        _viewModel = StateObject(wrappedValue: SwipeViewModel(circleId: circleId))
+    }
 
     var body: some View {
         NavigationStack {
             if viewModel.isLoading {
                 ProgressView("Loading Restaurants...")
-            } else if let locationError = viewModel.locationService.locationError {
+            } else if let locationError = viewModel.locationError {
                 VStack {
                     Text("Location Error")
                         .font(.title)
@@ -85,19 +91,19 @@ struct SwipeView: View {
                     }
                     .tint(.black)
                     .font(.largeTitle)
-
+                    // TODO: Fix counting the yes and no votes. Just count as we swipe
                     HStack {
                         Spacer()
-                        Text("\(viewModel.noRestaurants.count)")
+                        Text("\(viewModel.userNoVotes)")
                         Spacer()
                         Spacer()
-                        Text("\(viewModel.yesRestaurants.count)")
+                        Text("\(viewModel.userYesVotes)")
                         Spacer()
                     }
                 }
                 .padding(8)
                 .navigationDestination(isPresented: $navigateToResults) {
-                    ResultsView()
+                    ResultsView(circleId: circleId)
                         .environmentObject(viewModel)
                 }
             }
@@ -106,5 +112,5 @@ struct SwipeView: View {
 }
 
 #Preview {
-    SwipeView()
+    SwipeView(circleId: UUID())
 }
