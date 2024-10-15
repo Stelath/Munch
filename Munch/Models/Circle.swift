@@ -14,13 +14,6 @@ struct Circle: Identifiable, Codable {
     let started: Bool
 }
 
-struct CirclePartialUpdate: Codable {
-    let name: String?
-    let location: String?
-    let users: [String]?
-    let restaurants: [String]?
-    let started: Bool?
-}
 
 struct Code: Identifiable, Codable {
     let id: String

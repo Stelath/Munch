@@ -38,7 +38,7 @@ class RestaurantViewModel: ObservableObject, Identifiable {
                 let scene = try await request.scene
                 await MainActor.run {
                     self.lookAroundScene = scene
-                    print("Successfully fetched Look Around scene for \(self.restaurant.name)") // DEBUG
+                    print("LookAroundScene set for \(self.restaurant.name): \(String(describing: self.lookAroundScene))") // DEBUG
                 }
             } catch {
                 print("Failed to fetch Look Around scene for \(restaurant.name): \(error.localizedDescription)") // DEBUG
