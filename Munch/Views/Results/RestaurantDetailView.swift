@@ -10,12 +10,15 @@ import MapKit
 
 struct RestaurantDetailView: View {
     let restaurant: Restaurant
+    @State private var region = MKCoordinateRegion()
+    @State private var coordinate: CLLocationCoordinate2D?
+    @State private var isMapLoaded = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Restaurant Image
-                if let firstImage = restaurant.images.first, let imageURL = URL(string: firstImage) {
+                if let firstImage = restaurant.imageURLs.first, let imageURL = URL(string: firstImage) {
                     AsyncImage(url: imageURL) { phase in
                         switch phase {
                         case .empty:
@@ -67,16 +70,32 @@ struct RestaurantDetailView: View {
                 }
                 .padding(.horizontal)
 
-                // Map View
-                Map(coordinateRegion: .constant(MKCoordinateRegion(
-                    center: restaurant.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-                )), annotationItems: [restaurant]) { restaurant in
-                    MapMarker(coordinate: restaurant.coordinate, tint: .blue)
+                if let coordinate = coordinate {
+                    Map(coordinateRegion: $region, annotationItems: [AnnotationItem(coordinate: coordinate)]) { item in
+                        Marker(restaurant.name, coordinate: item.coordinate)
+                            .tint(.red)
+                    }
+                    .frame(height: 200)
+                    .cornerRadius(15)
+                    .padding(.horizontal)
+                    .onAppear {
+                        region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+                    }
+                } else if !isMapLoaded {
+                    ProgressView("Loading Map...")
+                        .frame(height: 200)
+                        .cornerRadius(15)
+                        .padding(.horizontal)
+                        .onAppear {
+                            geocodeAddress()
+                        }
+                } else {
+                    Text("Unable to load map for this address.")
+                        .foregroundColor(.gray)
+                        .frame(height: 200)
+                        .cornerRadius(15)
+                        .padding(.horizontal)
                 }
-                .frame(height: 200)
-                .cornerRadius(15)
-                .padding(.horizontal)
 
                 Spacer()
             }
@@ -85,6 +104,25 @@ struct RestaurantDetailView: View {
         .navigationTitle(restaurant.name)
         .navigationBarTitleDisplayMode(.inline)
     }
+
+    private func geocodeAddress() {
+        isMapLoaded = true
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(restaurant.address) { placemarks, error in
+            if let error = error {
+                print("Geocoding error: \(error.localizedDescription)")
+            } else if let coordinate = placemarks?.first?.location?.coordinate {
+                self.coordinate = coordinate
+                self.region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+            }
+        }
+    }
+}
+
+// Helper struct for annotation
+struct AnnotationItem: Identifiable {
+    let id = UUID()
+    let coordinate: CLLocationCoordinate2D
 }
 
 struct RestaurantDetailView_Previews: PreviewProvider {
@@ -93,9 +131,8 @@ struct RestaurantDetailView_Previews: PreviewProvider {
             id: UUID(),
             name: "Sushi Place",
             address: "123 Main St",
-            images: ["https://example.com/image.jpg"], // Replace with valid image URLs
-            coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-            mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)))
+            imageURLs: ["https://example.com/image.jpg"], // Replace with valid image URLs
+            logoURL: nil
         )
         RestaurantDetailView(restaurant: sampleRestaurant)
     }
