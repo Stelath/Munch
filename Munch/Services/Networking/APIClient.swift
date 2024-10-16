@@ -10,7 +10,7 @@ import Foundation
 class APIClient {
     static let shared = APIClient()
     private let session: URLSession
-    private let baseURL = URL(string: "https://my.API.com")!
+    private let baseURL = URL(string: "https://localhost:3000")!
 
     private init(session: URLSession = .shared) {
         self.session = session

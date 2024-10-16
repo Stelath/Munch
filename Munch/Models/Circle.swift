@@ -8,7 +8,6 @@ import Foundation
 
 struct Circle: Identifiable, Codable {
     let id: UUID
-    let code: String
     let name: String
     let location: String
     let users: [User]
