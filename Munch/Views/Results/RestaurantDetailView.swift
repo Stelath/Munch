@@ -69,25 +69,25 @@ struct RestaurantDetailView: View {
                 }
                 .padding(.horizontal)
 
-                if viewModel.isMapLoaded, let coordinate = viewModel.coordinate {
-                    Map(coordinateRegion: $viewModel.region, interactionModes: .all, showsUserLocation: false, annotationItems: [coordinate]) { coordinate in
-                        MapPin(coordinate: coordinate, tint: .red)
-                    }
-                    .frame(height: 200)
-                    .cornerRadius(15)
-                    .padding(.horizontal)
-                } else if !viewModel.isMapLoaded {
-                    ProgressView("Loading Map...")
-                        .frame(height: 200)
-                        .cornerRadius(15)
-                        .padding(.horizontal)
-                } else {
-                    Text("Unable to load map for this address.")
-                        .foregroundColor(.gray)
-                        .frame(height: 200)
-                        .cornerRadius(15)
-                        .padding(.horizontal)
-                }
+//                if viewModel.isMapLoaded, let coordinate = viewModel.coordinate {
+//                    Map(coordinateRegion: $viewModel.region, interactionModes: .all, showsUserLocation: false, annotationItems: [coordinate]) { coordinate in
+//                        MapPin(coordinate: coordinate, tint: .red)
+//                    }
+//                    .frame(height: 200)
+//                    .cornerRadius(15)
+//                    .padding(.horizontal)
+//                } else if !viewModel.isMapLoaded {
+//                    ProgressView("Loading Map...")
+//                        .frame(height: 200)
+//                        .cornerRadius(15)
+//                        .padding(.horizontal)
+//                } else {
+//                    Text("Unable to load map for this address.")
+//                        .foregroundColor(.gray)
+//                        .frame(height: 200)
+//                        .cornerRadius(15)
+//                        .padding(.horizontal)
+//                }
 
                 Spacer()
             }
