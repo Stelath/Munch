@@ -14,37 +14,40 @@ class CreateCircleViewModel: ObservableObject {
     @Published var generatedCode: String?
     @Published var joinedUsers: [User] = []
     @Published var canStartCircle: Bool = false
+    @Published var isLoading: Bool = false
     @Published var errorMessage: String?
 
-    private let circleService = CircleService()
+    private let circleService = CircleService.shared
     private let sseService = SSEService()
     private var circleId: String?
     
     func createCircle() {
         Task {
-//            errorMessage = nil
+            errorMessage = nil
+            isLoading = true
             do {
-                // Step 1: Create the circle
-                let (id, code) = try await circleService.createCircle(name: name, location: location)
+                //Create the circle
+                let (id, code) = try await circleService.createCircle(name: name, location: location) // add location options
+                self.circleId = id
+                self.generatedCode = code
                 
-                print("ID & CODE:", id, code)
+                print("ID & CODE:", id, code) // DEBUG
                 
-                // Step 2: Join the circle as the creator
+                // Join the circle
                 let userID = generateDummyID()
-                let userName = "Default User" // You can modify this to take user input later
+                let userName = "Default User" // get user input
                 try await circleService.joinCircle(circleId: id, userID: userID, userName: userName)
                 
-                // Step 3: Fetch the updated circle details
-                let fetchedCircle = try await circleService.getCircle(id: id)
-                print("GOT A CIRCLE ME BOY:", fetchedCircle)
-                
-                // Update published properties
-                self.generatedCode = code
-                self.circleId = id
-                self.joinedUsers = fetchedCircle.users
+                // Fetch Circle Details
+                let circle = try await circleService.getCircle(id: id)
+                self.joinedUsers = circle.users
+                self.joinedUsers.append(User(id: "111", name: "Mac")) // Testing
+                self.joinedUsers.append(User(id: "222", name: "AP"))
+                print(joinedUsers)
             } catch {
-//                self.errorMessage = error.localizedDescription
+                self.errorMessage = error.localizedDescription
             }
+            isLoading = false
         }
     }
     

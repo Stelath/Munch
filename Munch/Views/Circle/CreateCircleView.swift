@@ -5,8 +5,6 @@
 //  Created by Mac Howe on 10/14/24.
 //
 
-// place holder for this for now
-
 import SwiftUI
 
 struct CreateCircleView: View {
@@ -23,44 +21,42 @@ struct CreateCircleView: View {
             TextField("Name", text: $viewModel.name)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.words)
                 //TODO: How many restaurants to pick from and pick a new location - mac
             TextField("Location", text: $viewModel.location)
                        .padding()
                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                       .autocapitalization(.words)
-
-                   Button(action: {
-                       viewModel.createCircle()
-                   }) {
-                       Text("Create Circle")
-                           .bold()
-                           .padding()
-                           .frame(maxWidth: .infinity)
-                           .background(Color.blue)
-                           .foregroundColor(.white)
-                           .cornerRadius(8)
-                   }
-                   .padding()
-
-            if viewModel.generatedCode != nil {
-                VStack {
-                    Text("Circle Code: \(viewModel.generatedCode!)")
-                        .font(.title2)
+            
+            if viewModel.isLoading {
+                ProgressView()
+                    .padding()
+            } else {
+                Button(action: {
+                    viewModel.createCircle()
+                }) {
+                    Text("Create Circle")
+                        .bold()
                         .padding()
-
-                    Text("Share this code with your friends!")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                 }
                 .padding()
+            }
+            
+            // TODO: Sharing code button
+            if let code = viewModel.generatedCode {
+                Text("Circle Code: \(code)")
+                    .font(.title2)
+                    .padding()
+                    .fontWeight(.bold)
             }
 
             if !viewModel.joinedUsers.isEmpty {
                 VStack(alignment: .leading) {
                     Text("Joined Users")
                         .font(.headline)
-                        .padding(.top)
+                        .padding(.top, 3)
 
                     ForEach(viewModel.joinedUsers) { user in
                         Text(user.name)
@@ -72,7 +68,7 @@ struct CreateCircleView: View {
 
 
             Spacer()
-
+// TODO add start circle logic
             if viewModel.canStartCircle {
                 Button(action: {
                 }) {
@@ -85,6 +81,11 @@ struct CreateCircleView: View {
                         .cornerRadius(8)
                 }
                 .padding()
+            }
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
             }
         }
         .padding()

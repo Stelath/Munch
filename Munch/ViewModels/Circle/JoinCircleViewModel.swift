@@ -11,13 +11,13 @@ import Combine
 @MainActor
 class JoinCircleViewModel: ObservableObject {
     @Published var circleCode: String = ""
-    @Published var name: String = "Default User"
+    @Published var name: String = ""
     @Published var joinedUsers: [User] = []
     @Published var isLoading: Bool = false
     @Published var isWaitingToStart: Bool = false
     @Published var errorMessage: String?
 
-    private let circleService = CircleService()
+    private let circleService = CircleService.shared
     private let sseService = SSEService()
     private var circleId: String?
 
@@ -27,20 +27,19 @@ class JoinCircleViewModel: ObservableObject {
             isLoading = true
             errorMessage = nil
             do {
-                // Step 1: Fetch the circle ID using the provided code
+                // Fetch the circle ID using code
                 let codeResponse = try await circleService.fetchCode(code: circleCode)
                 let circleId = codeResponse.circleId
+                self.circleId = circleId
                 
-                // Step 2: Join the circle with a random user ID and default username
+                // Join the circle
                 let userID = generateDummyID()
                 let userName = name
                 try await circleService.joinCircle(circleId: circleId, userID: userID, userName: userName)
                 
-                // Step 3: Fetch the updated circle details
-                let fetchedCircle = try await circleService.getCircle(id: circleId)
-                
-                // Update published properties
-                self.joinedUsers = fetchedCircle.users
+                // Fetch Circle Details
+                let circle = try await circleService.getCircle(id: circleId)
+                self.joinedUsers = circle.users
             } catch {
                 self.errorMessage = error.localizedDescription
             }

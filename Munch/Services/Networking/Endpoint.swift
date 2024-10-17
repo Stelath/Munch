@@ -19,7 +19,7 @@ struct Endpoint {
     let headers: [String: String]?
     let body: [String: Any]?
     
-    // REMOVE STARTED Boolean
+    // REMOVE STARTED Boolean later
     static func createCircle(name: String, location: String, started: Bool = false) -> Endpoint {
         return Endpoint(
             path: "/circles",
@@ -42,7 +42,7 @@ struct Endpoint {
         return Endpoint(
             path: "/circles/\(id)",
             method: .GET,
-            headers: nil,
+            headers: ["Content-Type": "application/json"],
             body: nil
         )
     }
@@ -52,7 +52,7 @@ struct Endpoint {
         return Endpoint(
             path: "/codes/\(code)",
             method: .GET,
-            headers: nil,
+            headers: ["Content-Type": "application/json"],
             body: nil
         )
     }
@@ -61,7 +61,7 @@ struct Endpoint {
         return Endpoint(
             path: "/circles/\(circleId)/start",
             method: .POST,
-            headers: nil,
+            headers: ["Content-Type": "application/json"],
             body: nil
         )
     }

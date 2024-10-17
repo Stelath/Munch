@@ -21,30 +21,28 @@ struct JoinCircleView: View {
             TextField("Name", text: $viewModel.name)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.words)
             
-            TextField("Enter Circle Code", text: $viewModel.circleCode)
+            TextField("Circle Code", text: $viewModel.circleCode)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocapitalization(.allCharacters)
                 .disableAutocorrection(true)
-
-            Button(action: {
-                viewModel.joinCircle()
-            }) {
-                Text("Join Circle")
-                    .bold()
+            if viewModel.isLoading{
+                ProgressView()
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding()
-
-            if viewModel.isLoading {
-                ProgressView("Joining Circle...")
-                    .padding()
+            } else {
+                Button(action: {
+                    viewModel.joinCircle()
+                }) {
+                    Text("Join Circle")
+                        .bold()
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .padding()
             }
 
             if let errorMessage = viewModel.errorMessage {

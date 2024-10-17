@@ -9,14 +9,10 @@ import Foundation
 
 class APIClient {
     static let shared = APIClient()
-    private let session: URLSession
-    private let baseURL = URL(string: "http://localhost:3000")! // Update with your backend URL
+    private let session: URLSession = .shared
+    private let baseURL = URL(string: "http://localhost:3000")!
 
-    private init(session: URLSession = .shared) {
-        self.session = session
-    }
-
-    func request<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
+    func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
         var request = URLRequest(url: baseURL.appendingPathComponent(endpoint.path))
         request.httpMethod = endpoint.method.rawValue
         request.allHTTPHeaderFields = endpoint.headers
@@ -28,7 +24,7 @@ class APIClient {
         let (data, response) = try await session.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw URLError(.badServerResponse)
+            throw APIError.invalidResponse
         }
 
         switch httpResponse.statusCode {
@@ -47,13 +43,7 @@ struct ErrorResponse: Decodable {
     let message: String
 }
 
-enum APIError: Error, LocalizedError {
+enum APIError: Error {
+    case invalidResponse
     case serverError(String)
-
-    var errorDescription: String? {
-        switch self {
-        case .serverError(let message):
-            return message
-        }
-    }
 }
