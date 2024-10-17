@@ -31,6 +31,7 @@ class JoinCircleViewModel: ObservableObject {
                 let codeResponse = try await circleService.fetchCode(code: circleCode)
                 let circleId = codeResponse.circleId
                 self.circleId = circleId
+                print("Circle ID: \(circleId)") // DEBUG
                 
                 // Join the circle
                 let userID = generateDummyID()
@@ -40,6 +41,7 @@ class JoinCircleViewModel: ObservableObject {
                 // Fetch Circle Details
                 let circle = try await circleService.getCircle(id: circleId)
                 self.joinedUsers = circle.users
+                self.isWaitingToStart = true
             } catch {
                 self.errorMessage = error.localizedDescription
             }

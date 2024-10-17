@@ -45,12 +45,6 @@ struct JoinCircleView: View {
                 .padding()
             }
 
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .padding()
-            }
-
             if viewModel.isWaitingToStart {
                 VStack {
                     Text("Waiting for circle to start...")
@@ -73,6 +67,11 @@ struct JoinCircleView: View {
                 .padding()
             }
             Spacer()
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+            }
         }
         .padding()
         .navigationTitle("Join Circle")
