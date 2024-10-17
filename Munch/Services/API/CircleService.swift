@@ -10,23 +10,32 @@ import Foundation
 
 
 class CircleService {
-    func createCircle(userId: UUID, name: String, location: String) async throws -> Circle {
-        let endpoint = Endpoint.createCircle(userId: userId, name: name, location: location)
+    func createCircle(name: String, location: String) async throws -> (id: String, code: String) {
+        let endpoint = Endpoint.createCircle(name: name, location: location)
+        let response = try await APIClient.shared.request(endpoint, responseType: CreateCircleResponse.self)
+        return (response.id, response.code)
+    }
+
+    func joinCircle(circleId: String, userID: String, userName: String) async throws {
+        let endpoint = Endpoint.joinCircle(circleId: circleId, userID: userID, userName: userName)
+        let response = try await APIClient.shared.request(endpoint, responseType: EmptyResponse.self)
+        print(response)
+    }
+
+    func getCircle(id: String) async throws -> Circle {
+        let endpoint = Endpoint.getCircle(id: id)
         return try await APIClient.shared.request(endpoint, responseType: Circle.self)
     }
 
-    func joinCircle(code: String, userName: String) async throws -> Circle {
-        let endpoint = Endpoint.joinCircle(code: code, userName: userName)
-        return try await APIClient.shared.request(endpoint, responseType: Circle.self)
+    func fetchCode(code: String) async throws -> Code {
+        let endpoint = Endpoint.fetchCode(code: code)
+        return try await APIClient.shared.request(endpoint, responseType: Code.self)
     }
+}
 
-    func getCircle(circleId: UUID) async throws -> Circle {
-        let endpoint = Endpoint.getCircle(circleId: circleId)
-        return try await APIClient.shared.request(endpoint, responseType: Circle.self)
-    }
-
-    func startCircle(circleId: UUID) async throws -> Circle {
-        let endpoint = Endpoint.startCircle(circleId: circleId)
-        return try await APIClient.shared.request(endpoint, responseType: Circle.self)
-    }
+// Response models
+struct CreateCircleResponse: Decodable {
+    let message: String
+    let id: String
+    let code: String
 }

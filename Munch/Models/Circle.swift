@@ -7,7 +7,7 @@
 import Foundation
 
 struct Circle: Identifiable, Codable {
-    let id: UUID
+    let id: String
     let name: String
     let location: String
     let users: [User]
@@ -17,7 +17,7 @@ struct Circle: Identifiable, Codable {
 
 
 struct Code: Identifiable, Codable {
-    let id: UUID
+    let id: String
     let code: String
     let circleId: String
 }

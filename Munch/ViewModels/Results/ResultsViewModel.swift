@@ -17,9 +17,9 @@ class ResultsViewModel: ObservableObject {
     
     private let restaurantService = RestaurantService()
     private let sseService = SSEService()
-    let circleId: UUID
+    let circleId: String
     
-    init(circleId: UUID) {
+    init(circleId: String) {
         self.circleId = circleId
         Task {
             await fetchResults()
@@ -39,7 +39,7 @@ class ResultsViewModel: ObservableObject {
     }
     
     func startListeningForUpdates() {
-        guard let url = URL(string: "https://api.yourapp.com/circles/\(circleId.uuidString)/results/events") else { return }
+        guard let url = URL(string: "https://api.yourapp.com/circles/\(circleId)/results/events") else { return }
         sseService.startListening(url: url) { [weak self] eventName, eventData in
             guard let self = self else { return }
             if eventName == "vote_updated", let data = eventData?.data(using: .utf8) {

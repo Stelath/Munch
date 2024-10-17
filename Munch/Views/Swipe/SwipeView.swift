@@ -10,9 +10,9 @@ import SwiftUI
 struct SwipeView: View {
     @StateObject private var viewModel: SwipeViewModel
     @State private var navigateToResults = false
-    private let circleId: UUID
+    private let circleId: String
     
-    init(circleId: UUID) {
+    init(circleId: String) {
         self.circleId = circleId
         _viewModel = StateObject(wrappedValue: SwipeViewModel(circleId: circleId))
     }
@@ -112,5 +112,5 @@ struct SwipeView: View {
 }
 
 #Preview {
-    SwipeView(circleId: UUID())
+    SwipeView(circleId: UUID().uuidString)
 }

@@ -95,7 +95,7 @@ struct RestaurantView: View {
 struct RestaurantView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleRestaurant = Restaurant(
-            id: UUID(),
+            id: "testingtesting123",
             name: "Sample Restaurant",
             address: "123 Main St",
             imageURLs: [],

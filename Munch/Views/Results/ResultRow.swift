@@ -113,14 +113,14 @@ struct RestaurantResultRow: View {
 struct RestaurantResultRow_Previews: PreviewProvider {
     static var previews: some View {
         let sampleRestaurant = Restaurant(
-            id: UUID(),
+            id: "testingtesting123",
             name: "Sushi Place",
             address: "123 Main St",
             imageURLs: ["https://example.com/image.jpg"],
             logoURL: nil
         ) 
         let sampleResult = RestaurantVoteResult(
-            id: UUID(),
+            id: UUID().uuidString,
             restaurant: sampleRestaurant,
             likes: 10,
             dislikes: 2

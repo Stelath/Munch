@@ -12,7 +12,7 @@ import SwiftUI
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
     // Assume you have a way to obtain the current user's UUID
-    let userId: UUID = UUID() // Replace with actual user ID retrieval - May hash it from the username they pick for now
+    let userId: String = UUID().uuidString // Replace with actual user ID retrieval - May hash it from the username they pick for now
     
     var body: some View {
         VStack {
@@ -31,7 +31,7 @@ struct CreateCircleView: View {
                        .autocapitalization(.words)
 
                    Button(action: {
-                       viewModel.createCircle(userId: userId)
+                       viewModel.createCircle()
                    }) {
                        Text("Create Circle")
                            .bold()
@@ -43,9 +43,9 @@ struct CreateCircleView: View {
                    }
                    .padding()
 
-            if let code = viewModel.generatedCode {
+            if viewModel.generatedCode != nil {
                 VStack {
-                    Text("Circle Code: \(code)")
+                    Text("Circle Code: \(viewModel.generatedCode!)")
                         .font(.title2)
                         .padding()
 
@@ -75,7 +75,6 @@ struct CreateCircleView: View {
 
             if viewModel.canStartCircle {
                 Button(action: {
-                    viewModel.startCircle()
                 }) {
                     Text("Start Circle")
                         .bold()

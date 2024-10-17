@@ -10,7 +10,7 @@ import SwiftUI
 struct ResultsView: View {
     @StateObject private var viewModel: ResultsViewModel
 
-    init(circleId: UUID) {
+    init(circleId: String) {
         _viewModel = StateObject(wrappedValue: ResultsViewModel(circleId: circleId))
     }
 
@@ -64,6 +64,6 @@ struct ResultsView: View {
 
 struct ResultsView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultsView(circleId: UUID()) // sample UUID
+        ResultsView(circleId: UUID().uuidString) // sample UUID
     }
 }

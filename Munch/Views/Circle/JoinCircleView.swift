@@ -10,7 +10,7 @@ import SwiftUI
 struct JoinCircleView: View {
     @StateObject private var viewModel = JoinCircleViewModel()
     @State private var navigateToSwipe = false
-    @State private var currentCircleId: UUID?
+    @State private var currentCircleId: String?
 
     var body: some View {
         VStack {

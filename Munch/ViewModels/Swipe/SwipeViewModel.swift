@@ -25,10 +25,10 @@ class SwipeViewModel: ObservableObject {
 
     private let restaurantService = RestaurantService()
     private let locationService = LocationService()
-    private var circleId: UUID
+    private var circleId: String
     private var currentIndex: Int = 0
 
-    init(circleId: UUID) {
+    init(circleId: String) {
         self.circleId = circleId
         locationService.requestLocationPermission()
         locationService.startUpdatingLocation()

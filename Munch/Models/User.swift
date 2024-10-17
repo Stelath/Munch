@@ -8,6 +8,6 @@
 import Foundation
 
 struct User: Identifiable, Codable, Equatable {
-    let id: UUID
+    let id: String
     let name: String
 }

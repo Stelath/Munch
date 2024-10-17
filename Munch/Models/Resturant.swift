@@ -12,11 +12,10 @@ import MapKit
 
 
 struct Restaurant: Identifiable, Codable {
-    let id: UUID
+    let id: String
     let name: String
     let address: String
     let imageURLs: [String]
     let logoURL: String?
-    
 }
 

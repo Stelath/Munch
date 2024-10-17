@@ -104,14 +104,14 @@ struct RestaurantDetailView: View {
 
 // Helper struct for annotation
 struct AnnotationItem: Identifiable {
-    let id = UUID()
+    let id = UUID().uuidString
     let coordinate: CLLocationCoordinate2D
 }
 
 struct RestaurantDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleRestaurant = Restaurant(
-            id: UUID(),
+            id: "testingtesting123",
             name: "Sushi Place",
             address: "123 Main St",
             imageURLs: ["https://example.com/image.jpg"],
