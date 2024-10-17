@@ -104,7 +104,7 @@ struct RestaurantDetailView: View {
 
 // Helper struct for annotation
 struct AnnotationItem: Identifiable {
-    let id = UUID().uuidString
+    let id = generateDummyID()
     let coordinate: CLLocationCoordinate2D
 }
 

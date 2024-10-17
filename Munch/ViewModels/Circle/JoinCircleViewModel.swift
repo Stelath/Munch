@@ -32,7 +32,7 @@ class JoinCircleViewModel: ObservableObject {
                 let circleId = codeResponse.circleId
                 
                 // Step 2: Join the circle with a random user ID and default username
-                let userID = UUID().uuidString
+                let userID = generateDummyID()
                 let userName = name
                 try await circleService.joinCircle(circleId: circleId, userID: userID, userName: userName)
                 

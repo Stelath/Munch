@@ -12,7 +12,7 @@ import SwiftUI
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
     // Assume you have a way to obtain the current user's UUID
-    let userId: String = UUID().uuidString // Replace with actual user ID retrieval - May hash it from the username they pick for now
+    let userId: String = generateDummyID() // Replace with actual user ID retrieval - May hash it from the username they pick for now
     
     var body: some View {
         VStack {

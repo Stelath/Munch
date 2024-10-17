@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -106,6 +106,10 @@
 		4AA542A72CBDDCCE00784CBC /* ResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		025A5F3A2CC09D90001AA7FF /* Utilites */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utilites; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		02D4E6512C1F798900D12FE2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -154,6 +158,7 @@
 		02D4E6562C1F798900D12FE2 /* Munch */ = {
 			isa = PBXGroup;
 			children = (
+				025A5F3A2CC09D90001AA7FF /* Utilites */,
 				02D4E6852C1FA1C800D12FE2 /* App */,
 				02D4E6832C1FA15400D12FE2 /* Models */,
 				02D4E6842C1FA17600D12FE2 /* Views */,
@@ -383,6 +388,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				025A5F3A2CC09D90001AA7FF /* Utilites */,
 			);
 			name = Munch;
 			productName = Munch;

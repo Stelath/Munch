@@ -120,7 +120,7 @@ struct RestaurantResultRow_Previews: PreviewProvider {
             logoURL: nil
         ) 
         let sampleResult = RestaurantVoteResult(
-            id: UUID().uuidString,
+            id: generateDummyID(),
             restaurant: sampleRestaurant,
             likes: 10,
             dislikes: 2

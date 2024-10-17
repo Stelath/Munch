@@ -112,5 +112,5 @@ struct SwipeView: View {
 }
 
 #Preview {
-    SwipeView(circleId: UUID().uuidString)
+    SwipeView(circleId: generateDummyID())
 }

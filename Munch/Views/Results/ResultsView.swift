@@ -64,6 +64,6 @@ struct ResultsView: View {
 
 struct ResultsView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultsView(circleId: UUID().uuidString) // sample UUID
+        ResultsView(circleId: generateDummyID()) // sample UUID
     }
 }

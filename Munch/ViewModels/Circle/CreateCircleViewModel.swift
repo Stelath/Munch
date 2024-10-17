@@ -30,7 +30,7 @@ class CreateCircleViewModel: ObservableObject {
                 print("ID & CODE:", id, code)
                 
                 // Step 2: Join the circle as the creator
-                let userID = UUID().uuidString
+                let userID = generateDummyID()
                 let userName = "Default User" // You can modify this to take user input later
                 try await circleService.joinCircle(circleId: id, userID: userID, userName: userName)
                 
