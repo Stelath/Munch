@@ -17,21 +17,31 @@ class RestaurantDetailViewModel: ObservableObject {
     private let geocoder = CLGeocoder()
 
     func fetchCoordinate(for address: String) {
-        isMapLoaded = false
-        geocoder.geocodeAddressString(address) { [weak self] placemarks, error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
-            } else if let location = placemarks?.first?.location {
-                let coordinate = location.coordinate
-                self.coordinate = coordinate
-                self.region = MKCoordinateRegion(
-                    center: coordinate,
-                    latitudinalMeters: 1000,
-                    longitudinalMeters: 1000
-                )
+        Task {
+            await MainActor.run {
+                self.isMapLoaded = false
             }
-            self.isMapLoaded = true
+            do {
+                let placemarks = try await geocoder.geocodeAddressString(address)
+                if let location = placemarks.first?.location {
+                    let coordinate = location.coordinate
+                    await MainActor.run {
+                        self.coordinate = coordinate
+                        self.region = MKCoordinateRegion(
+                            center: coordinate,
+                            latitudinalMeters: 1000,
+                            longitudinalMeters: 1000
+                        )
+                    }
+                } else {
+                    print("No location found for address: \(address)")
+                }
+            } catch {
+                print("Geocoding error: \(error.localizedDescription)")
+            }
+            await MainActor.run {
+                self.isMapLoaded = true
+            }
         }
     }
 }

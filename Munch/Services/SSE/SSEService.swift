@@ -77,7 +77,7 @@ extension SSEService: URLSessionDataDelegate {
         } else {
             print("SSE session invalidated")
         }
-        // Optionally attempt to reconnect
+        // attempt to reconnect
         if let url = url, let eventHandler = eventHandler {
             startListening(url: url, eventHandler: eventHandler)
         }

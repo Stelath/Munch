@@ -27,13 +27,17 @@ class JoinCircleViewModel: ObservableObject {
     
     func joinCircle() {
         Task {
-            isLoading = true
-            errorMessage = nil
+            await MainActor.run{
+                isLoading = true
+                errorMessage = nil
+            }
             do {
                 // Fetch the circle ID using code
                 let codeResponse = try await circleService.fetchCode(code: circleCode)
                 let circleId = codeResponse.circleId
-                self.circleId = circleId
+                await MainActor.run {
+                    self.circleId = circleId
+                }
                 print("Circle ID: \(circleId)") // DEBUG
                 
                 // Join the circle
@@ -43,14 +47,20 @@ class JoinCircleViewModel: ObservableObject {
                 
                 // Fetch Circle Details
                 let circle = try await circleService.getCircle(id: circleId)
-                self.joinedUsers = circle.users
-                self.isWaitingToStart = true
+                await MainActor.run {
+                    self.joinedUsers = circle.users
+                    self.isWaitingToStart = true
+                }
                 
                 startListeningForUpdates()
             } catch {
-                self.errorMessage = error.localizedDescription
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                }
             }
-            isLoading = false
+            await MainActor.run {
+                self.isLoading = false
+            }
         }
     }
     private func startListeningForUpdates() {
@@ -66,9 +76,11 @@ class JoinCircleViewModel: ObservableObject {
                         if let userID = eventDict?["userID"] as? String,
                            let userName = eventDict?["userName"] as? String {
                             let newUser = User(id: userID, name: userName)
-                            DispatchQueue.main.async {
-                                if !self.joinedUsers.contains(where: { $0.id == newUser.id }) {
-                                    self.joinedUsers.append(newUser)
+                            Task {
+                                await MainActor.run {
+                                    if !self.joinedUsers.contains(where: { $0.id == newUser.id }) {
+                                        self.joinedUsers.append(newUser)
+                                    }
                                 }
                             }
                         }

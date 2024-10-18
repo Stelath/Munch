@@ -14,7 +14,7 @@ public enum SwipeDirection {
     case right
 }
 
-@MainActor
+
 class SwipeViewModel: ObservableObject {
     @Published private(set) var restaurants: [Restaurant] = []
     @Published private(set) var restaurantViewModels: [RestaurantViewModel] = []
@@ -48,15 +48,24 @@ class SwipeViewModel: ObservableObject {
     }
 
     func fetchRestaurants() async {
-        isLoading = true
+        await MainActor.run {
+            self.isLoading = true
+        }
         do {
             let fetchedRestaurants = try await restaurantService.fetchRestaurants(circleId: circleId)
-            self.restaurants = fetchedRestaurants
-            self.updateRestaurantViewModels()
+            await MainActor.run {
+                self.restaurants = fetchedRestaurants
+                self.updateRestaurantViewModels()
+            }
         } catch {
-            print("Failed to fetch restaurants: \(error.localizedDescription)")
+            await MainActor.run {
+                self.locationError = error
+                print("Failed to fetch restaurants: \(error.localizedDescription)")
+            }
         }
-        isLoading = false
+        await MainActor.run {
+            self.isLoading = false
+        }
     }
 
     private func updateRestaurantViewModels() {
@@ -81,12 +90,16 @@ class SwipeViewModel: ObservableObject {
             }
         }
 
-        if direction == .left {
-            self.userNoVotes += 1
-        } else {
-            self.userYesVotes += 1
+        Task {
+            await MainActor.run {
+                if direction == .left {
+                    self.userNoVotes += 1
+                } else {
+                    self.userYesVotes += 1
+                }
+                self.currentIndex -= 1
+            }
         }
-        currentIndex -= 1
     }
 
     func performSwipe(direction: SwipeDirection) {

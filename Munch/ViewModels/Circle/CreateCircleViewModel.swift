@@ -27,33 +27,41 @@ class CreateCircleViewModel: ObservableObject {
     
     func createCircle() {
         Task {
-            errorMessage = nil
-            isLoading = true
+            await MainActor.run {
+                errorMessage = nil
+                isLoading = true
+            }
             do {
+                sseService.stopListening() // If there was already a service running
                 //Create the circle
                 let (id, code) = try await circleService.createCircle(name: name, location: location) // add location options
-                self.circleId = id
-                self.generatedCode = code
-                
+                await MainActor.run{
+                    self.circleId = id
+                    self.generatedCode = code
+                }
                 print("ID & CODE:", id, code) // DEBUG
                 
                 // Join the circle
                 let userID = generateDummyID()
-                let userName = name // get user input
+                let userName = name
                 try await circleService.joinCircle(circleId: id, userID: userID, userName: userName)
                 
                 // Fetch Circle Details
                 let circle = try await circleService.getCircle(id: id)
-                self.joinedUsers = circle.users
-//                self.joinedUsers.append(User(id: "111", name: "Mac")) // Testing
-//                self.joinedUsers.append(User(id: "222", name: "AP"))
-                print(joinedUsers)
-                
+                await MainActor.run {
+                    self.joinedUsers = circle.users
+                }
+                print(joinedUsers) // DEBUG
+        
                 startListeningForUpdates()
             } catch {
-                self.errorMessage = error.localizedDescription
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                }
             }
-            isLoading = false
+            await MainActor.run {
+                isLoading = false
+            }
         }
     }
     private func startListeningForUpdates() {
@@ -69,9 +77,11 @@ class CreateCircleViewModel: ObservableObject {
                         if let userID = eventDict?["userID"] as? String,
                            let userName = eventDict?["userName"] as? String {
                             let newUser = User(id: userID, name: userName)
-                            DispatchQueue.main.async {
-                                if !self.joinedUsers.contains(where: { $0.id == newUser.id }) {
-                                    self.joinedUsers.append(newUser)
+                            Task {
+                                await MainActor.run {
+                                    if !self.joinedUsers.contains(where: { $0.id == newUser.id }) {
+                                        self.joinedUsers.append(newUser)
+                                    }
                                 }
                             }
                         }

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import MapKit
 
-@MainActor
+@MainActor // change to await Mainactor.run
 class ResultsViewModel: ObservableObject {
     @Published var restaurantResults: [RestaurantVoteResult] = []
     @Published var isLoading: Bool = false
