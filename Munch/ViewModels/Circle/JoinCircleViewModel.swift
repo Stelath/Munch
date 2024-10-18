@@ -21,7 +21,10 @@ class JoinCircleViewModel: ObservableObject {
     private let sseService = SSEService()
     private var circleId: String?
 
-
+    deinit {
+        sseService.stopListening()
+    }
+    
     func joinCircle() {
         Task {
             isLoading = true
@@ -42,44 +45,44 @@ class JoinCircleViewModel: ObservableObject {
                 let circle = try await circleService.getCircle(id: circleId)
                 self.joinedUsers = circle.users
                 self.isWaitingToStart = true
+                
+                startListeningForUpdates()
             } catch {
                 self.errorMessage = error.localizedDescription
             }
             isLoading = false
         }
     }
-    
-//    private func startListeningForUpdates() {
-//        guard let circleId = circleId,
-//              let url = URL(string: "https://api.yourapp.com/circles/\(circleId.uuidString)/events") else { return }
-//        sseService.startListening(url: url) { [weak self] eventName, eventData in
-//            guard let self = self else { return }
-//            switch eventName {
-//            case "user_joined":
-//                if let data = eventData?.data(using: .utf8) {
-//                    do {
-//                        let newUser = try JSONDecoder().decode(User.self, from: data)
-//                        DispatchQueue.main.async {
-//                            if !self.joinedUsers.contains(where: { $0.id == newUser.id }) {
-//                                self.joinedUsers.append(newUser)
-//                            }
-//                        }
-//                    } catch {
-//                        print("Failed to decode user_joined event: \(error.localizedDescription)")
-//                    }
-//                }
-//            case "circle_started":
-//                DispatchQueue.main.async {
-//                    self.isWaitingToStart = false
-//                    // Navigate to SwipeView or appropriate screen
-//                }
-//            default:
-//                break
-//            }
-//        }
-//    }
-//
-//    func stopListeningForUpdates() {
-//        sseService.stopListening()
-//    }
+    private func startListeningForUpdates() {
+        guard let circleId = circleId,
+              let url = URL(string: "http://localhost:3000/circles/\(circleId)/events") else { return }
+        sseService.startListening(url: url) { [weak self] eventName, eventData in
+            guard let self = self else { return }
+            switch eventName {
+            case "message":
+                if let data = eventData?.data(using: .utf8) {
+                    do {
+                        let eventDict = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+                        if let userID = eventDict?["userID"] as? String,
+                           let userName = eventDict?["userName"] as? String {
+                            let newUser = User(id: userID, name: userName)
+                            DispatchQueue.main.async {
+                                if !self.joinedUsers.contains(where: { $0.id == newUser.id }) {
+                                    self.joinedUsers.append(newUser)
+                                }
+                            }
+                        }
+                    } catch {
+                        print("Failed to decode SSE event: \(error.localizedDescription)")
+                    }
+                }
+            default:
+                break
+            }
+        }
+    }
+
+    func stopListeningForUpdates() {
+        sseService.stopListening()
+    }
 }

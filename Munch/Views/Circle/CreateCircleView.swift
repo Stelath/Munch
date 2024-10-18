@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+//import UIKit
 
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
@@ -46,10 +47,29 @@ struct CreateCircleView: View {
             
             // TODO: Sharing code button
             if let code = viewModel.generatedCode {
-                Text("Circle Code: \(code)")
-                    .font(.title2)
-                    .padding()
-                    .fontWeight(.bold)
+                HStack(spacing: 10) {
+                    // Circle Code Text
+                    Text("Circle Code: \(code)")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                        .accessibilityLabel("Circle Code: \(code)")
+
+                    ShareLink(
+                        item: "Join my circle on Munch! Use this code: \(code)",
+                        subject: Text("Join My Munch Circle"),
+                        message: Text("Use this code to join my circle on Munch: \(code)"),
+                        preview: SharePreview("Join My Munch Circle", image: Image(systemName: "circle.fill"))
+                    ) {
+                        Image(systemName: "square.and.arrow.up")
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(.blue)
+                            .padding(8)
+                            .accessibilityLabel("Share Circle Code")
+                    }
+                }
+                .padding(.horizontal)
             }
 
             if !viewModel.joinedUsers.isEmpty {
