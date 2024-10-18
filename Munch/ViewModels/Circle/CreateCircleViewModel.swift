@@ -8,12 +8,12 @@
 import Foundation
 import Combine
 
+
 class CreateCircleViewModel: ObservableObject {
     @Published var name: String = ""
     @Published var location: String = ""
     @Published var generatedCode: String?
     @Published var joinedUsers: [User] = []
-    @Published var canStartCircle: Bool = false
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
 

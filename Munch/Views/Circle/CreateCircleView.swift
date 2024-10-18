@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//import UIKit
+
 
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
@@ -89,7 +89,7 @@ struct CreateCircleView: View {
 
             Spacer()
 // TODO add start circle logic
-            if viewModel.canStartCircle {
+            if !viewModel.joinedUsers.isEmpty {
                 Button(action: {
                 }) {
                     Text("Start Circle")

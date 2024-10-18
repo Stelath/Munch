@@ -29,7 +29,7 @@ class SSEService: NSObject {
         task = urlSession?.dataTask(with: request)
         task?.resume()
     }
-
+    
     func stopListening() {
         task?.cancel()
         task = nil
