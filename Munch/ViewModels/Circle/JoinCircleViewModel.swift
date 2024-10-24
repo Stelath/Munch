@@ -11,7 +11,7 @@ import Combine
 @MainActor
 class JoinCircleViewModel: ObservableObject {
     @Published var circleCode: String = ""
-    @Published var name: String = ""
+//    @Published var name: String = ""
     @Published var joinedUsers: [User] = []
     @Published var isLoading: Bool = false
     @Published var isWaitingToStart: Bool = false
@@ -20,9 +20,14 @@ class JoinCircleViewModel: ObservableObject {
     private let circleService = CircleService.shared
     private let sseService = SSEService()
     private var circleId: String?
+    private var user: User?
 
     deinit {
         sseService.stopListening()
+    }
+    
+    func setUser(_ user: User?) {
+        self.user = user
     }
     
     func joinCircle() {
@@ -41,9 +46,11 @@ class JoinCircleViewModel: ObservableObject {
                 print("Circle ID: \(circleId)") // DEBUG
                 
                 // Join the circle
-                let userID = generateDummyID()
-                let userName = name
-                try await circleService.joinCircle(circleId: circleId, userID: userID, userName: userName)
+                guard let user = self.user else {
+                    self.errorMessage = "User not authenticated."
+                    return
+                }
+                try await circleService.joinCircle(circleId: circleId, userID: user.id, userName: user.name)
                 
                 // Fetch Circle Details
                 let circle = try await circleService.getCircle(id: circleId)

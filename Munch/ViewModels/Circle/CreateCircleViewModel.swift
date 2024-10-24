@@ -9,7 +9,8 @@ import Foundation
 import CoreLocation
 
 class CreateCircleViewModel: ObservableObject {
-    @Published var name: String = ""
+    
+//    @Published var name: String = ""
     @Published var location: String = ""
     @Published var generatedCode: String?
     @Published var joinedUsers: [User] = []
@@ -20,9 +21,14 @@ class CreateCircleViewModel: ObservableObject {
     private let sseService = SSEService()
     private let locationService = LocationService()
     private var circleId: String?
+    private var user: User?
     
     deinit {
         sseService.stopListening()
+    }
+    
+    func setUser(_ user: User?) {
+        self.user = user
     }
     
     func createCircle() {
@@ -34,7 +40,11 @@ class CreateCircleViewModel: ObservableObject {
             do {
                 sseService.stopListening() // If there was already a service running
                 //Create the circle
-                let (id, code) = try await circleService.createCircle(name: name, location: location) // add location options
+                guard let user = self.user else {
+                    self.errorMessage = "User not authenticated."
+                    return
+                }
+                let (id, code) = try await circleService.createCircle(name: user.name, location: location) // add location options
                 await MainActor.run{
                     self.circleId = id
                     self.generatedCode = code
@@ -42,9 +52,7 @@ class CreateCircleViewModel: ObservableObject {
                 print("ID & CODE:", id, code) // DEBUG
                 
                 // Join the circle
-                let userID = generateDummyID()
-                let userName = name
-                try await circleService.joinCircle(circleId: id, userID: userID, userName: userName)
+                try await circleService.joinCircle(circleId: id, userID: user.id, userName: user.name)
                 
                 // Fetch Circle Details
                 let circle = try await circleService.getCircle(id: id)

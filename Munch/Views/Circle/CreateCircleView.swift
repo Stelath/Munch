@@ -11,6 +11,7 @@ import CoreLocationUI
 
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
+    @EnvironmentObject private var authViewModel: AuthenticationViewModel
     
     var body: some View {
         VStack {
@@ -18,9 +19,9 @@ struct CreateCircleView: View {
                 .font(.largeTitle)
                 .padding()
 
-            TextField("Name", text: $viewModel.name)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+//            TextField("Name", text: $viewModel.name)
+//                .padding()
+//                .textFieldStyle(RoundedBorderTextFieldStyle())
                 //TODO: How many restaurants to pick from and pick a new location - mac
             ZStack {
                         TextField("Location", text: $viewModel.location)
@@ -120,6 +121,9 @@ struct CreateCircleView: View {
         }
         .padding()
         .navigationTitle("Create Circle")
+        .onAppear {
+            viewModel.setUser(authViewModel.user)
+        }
     }
 }
 

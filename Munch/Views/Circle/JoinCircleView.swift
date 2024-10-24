@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JoinCircleView: View {
     @StateObject private var viewModel = JoinCircleViewModel()
+    @EnvironmentObject private var authViewModel: AuthenticationViewModel
     @State private var navigateToSwipe = false
     @State private var currentCircleId: String?
 
@@ -18,9 +19,9 @@ struct JoinCircleView: View {
                 .font(.largeTitle)
                 .padding()
             
-            TextField("Name", text: $viewModel.name)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+//            TextField("Name", text: $viewModel.name)
+//                .padding()
+//                .textFieldStyle(RoundedBorderTextFieldStyle())
             
             TextField("Circle Code", text: $viewModel.circleCode)
                 .padding()
@@ -76,6 +77,9 @@ struct JoinCircleView: View {
         }
         .padding()
         .navigationTitle("Join Circle")
+        .onAppear{
+            viewModel.setUser(authViewModel.user)
+        }
     }
 }
 

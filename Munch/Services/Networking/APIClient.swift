@@ -31,9 +31,11 @@ class APIClient {
         case 200...299:
             return try JSONDecoder().decode(T.self, from: data)
         default:
-            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
-            let errorMessage = errorResponse?.message ?? "An unknown error occurred."
-            throw APIError.serverError(errorMessage)
+            if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                throw APIError.serverError(errorResponse.message)
+            } else {
+                throw APIError.invalidResponse
+            }
         }
     }
 }
@@ -43,7 +45,16 @@ struct ErrorResponse: Decodable {
     let message: String
 }
 
-enum APIError: Error {
+enum APIError: LocalizedError {
     case invalidResponse
     case serverError(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidResponse:
+            return "Invalid response from the server."
+        case .serverError(let message):
+            return message
+        }
+    }
 }

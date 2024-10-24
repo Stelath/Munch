@@ -19,6 +19,20 @@ struct Endpoint {
     let headers: [String: String]?
     let body: [String: Any]?
     
+    // Authentication
+    static func authenticateWithApple(userId: String, identityToken: String, name: String) -> Endpoint {
+        return Endpoint(
+            path: "/auth/apple",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: [
+                "userId": userId,
+                "identityToken": identityToken,
+                "name": name
+            ]
+        )
+    }
+    
     // REMOVE STARTED Boolean later
     static func createCircle(name: String, location: String, started: Bool = false) -> Endpoint {
         return Endpoint(
@@ -93,3 +107,6 @@ struct Endpoint {
         )
     }
 }
+
+
+

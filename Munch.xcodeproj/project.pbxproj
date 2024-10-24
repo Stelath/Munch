@@ -21,6 +21,10 @@
 		02F5EE832C21592000DC1C8F /* Resturant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE822C21591D00DC1C8F /* Resturant.swift */; };
 		02F5EE852C21593600DC1C8F /* SwipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE842C21592800DC1C8F /* SwipeViewModel.swift */; };
 		02F5EE872C215CF500DC1C8F /* RestaurantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F5EE862C215CF200DC1C8F /* RestaurantView.swift */; };
+		4A5A58CE2CC9D94B00EACB5B /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5A58CD2CC9D94800EACB5B /* AuthenticationViewModel.swift */; };
+		4A5A58D82CC9E4E900EACB5B /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5A58D12CC9DBCD00EACB5B /* AuthenticationError.swift */; };
+		4A5A58DB2CC9EE7500EACB5B /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 4A5A58DA2CC9EE7500EACB5B /* KeychainAccess */; };
+		4A5A58DD2CC9F07100EACB5B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5A58DC2CC9F04700EACB5B /* AuthService.swift */; };
 		4A694A952CC2E0F60080573F /* DummyID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A694A932CC2E0F60080573F /* DummyID.swift */; };
 		4A6ECFC12CB8DF41007C0095 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6ECFBE2CB8DF41007C0095 /* Circle.swift */; };
 		4A8D26BB2CBBB2A800B9B0EC /* RestaurantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D26BA2CBBB29D00B9B0EC /* RestaurantViewModel.swift */; };
@@ -38,7 +42,6 @@
 		4AA542862CBCDA9600784CBC /* RestaurantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542852CBCDA9400784CBC /* RestaurantService.swift */; };
 		4AA542882CBCDAAC00784CBC /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542872CBCDAAA00784CBC /* UserService.swift */; };
 		4AA542952CBCDE2D00784CBC /* JoinCircleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542942CBCDE2B00784CBC /* JoinCircleViewModel.swift */; };
-		4AA542982CBCDE4F00784CBC /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542972CBCDE4C00784CBC /* LoginViewModel.swift */; };
 		4AA5429D2CBCE6E900784CBC /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5429C2CBCE6E200784CBC /* APIClient.swift */; };
 		4AA542A02CBCE72400784CBC /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5429F2CBCE71900784CBC /* Endpoint.swift */; };
 		4AA542A22CBCE82500784CBC /* SSEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA542A12CBCE81B00784CBC /* SSEService.swift */; };
@@ -83,6 +86,9 @@
 		02F5EE842C21592800DC1C8F /* SwipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeViewModel.swift; sourceTree = "<group>"; };
 		02F5EE862C215CF200DC1C8F /* RestaurantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantView.swift; sourceTree = "<group>"; };
 		4A5A58C82CC947BE00EACB5B /* Munch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Munch.entitlements; sourceTree = "<group>"; };
+		4A5A58CD2CC9D94800EACB5B /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		4A5A58D12CC9DBCD00EACB5B /* AuthenticationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationError.swift; sourceTree = "<group>"; };
+		4A5A58DC2CC9F04700EACB5B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		4A694A932CC2E0F60080573F /* DummyID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyID.swift; sourceTree = "<group>"; };
 		4A6ECFBE2CB8DF41007C0095 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		4A8D26BA2CBBB29D00B9B0EC /* RestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModel.swift; sourceTree = "<group>"; };
@@ -100,7 +106,6 @@
 		4AA542852CBCDA9400784CBC /* RestaurantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantService.swift; sourceTree = "<group>"; };
 		4AA542872CBCDAAA00784CBC /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		4AA542942CBCDE2B00784CBC /* JoinCircleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinCircleViewModel.swift; sourceTree = "<group>"; };
-		4AA542972CBCDE4C00784CBC /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		4AA5429C2CBCE6E200784CBC /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		4AA5429F2CBCE71900784CBC /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		4AA542A12CBCE81B00784CBC /* SSEService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEService.swift; sourceTree = "<group>"; };
@@ -114,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A5A58DB2CC9EE7500EACB5B /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +214,7 @@
 		02D4E6832C1FA15400D12FE2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4A5A58D22CC9DBCD00EACB5B /* Authentication */,
 				4A985DD72CBE0AFE004E09E9 /* Vote.swift */,
 				4A985DD52CBE0AD3004E09E9 /* Results.swift */,
 				4AA542A32CBCED4F00784CBC /* User.swift */,
@@ -232,8 +239,8 @@
 		02D4E6852C1FA1C800D12FE2 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				02D4E6592C1F798900D12FE2 /* ContentView.swift */,
 				02D4E6572C1F798900D12FE2 /* MunchApp.swift */,
+				02D4E6592C1F798900D12FE2 /* ContentView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -244,6 +251,14 @@
 				02D4E65B2C1F798B00D12FE2 /* Assets.xcassets */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		4A5A58D22CC9DBCD00EACB5B /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				4A5A58D12CC9DBCD00EACB5B /* AuthenticationError.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		4A694A942CC2E0F60080573F /* Utilites */ = {
@@ -287,6 +302,7 @@
 		4AA542812CBCDA6300784CBC /* API */ = {
 			isa = PBXGroup;
 			children = (
+				4A5A58DC2CC9F04700EACB5B /* AuthService.swift */,
 				4AA542872CBCDAAA00784CBC /* UserService.swift */,
 				4AA542852CBCDA9400784CBC /* RestaurantService.swift */,
 				4AA542822CBCDA7500784CBC /* CircleService.swift */,
@@ -351,7 +367,7 @@
 		4AA542962CBCDE3800784CBC /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				4AA542972CBCDE4C00784CBC /* LoginViewModel.swift */,
+				4A5A58CD2CC9D94800EACB5B /* AuthenticationViewModel.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -398,6 +414,9 @@
 			dependencies = (
 			);
 			name = Munch;
+			packageProductDependencies = (
+				4A5A58DA2CC9EE7500EACB5B /* KeychainAccess */,
+			);
 			productName = Munch;
 			productReference = 02D4E6542C1F798900D12FE2 /* Munch.app */;
 			productType = "com.apple.product-type.application";
@@ -470,6 +489,9 @@
 				Base,
 			);
 			mainGroup = 02D4E64B2C1F798900D12FE2;
+			packageReferences = (
+				4A5A58D92CC9EE7500EACB5B /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			productRefGroup = 02D4E6552C1F798900D12FE2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -527,10 +549,10 @@
 				4A8D26BB2CBBB2A800B9B0EC /* RestaurantViewModel.swift in Sources */,
 				02F5EE872C215CF500DC1C8F /* RestaurantView.swift in Sources */,
 				02D4E65A2C1F798900D12FE2 /* ContentView.swift in Sources */,
+				4A5A58CE2CC9D94B00EACB5B /* AuthenticationViewModel.swift in Sources */,
 				4AA542A62CBDD5E500784CBC /* CircleTabView.swift in Sources */,
 				4AA542832CBCDA7900784CBC /* CircleService.swift in Sources */,
 				02CA030F2C53818A0053EAC4 /* LoginView.swift in Sources */,
-				4AA542982CBCDE4F00784CBC /* LoginViewModel.swift in Sources */,
 				4A8D26BE2CBBBE9800B9B0EC /* LocationService.swift in Sources */,
 				02CA03102C53818A0053EAC4 /* ResultsView.swift in Sources */,
 				4A985DDE2CBE139F004E09E9 /* RestaurantDetailView.swift in Sources */,
@@ -539,9 +561,11 @@
 				4AA542A02CBCE72400784CBC /* Endpoint.swift in Sources */,
 				02D4E6582C1F798900D12FE2 /* MunchApp.swift in Sources */,
 				02F5EE852C21593600DC1C8F /* SwipeViewModel.swift in Sources */,
+				4A5A58DD2CC9F07100EACB5B /* AuthService.swift in Sources */,
 				4AA542A22CBCE82500784CBC /* SSEService.swift in Sources */,
 				4AA5427E2CBCD9E500784CBC /* LoadingIndicatorView.swift in Sources */,
 				4AA5427F2CBCD9E500784CBC /* ErrorView.swift in Sources */,
+				4A5A58D82CC9E4E900EACB5B /* AuthenticationError.swift in Sources */,
 				4A985DD82CBE0B04004E09E9 /* Vote.swift in Sources */,
 				4AA542882CBCDAAC00784CBC /* UserService.swift in Sources */,
 				4AA542862CBCDA9600784CBC /* RestaurantService.swift in Sources */,
@@ -878,6 +902,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4A5A58D92CC9EE7500EACB5B /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4A5A58DA2CC9EE7500EACB5B /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A5A58D92CC9EE7500EACB5B /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 02D4E64C2C1F798900D12FE2 /* Project object */;
 }
