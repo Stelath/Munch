@@ -24,15 +24,11 @@ class SwipeViewModel: ObservableObject {
     @Published var locationError: Error?
 
     private let restaurantService = RestaurantService()
-    private let locationService = LocationService()
     private var circleId: String
     private var currentIndex: Int = 0
 
     init(circleId: String) {
         self.circleId = circleId
-        locationService.requestLocationPermission()
-        locationService.startUpdatingLocation()
-        locationService.$locationError.assign(to: &$locationError)
         Task {
             await fetchRestaurants()
         }

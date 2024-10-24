@@ -25,7 +25,7 @@ class CircleService {
 
     func joinCircle(circleId: String, userID: String, userName: String) async throws {
         let endpoint = Endpoint.joinCircle(circleId: circleId, userID: userID, userName: userName)
-        try await APIClient.shared.request(endpoint) as EmptyResponse
+        _ = try await APIClient.shared.request(endpoint) as EmptyResponse
     }
 
     func getCircle(id: String) async throws -> Circle {

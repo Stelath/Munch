@@ -16,7 +16,7 @@ class RestaurantService {
 
     func submitVote(circleId: String, restaurantId: String, voteType: VoteType) async throws {
         let endpoint = Endpoint.submitVote(circleId: circleId, restaurantId: restaurantId, voteType: voteType)
-        try await APIClient.shared.request(endpoint) as EmptyResponse
+        _ = try await APIClient.shared.request(endpoint) as EmptyResponse
     }
 
     func getVotingResults(circleId: String) async throws -> [RestaurantVoteResult] {

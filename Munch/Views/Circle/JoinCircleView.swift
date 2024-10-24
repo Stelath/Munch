@@ -48,7 +48,8 @@ struct JoinCircleView: View {
             if viewModel.isWaitingToStart {
                 VStack {
                     Text("Waiting for circle to start...")
-                        .font(.headline)
+                        .font(.title2)
+                        .fontWeight(.bold)
                         .padding(.bottom)
 
                     if !viewModel.joinedUsers.isEmpty {

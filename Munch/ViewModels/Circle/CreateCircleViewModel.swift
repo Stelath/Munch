@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import Combine
-
+import CoreLocation
 
 class CreateCircleViewModel: ObservableObject {
     @Published var name: String = ""
@@ -19,6 +18,7 @@ class CreateCircleViewModel: ObservableObject {
 
     private let circleService = CircleService.shared
     private let sseService = SSEService()
+    private let locationService = LocationService()
     private var circleId: String?
     
     deinit {
@@ -97,5 +97,46 @@ class CreateCircleViewModel: ObservableObject {
 
     func stopListeningForUpdates() {
         sseService.stopListening()
+    }
+    
+
+
+    func fillCurrentCity() {
+        Task {
+            await MainActor.run {
+                self.isLoading = true
+                self.errorMessage = nil
+            }
+            do {
+                let userLocation = try await locationService.getCurrentLocation()
+                let cityAndState = try await fetchCityAndState(from: userLocation)
+                await MainActor.run {
+                    self.location = cityAndState
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                }
+            }
+            await MainActor.run {
+                self.isLoading = false
+            }
+        }
+    }
+
+    private func fetchCityAndState(from location: CLLocation) async throws -> String {
+        let geocoder = CLGeocoder()
+        let placemarks = try await geocoder.reverseGeocodeLocation(location)
+        if let placemark = placemarks.first,
+           let city = placemark.locality,
+           let state = placemark.administrativeArea {
+            return "\(city), \(state)"
+        } else {
+            throw NSError(
+                domain: "CityStateNotFound",
+                code: 0,
+                userInfo: [NSLocalizedDescriptionKey: "Unable to determine city and state from location."]
+            )
+        }
     }
 }

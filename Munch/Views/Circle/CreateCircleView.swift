@@ -6,12 +6,11 @@
 //
 
 import SwiftUI
+import CoreLocationUI
 
 
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
-    // Assume you have a way to obtain the current user's UUID
-    let userId: String = generateDummyID() // Replace with actual user ID retrieval - May hash it from the username they pick for now
     
     var body: some View {
         VStack {
@@ -23,9 +22,22 @@ struct CreateCircleView: View {
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 //TODO: How many restaurants to pick from and pick a new location - mac
-            TextField("Location", text: $viewModel.location)
-                       .padding()
-                       .textFieldStyle(RoundedBorderTextFieldStyle())
+            ZStack {
+                        TextField("Location", text: $viewModel.location)
+                            .padding()
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                viewModel.fillCurrentCity()
+                            }) {
+                                Image(systemName: "location.fill")
+                                    .foregroundColor(.blue)
+                            }
+                            .padding(.trailing, 25)
+                        }
+                    }
+    
             
             if viewModel.isLoading {
                 ProgressView()
@@ -45,29 +57,27 @@ struct CreateCircleView: View {
                 .padding()
             }
             
-            // TODO: Sharing code button
             if let code = viewModel.generatedCode {
-                HStack(spacing: 10) {
-                    // Circle Code Text
+                ZStack {
                     Text("Circle Code: \(code)")
                         .font(.title2)
                         .fontWeight(.bold)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                        .accessibilityLabel("Circle Code: \(code)")
-
-                    ShareLink(
-                        item: "Join my circle on Munch! Use this code: \(code)",
-                        subject: Text("Join My Munch Circle"),
-                        message: Text("Use this code to join my circle on Munch: \(code)"),
-                        preview: SharePreview("Join My Munch Circle", image: Image(systemName: "circle.fill"))
-                    ) {
-                        Image(systemName: "square.and.arrow.up")
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(.blue)
-                            .padding(8)
-                            .accessibilityLabel("Share Circle Code")
+                    HStack {
+                        Spacer()
+                        ShareLink(
+                            item: "Join my circle on Munch! Use this code: \(code)",
+                            subject: Text("Join My Munch Circle"),
+                            message: Text("Use this code to join my circle on Munch: \(code)"),
+                            preview: SharePreview("Join My Munch Circle", image: Image(systemName: "circle.fill"))
+                        ) {
+                            Image(systemName: "square.and.arrow.up")
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.blue)
+                                .padding(8)
+                                .accessibilityLabel("Share Circle Code")
+                        }
                     }
+                    .padding(.trailing, 25)
                 }
                 .padding(.horizontal)
             }

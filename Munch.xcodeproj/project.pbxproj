@@ -82,6 +82,7 @@
 		02F5EE822C21591D00DC1C8F /* Resturant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resturant.swift; sourceTree = "<group>"; };
 		02F5EE842C21592800DC1C8F /* SwipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeViewModel.swift; sourceTree = "<group>"; };
 		02F5EE862C215CF200DC1C8F /* RestaurantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantView.swift; sourceTree = "<group>"; };
+		4A5A58C82CC947BE00EACB5B /* Munch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Munch.entitlements; sourceTree = "<group>"; };
 		4A694A932CC2E0F60080573F /* DummyID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyID.swift; sourceTree = "<group>"; };
 		4A6ECFBE2CB8DF41007C0095 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		4A8D26BA2CBBB29D00B9B0EC /* RestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModel.swift; sourceTree = "<group>"; };
@@ -156,6 +157,7 @@
 		02D4E6562C1F798900D12FE2 /* Munch */ = {
 			isa = PBXGroup;
 			children = (
+				4A5A58C82CC947BE00EACB5B /* Munch.entitlements */,
 				4A694A942CC2E0F60080573F /* Utilites */,
 				02D4E6852C1FA1C800D12FE2 /* App */,
 				02D4E6832C1FA15400D12FE2 /* Models */,
@@ -267,8 +269,8 @@
 			isa = PBXGroup;
 			children = (
 				4AA542A52CBDD5DF00784CBC /* CircleTabView.swift */,
-				4AA542792CBCD95A00784CBC /* JoinCircleView.swift */,
 				4AA542772CBCD94800784CBC /* CreateCircleView.swift */,
+				4AA542792CBCD95A00784CBC /* JoinCircleView.swift */,
 			);
 			path = Circle;
 			sourceTree = "<group>";
@@ -340,8 +342,8 @@
 		4AA542932CBCDE0200784CBC /* Circle */ = {
 			isa = PBXGroup;
 			children = (
-				4AA542942CBCDE2B00784CBC /* JoinCircleViewModel.swift */,
 				02D4E68B2C1FB18100D12FE2 /* CreateCircleViewModel.swift */,
+				4AA542942CBCDE2B00784CBC /* JoinCircleViewModel.swift */,
 			);
 			path = Circle;
 			sourceTree = "<group>";
@@ -707,6 +709,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Munch/Munch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "'Munch/Resources/Preview Content'";
@@ -739,6 +742,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Munch/Munch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "'Munch/Resources/Preview Content'";
