@@ -28,7 +28,7 @@ class AuthenticationViewModel: NSObject, ObservableObject {
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
-
+    // TODO: Change should not remove from keychain because cant get name back. Should mark as signed out or make backend api give user id and name back
     @MainActor
     func signOut() {
         user = nil
