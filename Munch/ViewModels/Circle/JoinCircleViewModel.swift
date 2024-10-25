@@ -52,17 +52,20 @@ class JoinCircleViewModel: ObservableObject {
                 }
                 try await circleService.joinCircle(circleId: circleId, userID: user.id, userName: user.name)
                 
+                print("here")
                 // Fetch Circle Details
                 let circle = try await circleService.getCircle(id: circleId)
                 await MainActor.run {
                     self.joinedUsers = circle.users
                     self.isWaitingToStart = true
                 }
+                print("here")
                 
                 startListeningForUpdates()
             } catch {
                 await MainActor.run {
                     self.errorMessage = error.localizedDescription
+                    debugPrint(error)
                 }
             }
             await MainActor.run {

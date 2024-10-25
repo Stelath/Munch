@@ -61,13 +61,26 @@ extension AuthenticationViewModel: ASAuthorizationControllerDelegate {
 
             do {
                 let userId = credential.user
-                let fullName = credential.fullName
-                let userName = [fullName?.givenName, fullName?.familyName]
-                    .compactMap { $0 }
-                    .joined(separator: " ")
+                var userName : String
+                
+                if let fullName = credential.fullName,
+                   !fullName.givenName.isNilOrEmpty,
+                   !fullName.familyName.isNilOrEmpty {
+                    userName = [fullName.givenName, fullName.familyName]
+                        .compactMap { $0 }
+                        .joined(separator: " ")
+                    // Store userName in Keychain
+                    keychain["userName"] = userName
+                } else if let storedUserName = keychain["userName"] {
+                    userName = storedUserName
+                } else {
+                    userName = "Unknown"
+                }
+                
+                print("user", userName)
 
-                if let identityToken = credential.identityToken {
-                    let tokenString = identityToken.base64EncodedString()
+                if let identityToken = credential.identityToken,
+                   let tokenString = String(data: identityToken, encoding: .utf8) {
                     try await AuthService.authenticateWithApple(
                         userId: userId,
                         identityToken: tokenString,
@@ -77,7 +90,6 @@ extension AuthenticationViewModel: ASAuthorizationControllerDelegate {
                     self.errorMessage = "Failed to retrieve identity token."
                 }
                 keychain["userId"] = userId
-                keychain["userName"] = userName
                 user = User(id: userId, name: userName)
             } catch {
                 self.errorMessage = error.localizedDescription
@@ -105,5 +117,11 @@ extension AuthenticationViewModel: ASAuthorizationControllerPresentationContextP
             .compactMap { $0 as? UIWindowScene }
             .flatMap { $0.windows }
             .first { $0.isKeyWindow } ?? UIWindow()
+    }
+}
+
+extension Optional where Wrapped == String {
+    var isNilOrEmpty: Bool {
+        return self?.isEmpty ?? true
     }
 }
