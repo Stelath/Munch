@@ -40,4 +40,5 @@ struct CircleTabView: View {
 
 #Preview {
     CircleTabView()
+        .environmentObject(AuthenticationViewModel())
 }

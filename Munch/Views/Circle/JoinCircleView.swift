@@ -85,4 +85,5 @@ struct JoinCircleView: View {
 
 #Preview {
     JoinCircleView()
+        .environmentObject(AuthenticationViewModel())
 }

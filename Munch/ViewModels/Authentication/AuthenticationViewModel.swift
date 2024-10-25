@@ -66,15 +66,16 @@ extension AuthenticationViewModel: ASAuthorizationControllerDelegate {
                     .compactMap { $0 }
                     .joined(separator: " ")
 
-                if let identityToken = credential.identityToken,
-                   let tokenString = String(data: identityToken, encoding: .utf8) {
+                if let identityToken = credential.identityToken {
+                    let tokenString = identityToken.base64EncodedString()
                     try await AuthService.authenticateWithApple(
                         userId: userId,
                         identityToken: tokenString,
                         name: userName
                     )
+                } else {
+                    self.errorMessage = "Failed to retrieve identity token."
                 }
-
                 keychain["userId"] = userId
                 keychain["userName"] = userName
                 user = User(id: userId, name: userName)

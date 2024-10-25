@@ -129,4 +129,5 @@ struct CreateCircleView: View {
 
 #Preview {
     CreateCircleView()
+        .environmentObject(AuthenticationViewModel())
 }
