@@ -8,7 +8,8 @@ import SwiftUI
 
 struct CircleTabView: View {
     @State private var selectedTab = 0
-
+    @EnvironmentObject private var authViewModel: AuthenticationViewModel
+    
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
@@ -27,10 +28,11 @@ struct CircleTabView: View {
             .accentColor(.blue)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Image(systemName: "gearshape.fill")
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
                         .foregroundColor(.blue)
                         .onTapGesture {
-                            // Placeholder for settings 
+                            AuthenticationViewModel().signOut()
+                            print("out")
                         }
                 }
             }
@@ -40,4 +42,5 @@ struct CircleTabView: View {
 
 #Preview {
     CircleTabView()
+        .environmentObject(AuthenticationViewModel())
 }

@@ -9,22 +9,13 @@ import Foundation
 import CoreLocation
 import MapKit
 
-// TODO: Make Codeable and see what we need - mac
-struct Restaurant: Identifiable {
-    let id: UUID
+
+
+struct Restaurant: Identifiable, Codable {
+    let id: String
     let name: String
     let address: String
-    let images: [String]
-    let coordinate: CLLocationCoordinate2D
-    let mapItem: MKMapItem
+    let imageURLs: [String]
+    let logoURL: String?
 }
-
-//struct Restaurant: Identifiable, Codable {
-//    let id: UUID
-//    let name: String
-//    let address: String
-//    let imageURLs: [String]
-//    let logoURL: String?
-//    
-//}
 

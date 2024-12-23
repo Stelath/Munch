@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Codable {
-    let id: String
+struct User: Identifiable, Codable, Equatable {
+    let id: String // will be the apple user ID 
     let name: String
 }

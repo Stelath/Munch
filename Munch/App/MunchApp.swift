@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct MunchApp: App {
+    @StateObject private var authViewModel = AuthenticationViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(authViewModel)
         }
     }
 }
+    

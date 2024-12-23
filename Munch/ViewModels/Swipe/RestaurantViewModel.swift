@@ -7,10 +7,11 @@
 
 import SwiftUI
 import MapKit
+import CoreLocation
 
 class RestaurantViewModel: ObservableObject, Identifiable {
     @Published var restaurant: Restaurant
-    @Published var lookAroundScene: MKLookAroundScene?
+    @Published var lookAroundScene: MKLookAroundScene? // make this from the address of the place - CLGeocoder
     @Published var position: CGSize = .zero
     @Published var rotation: Double = 0.0
 
@@ -18,7 +19,6 @@ class RestaurantViewModel: ObservableObject, Identifiable {
 
     init(restaurant: Restaurant) {
         self.restaurant = restaurant
-        fetchLookAroundPreview()
     }
 
     var likeOpacity: Double {
@@ -34,14 +34,22 @@ class RestaurantViewModel: ObservableObject, Identifiable {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let request = MKLookAroundSceneRequest(mapItem: restaurant.mapItem)
-                let scene = try await request.scene
-                await MainActor.run {
-                    self.lookAroundScene = scene
-                    print("LookAroundScene set for \(self.restaurant.name): \(String(describing: self.lookAroundScene))") // DEBUG
+                let geocoder = CLGeocoder()
+                let placemarks = try await geocoder.geocodeAddressString(self.restaurant.address)
+                if let coordinate = placemarks.first?.location?.coordinate {
+                    let request = MKLookAroundSceneRequest(coordinate: coordinate)
+                    if let scene = try? await request.scene {
+                        await MainActor.run {
+                            self.lookAroundScene = scene
+                        }
+                    } else {
+                        print("No Look Around scene available for this location.")
+                    }
+                } else {
+                    print("Failed to get coordinate for address: \(self.restaurant.address)")
                 }
             } catch {
-                print("Failed to fetch Look Around scene for \(restaurant.name): \(error.localizedDescription)") // DEBUG
+                print("Failed to fetch Look Around scene for \(self.restaurant.name): \(error.localizedDescription)")
             }
         }
     }

@@ -10,12 +10,14 @@ import MapKit
 
 struct RestaurantDetailView: View {
     let restaurant: Restaurant
+    @StateObject private var viewModel = RestaurantDetailViewModel()
+
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Restaurant Image
-                if let firstImage = restaurant.images.first, let imageURL = URL(string: firstImage) {
+                if let firstImage = restaurant.imageURLs.first, let imageURL = URL(string: firstImage) {
                     AsyncImage(url: imageURL) { phase in
                         switch phase {
                         case .empty:
@@ -67,16 +69,25 @@ struct RestaurantDetailView: View {
                 }
                 .padding(.horizontal)
 
-                // Map View
-                Map(coordinateRegion: .constant(MKCoordinateRegion(
-                    center: restaurant.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-                )), annotationItems: [restaurant]) { restaurant in
-                    MapMarker(coordinate: restaurant.coordinate, tint: .blue)
-                }
-                .frame(height: 200)
-                .cornerRadius(15)
-                .padding(.horizontal)
+//                if viewModel.isMapLoaded, let coordinate = viewModel.coordinate {
+//                    Map(coordinateRegion: $viewModel.region, interactionModes: .all, showsUserLocation: false, annotationItems: [coordinate]) { coordinate in
+//                        MapPin(coordinate: coordinate, tint: .red)
+//                    }
+//                    .frame(height: 200)
+//                    .cornerRadius(15)
+//                    .padding(.horizontal)
+//                } else if !viewModel.isMapLoaded {
+//                    ProgressView("Loading Map...")
+//                        .frame(height: 200)
+//                        .cornerRadius(15)
+//                        .padding(.horizontal)
+//                } else {
+//                    Text("Unable to load map for this address.")
+//                        .foregroundColor(.gray)
+//                        .frame(height: 200)
+//                        .cornerRadius(15)
+//                        .padding(.horizontal)
+//                }
 
                 Spacer()
             }
@@ -84,18 +95,27 @@ struct RestaurantDetailView: View {
         }
         .navigationTitle(restaurant.name)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            viewModel.fetchCoordinate(for: restaurant.address)
+        }
     }
+}
+
+
+// Helper struct for annotation
+struct AnnotationItem: Identifiable {
+    let id = generateDummyID()
+    let coordinate: CLLocationCoordinate2D
 }
 
 struct RestaurantDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleRestaurant = Restaurant(
-            id: UUID(),
+            id: "testingtesting123",
             name: "Sushi Place",
             address: "123 Main St",
-            images: ["https://example.com/image.jpg"], // Replace with valid image URLs
-            coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-            mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)))
+            imageURLs: ["https://example.com/image.jpg"],
+            logoURL: nil
         )
         RestaurantDetailView(restaurant: sampleRestaurant)
     }

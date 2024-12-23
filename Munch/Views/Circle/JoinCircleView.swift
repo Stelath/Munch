@@ -9,6 +9,9 @@ import SwiftUI
 
 struct JoinCircleView: View {
     @StateObject private var viewModel = JoinCircleViewModel()
+    @EnvironmentObject private var authViewModel: AuthenticationViewModel
+    @State private var navigateToSwipe = false
+    @State private var currentCircleId: String?
 
     var body: some View {
         VStack {
@@ -16,45 +19,38 @@ struct JoinCircleView: View {
                 .font(.largeTitle)
                 .padding()
             
-            TextField("Name", text: $viewModel.name)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.words)
+//            TextField("Name", text: $viewModel.name)
+//                .padding()
+//                .textFieldStyle(RoundedBorderTextFieldStyle())
             
-            TextField("Enter Circle Code", text: $viewModel.circleCode)
+            TextField("Circle Code", text: $viewModel.circleCode)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocapitalization(.allCharacters)
                 .disableAutocorrection(true)
-
-            Button(action: {
-                viewModel.joinCircle()
-            }) {
-                Text("Join Circle")
-                    .bold()
+            if viewModel.isLoading{
+                ProgressView()
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding()
-
-            if viewModel.isLoading {
-                ProgressView("Joining Circle...")
-                    .padding()
-            }
-
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .padding()
+            } else {
+                Button(action: {
+                    viewModel.joinCircle()
+                }) {
+                    Text("Join Circle")
+                        .bold()
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .padding()
             }
 
             if viewModel.isWaitingToStart {
                 VStack {
                     Text("Waiting for circle to start...")
-                        .font(.headline)
+                        .font(.title2)
+                        .fontWeight(.bold)
                         .padding(.bottom)
 
                     if !viewModel.joinedUsers.isEmpty {
@@ -62,8 +58,8 @@ struct JoinCircleView: View {
                             Text("Joined Users")
                                 .font(.headline)
 
-                            ForEach(viewModel.joinedUsers, id: \.self) { user in
-                                Text(user)
+                            ForEach(viewModel.joinedUsers) { user in
+                                Text(user.name)
                                     .padding(.vertical, 2)
                             }
                         }
@@ -73,12 +69,21 @@ struct JoinCircleView: View {
                 .padding()
             }
             Spacer()
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+            }
         }
         .padding()
         .navigationTitle("Join Circle")
+        .onAppear{
+            viewModel.setUser(authViewModel.user)
+        }
     }
 }
 
 #Preview {
     JoinCircleView()
+        .environmentObject(AuthenticationViewModel())
 }

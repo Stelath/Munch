@@ -9,71 +9,56 @@ import Foundation
 import Combine
 import MapKit
 
+@MainActor // change to await Mainactor.run
 class ResultsViewModel: ObservableObject {
     @Published var restaurantResults: [RestaurantVoteResult] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-
-    private var cancellables = Set<AnyCancellable>()
-
-    init() {
-        fetchResults()
+    
+    private let restaurantService = RestaurantService()
+    private let sseService = SSEService()
+    let circleId: String
+    
+    init(circleId: String) {
+        self.circleId = circleId
+        Task {
+            await fetchResults()
+            startListeningForUpdates()
+        }
     }
-
-    func fetchResults() {
+    
+    func fetchResults() async {
         isLoading = true
-        errorMessage = nil
-
-        // Simulate fetching data
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
-            let sampleResults = [
-                RestaurantVoteResult(
-                    restaurant: Restaurant(
-                        id: UUID(),
-                        name: "Sushi Place",
-                        address: "123 Main St",
-                        images: ["https://source.unsplash.com/featured/?sushi"],
-                        coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-                        mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)))
-                    ),
-                    likes: 10,
-                    dislikes: 2
-                ),
-                RestaurantVoteResult(
-                    restaurant: Restaurant(
-                        id: UUID(),
-                        name: "Pizza Corner",
-                        address: "456 Elm St",
-                        images: ["https://source.unsplash.com/featured/?pizza"],
-                        coordinate: CLLocationCoordinate2D(latitude: 37.8044, longitude: -122.2712),
-                        mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.8044, longitude: -122.2712)))
-                    ),
-                    likes: 8,
-                    dislikes: 1
-                ),
-                RestaurantVoteResult(
-                    restaurant: Restaurant(
-                        id: UUID(),
-                        name: "Burger Joint",
-                        address: "789 Oak St",
-                        images: ["https://source.unsplash.com/featured/?burger"],
-                        coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-                        mapItem: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)))
-                    ),
-                    likes: 5,
-                    dislikes: 0
-                )
-            ]
-
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.restaurantResults = sampleResults.sorted { $0.score > $1.score }
+        do {
+            let results = try await restaurantService.getVotingResults(circleId: circleId)
+            self.restaurantResults = results.sorted { $0.score > $1.score }
+        } catch {
+            self.errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
+    
+    func startListeningForUpdates() {
+        guard let url = URL(string: "https://api.yourapp.com/circles/\(circleId)/results/events") else { return }
+        sseService.startListening(url: url) { [weak self] eventName, eventData in
+            guard let self = self else { return }
+            if eventName == "vote_updated", let data = eventData?.data(using: .utf8) {
+                do {
+                    let updatedResult = try JSONDecoder().decode(RestaurantVoteResult.self, from: data)
+                    DispatchQueue.main.async {
+                        if let index = self.restaurantResults.firstIndex(where: { $0.restaurant.id == updatedResult.restaurant.id }) {
+                            self.restaurantResults[index] = updatedResult
+                            self.restaurantResults.sort { $0.score > $1.score }
+                        }
+                    }
+                } catch {
+                    print("Failed to decode vote_updated event: \(error.localizedDescription)")
+                }
             }
         }
     }
 
-    // Placeholder for SSE updates
-    func startListeningForUpdates() {
-        // Future SSE implementation to update `restaurantResults`
+    func stopListeningForUpdates() {
+        sseService.stopListening()
     }
 }

@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct ResultsView: View {
-    @StateObject private var viewModel = ResultsViewModel()
+    @StateObject private var viewModel: ResultsViewModel
+
+    init(circleId: String) {
+        _viewModel = StateObject(wrappedValue: ResultsViewModel(circleId: circleId))
+    }
 
     var body: some View {
         NavigationView {
@@ -44,7 +48,7 @@ struct ResultsView: View {
                         .padding(.top)
                     }
                     .refreshable {
-                        viewModel.fetchResults()
+                        await viewModel.fetchResults()
                     }
                 }
             }
@@ -60,6 +64,6 @@ struct ResultsView: View {
 
 struct ResultsView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultsView()
+        ResultsView(circleId: generateDummyID()) // sample UUID
     }
 }

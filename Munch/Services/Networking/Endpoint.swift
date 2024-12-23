@@ -7,29 +7,106 @@
 
 import Foundation
 
-enum Endpoint {
-    case createCircle(name: String)
-    case joinCircle(code: String)
-    case startCircle(circleId: String)
-    case fetchRestaurants(circleId: String)
-//    case submitVote(circleId: String, restaurantId: String, vote: Vote)
-    case getVotingResults(circleId: String)
+enum HTTPMethod: String {
+    case GET
+    case POST
+    case PATCH
+}
+
+struct Endpoint {
+    let path: String
+    let method: HTTPMethod
+    let headers: [String: String]?
+    let body: [String: Any]?
     
-    var url: URL {
-        let baseUrl = "https://api.yourapp.com"
-        switch self {
-        case .createCircle(let name):
-            return URL(string: "\(baseUrl)/circles?name=\(name)")!
-        case .joinCircle(let code):
-            return URL(string: "\(baseUrl)/circles/join?code=\(code)")!
-        case .startCircle(let circleId):
-            return URL(string: "\(baseUrl)/circles/\(circleId)/start")!
-        case .fetchRestaurants(let circleId):
-            return URL(string: "\(baseUrl)/circles/\(circleId)/restaurants")!
-//        case .submitVote(let circleId, let restaurantId, let vote):
-//            return URL(string: "\(baseUrl)/circles/\(circleId)/restaurants/\(restaurantId)/vote?vote=\(vote.rawValue)")!
-        case .getVotingResults(let circleId):
-            return URL(string: "\(baseUrl)/circles/\(circleId)/results")!
-        }
+    // Authentication
+    static func authenticateWithApple(userId: String, identityToken: String, name: String) -> Endpoint {
+        return Endpoint(
+            path: "/auth/apple",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: [
+                "userId": userId,
+                "identityToken": identityToken,
+                "name": name
+            ]
+        )
+    }
+    
+    // REMOVE STARTED Boolean later
+    static func createCircle(name: String, location: String, started: Bool = false) -> Endpoint {
+        return Endpoint(
+            path: "/circles",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: ["name": name, "location": location, "started": started]
+        )
+    }
+    
+    static func joinCircle(circleId: String, userID: String, userName: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/join",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: ["id": userID, "name": userName]
+        )
+    }
+    
+    static func getCircle(id: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(id)",
+            method: .GET,
+            headers: ["Content-Type": "application/json"],
+            body: nil
+        )
+    }
+    
+    // Change name to more descriptive one: ie. getCircleIDByCode
+    static func fetchCode(code: String) -> Endpoint {
+        return Endpoint(
+            path: "/codes/\(code)",
+            method: .GET,
+            headers: ["Content-Type": "application/json"],
+            body: nil
+        )
+    }
+    
+    static func startCircle(circleId: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/start",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: nil
+        )
+    }
+
+    static func fetchRestaurants(circleId: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/restaurants",
+            method: .GET,
+            headers: nil,
+            body: nil
+        )
+    }
+
+    static func submitVote(circleId: String, restaurantId: String, voteType: VoteType) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/restaurants/\(restaurantId)/vote",
+            method: .POST,
+            headers: ["Content-Type": "application/json"],
+            body: ["vote": voteType.rawValue]
+        )
+    }
+
+    static func getVotingResults(circleId: String) -> Endpoint {
+        return Endpoint(
+            path: "/circles/\(circleId)/results",
+            method: .GET,
+            headers: nil,
+            body: nil
+        )
     }
 }
+
+
+
