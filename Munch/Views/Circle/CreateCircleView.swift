@@ -12,6 +12,7 @@ import CoreLocationUI
 struct CreateCircleView: View {
     @StateObject private var viewModel = CreateCircleViewModel()
     @EnvironmentObject private var authViewModel: AuthenticationViewModel
+    @EnvironmentObject private var webSocketManager: WebSocketManager
     
     var body: some View {
         VStack {
@@ -123,6 +124,7 @@ struct CreateCircleView: View {
         .navigationTitle("Create Circle")
         .onAppear {
             viewModel.setUser(authViewModel.user)
+            viewModel.subscribeToWebSocketEvents(webSocketManager)
         }
     }
 }

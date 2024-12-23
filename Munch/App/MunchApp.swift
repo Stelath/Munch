@@ -11,11 +11,18 @@ import SwiftUI
 struct MunchApp: App {
     @StateObject private var authViewModel = AuthenticationViewModel()
     
+    private let webSocketBaseURL = URL(string: "ws://localhost:3000")!
+    @StateObject private var webSocketManager = WebSocketManager(baseURL: URL(string: "ws://localhost:3000")!)
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authViewModel)
+                .environmentObject(webSocketManager)
+                .onAppear {
+                    
+                    webSocketManager.connect()
+                }
         }
     }
 }
-    

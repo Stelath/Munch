@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ResultsView: View {
     @StateObject private var viewModel: ResultsViewModel
+    @EnvironmentObject private var webSocketManager: WebSocketManager
 
     init(circleId: String) {
         _viewModel = StateObject(wrappedValue: ResultsViewModel(circleId: circleId))
@@ -55,8 +56,7 @@ struct ResultsView: View {
             .navigationTitle("Top Restaurants")
             
             .onAppear {
-                // Start listening for SSE updates in the future
-                // viewModel.startListeningForUpdates()
+                viewModel.subscribeToWebSocketEvents(webSocketManager)
             }
         }
     }

@@ -9,21 +9,21 @@ import Foundation
 import Combine
 import MapKit
 
-@MainActor // change to await Mainactor.run
+@MainActor
 class ResultsViewModel: ObservableObject {
     @Published var restaurantResults: [RestaurantVoteResult] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
     private let restaurantService = RestaurantService()
-    private let sseService = SSEService()
+    private var cancellables = Set<AnyCancellable>()
+    
     let circleId: String
     
     init(circleId: String) {
         self.circleId = circleId
         Task {
             await fetchResults()
-            startListeningForUpdates()
         }
     }
     
@@ -38,27 +38,26 @@ class ResultsViewModel: ObservableObject {
         isLoading = false
     }
     
-    func startListeningForUpdates() {
-        guard let url = URL(string: "https://api.yourapp.com/circles/\(circleId)/results/events") else { return }
-        sseService.startListening(url: url) { [weak self] eventName, eventData in
-            guard let self = self else { return }
-            if eventName == "vote_updated", let data = eventData?.data(using: .utf8) {
-                do {
-                    let updatedResult = try JSONDecoder().decode(RestaurantVoteResult.self, from: data)
-                    DispatchQueue.main.async {
-                        if let index = self.restaurantResults.firstIndex(where: { $0.restaurant.id == updatedResult.restaurant.id }) {
-                            self.restaurantResults[index] = updatedResult
-                            self.restaurantResults.sort { $0.score > $1.score }
-                        }
+    func subscribeToWebSocketEvents(_ webSocketManager: WebSocketManager) {
+        webSocketManager.eventPublisher
+            .sink { [weak self] event in
+                guard let self = self else { return }
+                switch event {
+                case .voteUpdated(let updatedResult):
+                    // If this update is for our circle's restaurant, update it
+                    if let idx = self.restaurantResults.firstIndex(where: {
+                        $0.restaurant.id == updatedResult.restaurant.id
+                    }) {
+                        self.restaurantResults[idx] = updatedResult
+                    } else {
+                        self.restaurantResults.append(updatedResult)
                     }
-                } catch {
-                    print("Failed to decode vote_updated event: \(error.localizedDescription)")
+                    // Re-sort
+                    self.restaurantResults.sort { $0.score > $1.score }
+                default:
+                    break
                 }
             }
-        }
-    }
-
-    func stopListeningForUpdates() {
-        sseService.stopListening()
+            .store(in: &cancellables)
     }
 }

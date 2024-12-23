@@ -10,6 +10,7 @@ import SwiftUI
 struct JoinCircleView: View {
     @StateObject private var viewModel = JoinCircleViewModel()
     @EnvironmentObject private var authViewModel: AuthenticationViewModel
+    @EnvironmentObject private var webSocketManager: WebSocketManager
     @State private var navigateToSwipe = false
     @State private var currentCircleId: String?
 
@@ -79,6 +80,7 @@ struct JoinCircleView: View {
         .navigationTitle("Join Circle")
         .onAppear{
             viewModel.setUser(authViewModel.user)
+            viewModel.subscribeToWebSocketEvents(webSocketManager)
         }
     }
 }

@@ -89,5 +89,4 @@ MunchTests/
 MunchUITests/
 .gitignore
 .repopackignore
-
-
+LICENSE.md
