@@ -18,6 +18,7 @@ class CreateCircleViewModel: ObservableObject {
     @Published var joinedUsers: [User] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
+    @Published var isCircleStarted = false
     
     private let circleService = CircleService.shared
     private let locationService = LocationService()
@@ -65,6 +66,32 @@ class CreateCircleViewModel: ObservableObject {
             isLoading = false
             
         }
+    }
+    // MARK: - Start Circle
+    func startCircle() {
+        Task {
+            guard let circleId else {
+                self.errorMessage = "Circle ID not found."
+                return
+            }
+            do {
+                isLoading = true
+                // Call the new function in CircleService
+                try await circleService.startCircle(circleId: circleId)
+                
+                // Once started, set local state
+                isCircleStarted = true
+                isLoading = false
+
+            } catch {
+                isLoading = false
+                self.errorMessage = error.localizedDescription
+            }
+        }
+    }
+    
+    func getCircleId() -> String? {
+        return circleId
     }
     
 

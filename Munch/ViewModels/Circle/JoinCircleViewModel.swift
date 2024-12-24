@@ -16,6 +16,7 @@ class JoinCircleViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var isWaitingToStart: Bool = false
     @Published var errorMessage: String?
+    @Published var isCircleStarted = false
 
     private let circleService = CircleService.shared
     private var circleId: String?
@@ -54,6 +55,10 @@ class JoinCircleViewModel: ObservableObject {
             isLoading = false
         }
     }
+    // TODO: add errors 
+    func getCircleId() -> String? {
+        return circleId
+    }
     
     /// Subscribe to shared WebSocket events
     func subscribeToWebSocketEvents(_ webSocketManager: WebSocketManager) {
@@ -71,6 +76,7 @@ class JoinCircleViewModel: ObservableObject {
                     // If circle started matches our circleId
                     if circleId == self.circleId {
                         self.isWaitingToStart = false
+                        self.isCircleStarted = true
                     }
                 default:
                     break

@@ -82,10 +82,18 @@ struct JoinCircleView: View {
             viewModel.setUser(authViewModel.user)
             viewModel.subscribeToWebSocketEvents(webSocketManager)
         }
+        .navigationDestination(isPresented: $viewModel.isCircleStarted) {
+            if let circleId = viewModel.getCircleId() {
+                SwipeView(circleId: circleId)
+            } else {
+                Text("Error: No circle ID found!")
+            }
+        }
     }
 }
 
 #Preview {
     JoinCircleView()
         .environmentObject(AuthenticationViewModel())
+        .environmentObject(WebSocketManager(baseURL: URL(string: "https://example.com")!))
 }

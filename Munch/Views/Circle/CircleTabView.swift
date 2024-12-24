@@ -31,7 +31,7 @@ struct CircleTabView: View {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                         .foregroundColor(.blue)
                         .onTapGesture {
-                            AuthenticationViewModel().signOut()
+                            authViewModel.signOut()
                             print("out")
                         }
                 }
@@ -43,4 +43,5 @@ struct CircleTabView: View {
 #Preview {
     CircleTabView()
         .environmentObject(AuthenticationViewModel())
+        .environmentObject(WebSocketManager(baseURL: URL(string: "https://example.com")!))
 }

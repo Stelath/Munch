@@ -100,19 +100,25 @@ struct CreateCircleView: View {
 
 
             Spacer()
-// TODO add start circle logic
+            
             if !viewModel.joinedUsers.isEmpty {
-                Button(action: {
-                }) {
-                    Text("Start Circle")
-                        .bold()
+                if viewModel.isLoading {
+                    ProgressView("Starting circle...")
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                } else {
+                    Button(action: {
+                        viewModel.startCircle()
+                    }) {
+                        Text("Start Circle")
+                            .bold()
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                    .padding()
                 }
-                .padding()
             }
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
@@ -126,10 +132,21 @@ struct CreateCircleView: View {
             viewModel.setUser(authViewModel.user)
             viewModel.subscribeToWebSocketEvents(webSocketManager)
         }
+        
+        .navigationDestination(isPresented: $viewModel.isCircleStarted) {
+            /// Because we stored `circleId` in viewModel, unwrap it and pass to SwipeView
+            if let circleId = viewModel.getCircleId() {
+                SwipeView(circleId: circleId)
+            } else {
+                // Fallback UI if circleId is missing
+                Text("Error: No Circle ID found!")
+            }
+        }
     }
 }
 
 #Preview {
     CreateCircleView()
         .environmentObject(AuthenticationViewModel())
+        .environmentObject(WebSocketManager(baseURL: URL(string: "https://example.com")!))
 }

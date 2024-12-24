@@ -37,6 +37,11 @@ class CircleService {
         let endpoint = Endpoint.fetchCode(code: code)
         return try await APIClient.shared.request(endpoint)
     }
+    
+    func startCircle(circleId: String) async throws {
+        let endpoint = Endpoint.startCircle(circleId: circleId)
+        _ = try await APIClient.shared.request(endpoint) as EmptyResponse
+    }
 }
 
 // Response models

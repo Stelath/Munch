@@ -35,7 +35,7 @@ final class WebSocketManager: ObservableObject {
     
     // MARK: - Init
     /// You can pass a base URL or environment-based URL if needed.
-    init(baseURL: URL) {
+    init(baseURL: URL = URL(string: "ws://localhost:3000")!) {
         self.baseURL = baseURL
     }
     
