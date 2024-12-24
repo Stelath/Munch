@@ -17,7 +17,11 @@ class AuthenticationViewModel: NSObject, ObservableObject {
     @Published var isLoading = false
 
     private let keychain = Keychain(service: "com.stelath.Munch")
-
+    private let kUserIdKey = "userId"       // Apple user ID
+    private let kUserNameKey = "userName"
+    private let kAppTokenKey = "sessionToken"  // Our server's token
+    
+    
     @MainActor
     func signInWithApple() {
         let request = ASAuthorizationAppleIDProvider().createRequest()
@@ -32,15 +36,27 @@ class AuthenticationViewModel: NSObject, ObservableObject {
     @MainActor
     func signOut() {
         user = nil
-        try? keychain.remove("userId")
-        try? keychain.remove("userName")
+        try? keychain.remove(kUserIdKey)
+        try? keychain.remove(kUserNameKey)
+        try? keychain.remove(kAppTokenKey)
     }
 
     @MainActor
     func restoreUserSession() {
-        if let userId = keychain["userId"],
-           let userName = keychain["userName"] {
-            user = User(id: userId, name: userName)
+        // only restoreing userId + userName
+        // Later ping your server with the token to see if the session is still valid
+        if let savedName = keychain[kUserNameKey],
+           let savedId = keychain[kUserIdKey] {
+            
+            //  local user from stored info
+            let restoredUser = User(id: savedId, name: savedName)
+            self.user = restoredUser
+        }
+        
+        // If you need the session token
+        if let sessionToken = keychain[kAppTokenKey] {
+            print("DEBUG: We have a session token: \(sessionToken)")
+            // Optionally set this in a global or environment for subsequent requests
         }
     }
 }
@@ -81,17 +97,23 @@ extension AuthenticationViewModel: ASAuthorizationControllerDelegate {
 
                 if let identityToken = credential.identityToken,
                    let tokenString = String(data: identityToken, encoding: .utf8) {
-                    try await AuthService.authenticateWithApple(
+                    let authResponse = try await AuthService.authenticateWithApple(
                         userId: userId,
                         identityToken: tokenString,
                         name: userName
                     )
+                    
+                    // The server returns { user, token }. We'll store it.
+                    keychain[kUserIdKey] = authResponse.user.id  // This might be the same or different from Apple userId
+                    keychain[kUserNameKey] = authResponse.user.name
+                    keychain[kAppTokenKey] = authResponse.token
+                    
+                    // Update local user
+                    user = authResponse.user
+
                 } else {
                     self.errorMessage = "Failed to retrieve identity token."
-                }
-                keychain["userId"] = userId
-                user = User(id: userId, name: userName)
-            } catch {
+                }            } catch {
                 self.errorMessage = error.localizedDescription
             }
 

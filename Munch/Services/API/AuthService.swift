@@ -7,9 +7,20 @@
 
 import Foundation
 
+struct AuthResponse: Decodable {
+    let user: User
+    let token: String
+}
+
 class AuthService {
-    static func authenticateWithApple(userId: String, identityToken: String, name: String) async throws {
-        let endpoint = Endpoint.authenticateWithApple(userId: userId, identityToken: identityToken, name: name)
-        _ = try await APIClient.shared.request(endpoint) as EmptyResponse
+    @discardableResult
+    static func authenticateWithApple(userId: String,identityToken: String, name: String) async throws -> AuthResponse {
+        let endpoint = Endpoint.authenticateWithApple(userId: userId,
+                                                      identityToken: identityToken,
+                                                      name: name)
+        // Expect AuthResponse from backend
+        let response: AuthResponse = try await APIClient.shared.request(endpoint)
+        return response
     }
 }
+
